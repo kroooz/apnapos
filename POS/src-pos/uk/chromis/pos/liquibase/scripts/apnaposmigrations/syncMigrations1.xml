@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+
+
+    <property name="boolean.type" value="boolean" dbms="derby, postgresql"/>
+    <property name="boolean.type" value="bit" dbms="mysql"/>
+   
+    <property name="blob.type" value="blob" dbms="derby"/>
+    <property name="blob.type" value="bytea" dbms="postgresql"/>
+    <property name="blob.type" value="mediumblob" dbms="mysql"/>
+     
+      
+    <changeSet author="Apna POS" id="Sync Migrations 1" >    
+        
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="TILL_BRANCH_SYNC"/>
+            </not>
+        </preConditions>
+        
+        <createTable tableName="TILL_BRANCH_SYNC">
+            <column name="LAST_SYNC_DATETIME" type="datetime" />
+            <column name="BRANCH_DB_ENGINE" type="varchar(1000)" />
+            <column name="BRANCH_DB_DRIVERLIB" type="varchar(1000)" />
+            <column name="BRANCH_DB_DRIVERCLASS" type="varchar(1000)" />
+            <column name="BRANCH_DB_URL" type="varchar(1000)" />
+            <column name="BRANCH_DB_USER" type="varchar(1000)" />
+            <column name="BRANCH_DB_PASSWORD" type="varchar(1000)" />
+            <column name="BRANCH_DB_SYNC_INTERVAL" type="int" />
+            <column name="IS_SYNC_STARTED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </createTable>
+        
+        <createTable tableName="SYNC_LOG">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="LOG_TEXT" type="varchar(1000)" /> 
+            <column name="LOG_DATETIME" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()" /> 
+        </createTable>
+
+        <addColumn tableName="CLOSEDCASH">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="SHIFTS">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="SHIFT_BREAKS">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="LEAVES">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="VOUCHERS">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="RESERVATIONS">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="RESERVATION_CUSTOMERS">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="STOCKDIARY">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="RECEIPTS">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="TICKETS">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="TICKETLINES">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="PAYMENTS">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="TAXLINES">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="DRAWEROPENED">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+
+        <addColumn tableName="LINEREMOVED">       
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </addColumn>
+        
+        
+        
+
+
+        <addColumn tableName="ROLES">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="PEOPLE">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="CATEGORIES">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="TAXCATEGORIES">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="TAXES">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="TAXCUSTCATEGORIES">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="FLOORS">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="PLACES">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="CUSTOMERS">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="THIRDPARTIES">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="BREAKS">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="LOCATIONS">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="PROMOTIONS">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="ATTRIBUTE">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="ATTRIBUTEVALUE">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="ATTRIBUTESET">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="ATTRIBUTESETINSTANCE">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="ATTRIBUTEUSE">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="ATTRIBUTEINSTANCE">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="PRODUCTS">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="PRODUCTS_COM">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="PRODUCTS_KIT">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+
+        <addColumn tableName="DBPERMISSIONS">       
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+        
+        <addColumn tableName="STOCKCURRENT">
+            <column name="UPDATED_AT" type="datetime" defaultValueComputed="NOW() ON UPDATE NOW()"/> 
+        </addColumn>
+                                                        
+    </changeSet> 
+          
+    <changeSet author="Apna POS" id="Update to ApnaPOS version to 1.1">    
+        <update tableName="APPLICATIONS">
+            <column name="VERSION" value="1.1"/>   
+            <column name="VERSIONINT" valueNumeric="11"/>         
+        </update>  
+    </changeSet> 
+                                            
+</databaseChangeLog>

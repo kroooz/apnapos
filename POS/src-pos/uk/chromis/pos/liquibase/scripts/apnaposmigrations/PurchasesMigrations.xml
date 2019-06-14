@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+
+
+    <property name="boolean.type" value="boolean" dbms="derby, postgresql"/>
+    <property name="boolean.type" value="bit" dbms="mysql"/>
+   
+    <property name="blob.type" value="blob" dbms="derby"/>
+    <property name="blob.type" value="bytea" dbms="postgresql"/>
+    <property name="blob.type" value="mediumblob" dbms="mysql"/>
+    
+    <changeSet author="Apna POS" id="Grant access to purchases menu">      
+        <insert tableName="DBPERMISSIONS">
+            <column name="CLASSNAME" value="uk.chromis.pos.suppliers.PurchasesPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##label.purchases"/>
+            <column name="DESCRIPTION" value="##label.purchases"/>  
+        </insert> 		  
+    </changeSet>
+    
+    <changeSet author="Apna POS" id="Add Purchases Tables" >    
+    
+        <createTable tableName="PURCHASES">
+            <column name="ID" type="varchar(255)" />
+            <column name="PURCHASE_DATE" type="datetime" />
+            <column name="INVOICE_NUMBER" type="varchar(255)" />
+            <column name="SUPPLIER_ID" type="varchar(255)" />
+        </createTable>
+
+        <createTable tableName="PURCHASE_LINES">
+            <column name="ID" type="varchar(255)" />
+            <column name="PRODUCT_ID" type="varchar(255)" />
+            <column name="UNITS" type="double" />
+            <column name="FREE_UNITS" type="double" />
+            <column name="RATE" type="double" />
+            <column name="DISCOUNT" type="double" />
+            <column name="TOTAL" type="double" />        
+        </createTable>
+
+        <createTable tableName="SUPPLIERS_LEDGER">
+            <column name="ID" type="varchar(255)" />
+            <column name="TRANSACTION_DATE" type="datetime" />
+            <column name="TRANSACTION_TYPE" type="varchar(255)" />
+            <column name="SUPPLIER_ID" type="varchar(255)" />
+            <column name="AMOUNT" type="double" />
+        </createTable>
+
+    </changeSet>
+          
+    <changeSet author="Apna POS" id="Update to ApnaPOS version to 1.2">    
+        <update tableName="APPLICATIONS">
+            <column name="VERSION" value="1.2"/>   
+            <column name="VERSIONINT" valueNumeric="12"/>         
+        </update>  
+    </changeSet> 
+                                            
+</databaseChangeLog>

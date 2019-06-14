@@ -1,0 +1,2 @@
+licensefilegenerator.SerialNumberHelper
+licensefilegenerator.OSHelper

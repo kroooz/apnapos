@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import uk.chromis.custom.controls.LabeledComboBox?>
+<?import uk.chromis.custom.controls.LabeledTextField?>
+<?import uk.chromis.custom.switches.ToggleSwitch?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uk.chromis.pos.config.GeneralPanelController">
+    <children>
+        
+        <LabeledTextField fx:id="machineName" layoutX="17.0" layoutY="30.0" />
+        <LabeledComboBox fx:id="skin" layoutX="17.0" layoutY="60.0" />
+        <LabeledComboBox fx:id="screenType" layoutX="17.0" layoutY="90.0" />
+        <LabeledComboBox fx:id="salesType" layoutX="17.0" layoutY="120.0" />
+      <RadioButton fx:id="clear" disable="true" layoutX="509.0" layoutY="325.0" mnemonicParsing="false" prefHeight="3.0" prefWidth="21.0" toggleGroup="$iconColour" visible="false" />                                            
+    </children>
+</AnchorPane>
