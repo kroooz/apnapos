@@ -148,7 +148,8 @@ public abstract class Formats {
      */
     public static void setCurrencyPattern(String pattern) {
         if (pattern == null || pattern.equals("")) {
-            m_currencyformat = NumberFormat.getCurrencyInstance();
+            // m_currencyformat = NumberFormat.getCurrencyInstance();
+            m_currencyformat = new DecimalFormat("Rs #0.00");
         } else {
             m_currencyformat = new DecimalFormat(pattern);
         }

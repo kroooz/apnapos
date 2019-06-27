@@ -167,7 +167,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private Boolean restaurant;
     private Action logout;
     private Integer delay = 0;
-    private DataLogicReceipts dlReceipts = null;
+    private DataLogicReceiptsAndPayments dlReceipts = null;
     private Boolean priceWith00;
     private String tableDetails;
     private RestaurantDBUtils restDB;
@@ -212,7 +212,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
         dlSync = (DataLogicSync) m_App.getBean("uk.chromis.pos.sync.DataLogicSync");
         dlCustomers = (DataLogicCustomers) m_App.getBean("uk.chromis.pos.customers.DataLogicCustomers");
-        dlReceipts = (DataLogicReceipts) app.getBean("uk.chromis.pos.sales.DataLogicReceipts");
+        dlReceipts = (DataLogicReceiptsAndPayments) app.getBean("uk.chromis.pos.sales.DataLogicReceiptsAndPayments");
         dlPromotions = (DataLogicPromotions) app.getBean("uk.chromis.pos.promotion.DataLogicPromotions");
         m_promotionSupport = new PromotionSupport(this, dlSales, dlPromotions);
 
@@ -920,7 +920,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
             setTicketName(m_oTicket.getName(m_oTicketExt));
 
-            if(removeAllItemsAndAddAgain){
+            if(!removeAllItemsAndAddAgain){
                 m_ticketlines.clearTicketLines();
                 for (int i = 0; i < m_oTicket.getLinesCount(); i++) {
                     m_ticketlines.addTicketLine(m_oTicket.getLine(i));
@@ -932,6 +932,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
             
             mergeSimilarRows();
+            
+            
+            
             m_ticketlines.refresh();
             try{
                 m_ticketlines.selectLastRow();
@@ -939,6 +942,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             catch(Exception ex){
             }
             
+            if(m_oTicket.getLinesCount() > 0) {
+                int lastLineIndex = m_oTicket.getLinesCount() - 1;
+                paintTicketLine(lastLineIndex, m_oTicket.getLine(lastLineIndex));
+            }
             
             printPartialTotals();
             stateToZero();
@@ -996,11 +1003,18 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private void addTicketLine(ProductInfoExt oProduct, double dMul, double dPrice) {
         if (oProduct.isVprice()) {
+            
+            dPrice = oProduct.getPriceSell();
+            
             TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
             if (m_jaddtax.isSelected()) {
                 dPrice /= (1 + tax.getRate());
             }
             addTicketLine(new TicketLineInfo(oProduct, dMul, dPrice, tax, (java.util.Properties) (oProduct.getProperties().clone())));
+            
+            new PlayWave("error.wav").start();
+            this.editLine("price");
+            
         } else {
             TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
             addTicketLine(new TicketLineInfo(oProduct, dMul, dPrice, tax, (java.util.Properties) (oProduct.getProperties().clone())));
@@ -1339,13 +1353,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         } else if (!prod.isVprice()) {
             incProduct(1.0, prod);
         } else {
-            if (AppConfig.getInstance().getBoolean("till.customsounds")) {
-                new PlayWave("error.wav").start(); // playing WAVE file 
-            } else {
-                Toolkit.getDefaultToolkit().beep();
-            }
-            JOptionPane.showMessageDialog(null,
-                    AppLocal.getIntString("message.novprice"));
+            incProduct(1.0, prod);
+//            if (AppConfig.getInstance().getBoolean("till.customsounds")) {
+//                new PlayWave("error.wav").start(); // playing WAVE file 
+//            } else {
+//                Toolkit.getDefaultToolkit().beep();
+//            }
+//            JOptionPane.showMessageDialog(null,
+//                    AppLocal.getIntString("message.novprice"));
         }
     }
 

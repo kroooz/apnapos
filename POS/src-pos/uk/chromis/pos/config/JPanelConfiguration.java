@@ -49,7 +49,7 @@ import uk.chromis.pos.forms.JPanelView;
 
 public class JPanelConfiguration extends JPanel implements JPanelView {
 
-    private AppView m_App;
+    public static AppView m_App;
     private AppProperties m_props;
     private Session s;
     private Connection con;

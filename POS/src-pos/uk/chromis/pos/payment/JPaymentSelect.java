@@ -619,7 +619,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         m_jButtonOK.setFocusable(false);
         m_jButtonOK.setMargin(new java.awt.Insets(8, 16, 8, 16));
         m_jButtonOK.setMaximumSize(new java.awt.Dimension(100, 44));
-        m_jButtonOK.setPreferredSize(new java.awt.Dimension(150, 55));
+        m_jButtonOK.setPreferredSize(null);
         m_jButtonOK.setRequestFocusEnabled(false);
         m_jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

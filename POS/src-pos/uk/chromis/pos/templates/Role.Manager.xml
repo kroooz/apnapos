@@ -114,6 +114,7 @@
     <class name="/uk/chromis/reports/cashflow.bs"/>
     <class name="/uk/chromis/reports/cashregisterlog.bs"/>
     <class name="/uk/chromis/reports/categorysales.bs"/>
+    <class name="/uk/chromis/reports/categorysalesbyuser.bs"/>
     <class name="/uk/chromis/reports/chartsales.bs"/>
     <class name="/uk/chromis/reports/closedpos.bs"/>
     <class name="/uk/chromis/reports/closedpos_1.bs"/>

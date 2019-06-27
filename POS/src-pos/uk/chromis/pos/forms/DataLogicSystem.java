@@ -39,6 +39,7 @@ import java.util.Properties;
 import java.util.UUID;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.ConnectionFactory;
 import uk.chromis.data.loader.DataRead;
@@ -697,5 +698,43 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
                         + "ORDER BY DATE(R.DATENEW), EXTRACT(HOUR FROM R.DATENEW)",
                 null,
                 HourlySalesInfo.getSerializerRead()).list();
+    }
+    
+    public String getSettingValue(String key){
+        
+        String value = null;
+        
+        try
+        {
+            String val = (String)new StaticSentence(s,
+                "SELECT SETTING_VALUE FROM SETTINGS WHERE SETTING_KEY = ?",
+                SerializerWriteString.INSTANCE,
+                SerializerReadString.INSTANCE).find(key);
+            
+            value = val;
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "Error occurred in getting Setting Value for key: ["+key+"], Error: " + ex.getMessage());
+        }
+        
+        return value;
+    }
+    
+    public void setSettingValue(String key, String value){
+        
+        try
+        {
+            new StaticSentence(s,
+                "REPLACE INTO SETTINGS (SETTING_KEY, SETTING_VALUE) VALUES (?, ?)",
+                new SerializerWriteBasic(new Datas[]{
+                    Datas.STRING, Datas.STRING
+                }),
+                null).exec(key, value);
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "Error occurred in setting Setting Value for key: ["+key+"], Error: " + ex.getMessage());
+        }
     }
 }

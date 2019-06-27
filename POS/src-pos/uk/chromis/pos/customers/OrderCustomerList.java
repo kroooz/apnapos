@@ -47,7 +47,7 @@ import uk.chromis.data.gui.MessageInf;
 import uk.chromis.pos.catalog.JCatalogTab;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
-import uk.chromis.pos.sales.DataLogicReceipts;
+import uk.chromis.pos.sales.DataLogicReceiptsAndPayments;
 import uk.chromis.pos.sales.SharedTicketInfo;
 import uk.chromis.pos.sales.TicketsEditor;
 import uk.chromis.pos.ticket.TicketInfo;
@@ -75,7 +75,7 @@ public class OrderCustomerList extends JPanel implements TicketSelector {
      */
     protected EventListenerList listeners = new EventListenerList();
     private final DataLogicCustomers dataLogicCustomers;
-    private final DataLogicReceipts dataLogicReceipts;
+    private final DataLogicReceiptsAndPayments dataLogicReceipts;
     private final ThumbNailBuilder tnbbutton;
 
     /**
@@ -93,7 +93,7 @@ public class OrderCustomerList extends JPanel implements TicketSelector {
         this.application = app;
         this.panelticket = panelticket;
         this.dataLogicCustomers = dlCustomers;
-        this.dataLogicReceipts = (DataLogicReceipts) application.getBean("uk.chromis.pos.sales.DataLogicReceipts");
+        this.dataLogicReceipts = (DataLogicReceiptsAndPayments) application.getBean("uk.chromis.pos.sales.DataLogicReceiptsAndPayments");
         tnbbutton = new ThumbNailBuilder(90, 98);
 
 //        orderSynchroniseHelper = new OrdersSynchroniseHelper(application, dataLogicReceipts, panelticket.getActiveTicket());

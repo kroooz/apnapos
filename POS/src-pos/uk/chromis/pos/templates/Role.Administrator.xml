@@ -17,6 +17,7 @@
 	<class name="payment.magcard"/>
 	<class name="uk.chromis.pos.inventory.RecipePanel"/>
 	<class name="/uk/chromis/reports/categorysales.bs"/>
+        <class name="/uk/chromis/reports/categorysalesbyuser.bs"/>
 	<class name="/uk/chromis/reports/paymentreport.bs"/>
 	<class name="uk.chromis.pos.inventory.ProductPacksPanel"/>
 	<class name="uk.chromis.pos.inventory.ProductsPanel"/>

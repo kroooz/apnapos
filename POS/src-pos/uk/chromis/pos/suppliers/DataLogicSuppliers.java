@@ -22,9 +22,13 @@
  */
 package uk.chromis.pos.suppliers;
 
+import java.util.Properties;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.*;
+import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.BeanFactoryDataSingle;
+import java.util.Date;
+import java.util.List;
 
 public class DataLogicSuppliers extends BeanFactoryDataSingle {
 
@@ -78,7 +82,34 @@ public class DataLogicSuppliers extends BeanFactoryDataSingle {
     }
 
     
-    
+
+    public final List<Object> getPurchases(int pageNumber, int recordsPerPage, String invoiceNumber, Date date, String SupplierId) throws BasicException {
+        
+        String query = "SELECT PURCHASES.ID, PURCHASES.PURCHASE_DATE, PURCHASES.INVOICE_NUMBER, SUPPLIERS.SUPPLIERNAME "
+                + "FROM PURCHASES LEFT JOIN SUPPLIERS ON SUPPLIERS.ID = PURCHASES.PARTY_ID WHERE 1 = 1 ";
+        
+        if(invoiceNumber != null && !invoiceNumber.equals("")) {
+            query += " AND PURCHASES.INVOICE_NUMBER LIKE \'%" + DataWriteUtils.getEscaped(invoiceNumber) + "%\' ";
+        }
+        
+        if(date != null) {
+            query += " AND PURCHASES.PURCHASE_DATE = " + DataWriteUtils.getSQLValue(date) + " ";
+        }
+        
+        if(SupplierId != null && !SupplierId.equals("")) {
+            query += " AND SUPPLIERS.ID = " + DataWriteUtils.getSQLValue(SupplierId) + " ";
+        }
+        
+        query += " ORDER BY PURCHASES.PURCHASE_DATE DESC ";
+        query += " LIMIT " + Integer.toString( (pageNumber-1) * recordsPerPage ) + ", ";   // OFFSET
+        query += Integer.toString( recordsPerPage ) + ";";               // LIMIT
+        
+        List<Object> result = new StaticSentence(s, query, 
+                null, 
+                new SerializerReadBasic(new Datas[]{ Datas.STRING, Datas.TIMESTAMP, Datas.STRING, Datas.STRING })).list();
+        
+        return result;
+    }
     
     
 }

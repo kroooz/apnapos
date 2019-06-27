@@ -53,6 +53,7 @@ public class ConfigurationController implements Initializable {
     public AnchorPane anchor;
     public Tab configureDatabase;
     public Tab configureTicket;
+    public Tab configureOther;
     public Tab configureGeneral;
     public Tab configurePayment;
     public Tab configurePeripheral;
@@ -82,6 +83,7 @@ public class ConfigurationController implements Initializable {
     private SalesScreenPanelController salesScreenController;
     private RestaurantPanelController restuarantController;
     private TicketPanelController ticketController;
+    private OtherController otherController;
 
     protected BooleanProperty dirty = new SimpleBooleanProperty();
 
@@ -94,6 +96,7 @@ public class ConfigurationController implements Initializable {
         peripheralController = (PeripheralPanelController) getController(configurePeripheral, "/uk/chromis/pos/config/PeripheralPanel.fxml");
         systemController = (SystemPanelController) getController(configureSystem, "/uk/chromis/pos/config/SystemPanel.fxml");
         ticketController = (TicketPanelController) getController(configureTicket, "/uk/chromis/pos/config/TicketPanel.fxml");
+        otherController = (OtherController) getController(configureOther, "/uk/chromis/pos/config/Other.fxml");
         restuarantController = (RestaurantPanelController) getController(configureRestaurant, "/uk/chromis/pos/config/RestaurantPanel.fxml");
         salesScreenController = (SalesScreenPanelController) getController(configureSalesScreen, "/uk/chromis/pos/config/SalesScreenPanel.fxml");
         // sync
@@ -105,6 +108,7 @@ public class ConfigurationController implements Initializable {
         dirty.bindBidirectional(peripheralController.dirty);
         dirty.bindBidirectional(systemController.dirty);
         dirty.bindBidirectional(ticketController.dirty);
+        dirty.bindBidirectional(otherController.dirty);
         dirty.bindBidirectional(restuarantController.dirty);
         dirty.bindBidirectional(salesScreenController.dirty);
 
@@ -142,6 +146,7 @@ public class ConfigurationController implements Initializable {
         restuarantController.load();
         salesScreenController.load();
         ticketController.load();
+        otherController.load();
         paymentController.load();
 
     }
@@ -155,6 +160,7 @@ public class ConfigurationController implements Initializable {
         salesScreenController.save();
         restuarantController.save();
         ticketController.save();
+        otherController.save();
         paymentController.save();
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

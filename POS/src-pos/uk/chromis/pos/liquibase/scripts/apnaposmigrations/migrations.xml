@@ -10,5 +10,5 @@
     <include file="uk/chromis/pos/liquibase/scripts/apnaposmigrations/addColumnsInClosedCashTable.xml"/>
     <include file="uk/chromis/pos/liquibase/scripts/apnaposmigrations/syncMigrations1.xml"/>
     <include file="uk/chromis/pos/liquibase/scripts/apnaposmigrations/PurchasesMigrations.xml"/>
-    <include file="uk/chromis/pos/liquibase/scripts/apnaposmigrations/AddedPurchaseTypeColumn.xml"/>
+    <include file="uk/chromis/pos/liquibase/scripts/apnaposmigrations/AddSettingsTableAndCosColumnInTicketLines.xml"/>
 </databaseChangeLog>

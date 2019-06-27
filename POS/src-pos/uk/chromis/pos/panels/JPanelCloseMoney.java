@@ -322,11 +322,11 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
             PaymentsModel.PaymentsLine paymentLine = paymentLines.get(i);
             
             if(paymentLine.getType().equalsIgnoreCase("cash")){
-                systemCash = paymentLine.getValue();
+                systemCash += paymentLine.getValue();
             }
             
             if(paymentLine.getType().equalsIgnoreCase("magcard")){
-                systemCard = paymentLine.getValue();
+                systemCard += paymentLine.getValue();
             }
         }
         

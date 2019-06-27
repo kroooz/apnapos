@@ -22,17 +22,24 @@ import javax.swing.table.DefaultTableModel;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.loader.DataParams;
+import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.SentenceList;
+import uk.chromis.data.loader.SerializerReadDouble;
+import uk.chromis.data.loader.SerializerReadString;
+import uk.chromis.data.loader.SerializerWriteBasic;
 import uk.chromis.data.loader.SerializerWriteString;
 import uk.chromis.data.loader.Session;
 import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.data.loader.Transaction;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.forms.DataLogicSystem;
 import uk.chromis.pos.inventory.MovementReason;
 import uk.chromis.pos.panels.JProductFinder;
 import uk.chromis.pos.payment.PaymentInfo;
+import uk.chromis.pos.sales.DataLogicReceiptsAndPayments;
 import uk.chromis.pos.sales.JPanelTicket;
 import uk.chromis.pos.sync.DataLogicSync;
 import uk.chromis.pos.ticket.ProductInfoExt;
@@ -50,8 +57,22 @@ public class PurchaseDialog extends javax.swing.JDialog {
     private DataLogicSuppliers dlSuppliers;
     private String localGuid;
     private DataLogicSales dlsales; 
+    private DataLogicReceiptsAndPayments dlReceiptsAndPayments;
+    private boolean isNewInvoice = true;
+    private String currentPurchaseId = "";
+    private String oldSupplierId = "";
+    private String oldLocationId = "";
+    private Double grandTotal = 0d;
+    private ComboBoxValModel m_LocationsModel;
+    private SentenceList m_sentlocations;
+    private double paidThroughCash;
+    private double paidThroughCheque;
+    private double paidThroughCard;
+    private double balancePayable;
+    private double oldBalancePayable = 0d;
     
     private List<PurchaseLine> purchaseLines = new ArrayList<PurchaseLine>();
+    private List<PurchaseLine> oldPurchaseLines = new ArrayList<PurchaseLine>();
     
     private String selectedProductId;
     private Double units = 0d;
@@ -60,6 +81,8 @@ public class PurchaseDialog extends javax.swing.JDialog {
     private Double discountPercent = 0d;
     private Double total = 0d;
     private int editingPurchaseLineId = -1;
+    private AppView m_app;
+    private DataLogicSystem dlSystem;
     
     private class PurchaseLine
     {
@@ -83,11 +106,15 @@ public class PurchaseDialog extends javax.swing.JDialog {
         List b;
         try {
             
+            m_app = app;
+            
             dlSync = (DataLogicSync) app.getBean("uk.chromis.pos.sync.DataLogicSync");
             s = app.getSession();
 
             dlSuppliers = (DataLogicSuppliers) app.getBean("uk.chromis.pos.suppliers.DataLogicSuppliers");
             dlsales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
+            dlSystem = (DataLogicSystem) app.getBean("uk.chromis.pos.forms.DataLogicSystem");
+            dlReceiptsAndPayments = (DataLogicReceiptsAndPayments) app.getBean("uk.chromis.pos.sales.DataLogicReceiptsAndPayments");
         
             localGuid = dlSync.getSiteGuid();
             
@@ -97,6 +124,10 @@ public class PurchaseDialog extends javax.swing.JDialog {
             m_SupplierModel = new ComboBoxValModel(b);
             m_SupplierModel.add(0, null);
             m_jSuppliers.setModel(m_SupplierModel);
+            
+            m_sentlocations = dlsales.getLocationsList(localGuid);
+            m_LocationsModel = new ComboBoxValModel(m_sentlocations.list());
+            m_jLocation.setModel(m_LocationsModel);
             
         } catch (BasicException ex) {
             Logger.getLogger(PurchaseDialog.class.getName()).log(Level.SEVERE, null, ex);
@@ -151,7 +182,17 @@ public class PurchaseDialog extends javax.swing.JDialog {
         btnSave = new javax.swing.JButton();
         m_jSuppliers = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
-        lblTotal = new javax.swing.JLabel();
+        lblGrandTotal = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        m_jLocation = new javax.swing.JComboBox();
+        jLabel14 = new javax.swing.JLabel();
+        txtPaidThroughCash = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        txtPaidThroughCheque = new javax.swing.JTextField();
+        txtPaidThroughCard = new javax.swing.JTextField();
+        txtBalancePayable = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Purchase");
@@ -283,7 +324,7 @@ public class PurchaseDialog extends javax.swing.JDialog {
                         .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAddUpdateLine, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(20, Short.MAX_VALUE))
+                        .addContainerGap(53, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -362,7 +403,7 @@ public class PurchaseDialog extends javax.swing.JDialog {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -377,8 +418,51 @@ public class PurchaseDialog extends javax.swing.JDialog {
 
         jLabel11.setText("Total:");
 
-        lblTotal.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        lblTotal.setText("0");
+        lblGrandTotal.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        lblGrandTotal.setText("0");
+
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel13.setText("Paid through Cash:");
+
+        m_jLocation.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        m_jLocation.setPreferredSize(new java.awt.Dimension(63, 26));
+
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel14.setText("Location");
+
+        txtPaidThroughCash.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtPaidThroughCashFocusLost(evt);
+            }
+        });
+
+        jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel15.setText("Paid through Cheque:");
+
+        jLabel16.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel16.setText("Paid through Card:");
+
+        jLabel17.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel17.setText("Balance Payable:");
+
+        txtPaidThroughCheque.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtPaidThroughChequeFocusLost(evt);
+            }
+        });
+
+        txtPaidThroughCard.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtPaidThroughCardFocusLost(evt);
+            }
+        });
+
+        txtBalancePayable.setEditable(false);
+        txtBalancePayable.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtBalancePayableFocusLost(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -387,43 +471,71 @@ public class PurchaseDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(dpPurchaseDate, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                            .addComponent(txtInvoiceNo)
+                            .addComponent(m_jSuppliers, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(m_jLocation, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtPaidThroughCash, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                                .addComponent(txtPaidThroughCheque)
+                                .addComponent(txtPaidThroughCard))
+                            .addComponent(txtBalancePayable, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSave))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(dpPurchaseDate, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                            .addComponent(txtInvoiceNo)
-                            .addComponent(m_jSuppliers, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(btnSave)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(1, 1, 1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(dpPurchaseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtPaidThroughCash, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(dpPurchaseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(m_jSuppliers, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(m_jSuppliers, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPaidThroughCheque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(txtInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPaidThroughCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(m_jLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBalancePayable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -431,7 +543,7 @@ public class PurchaseDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(jLabel11)
-                    .addComponent(lblTotal))
+                    .addComponent(lblGrandTotal))
                 .addContainerGap())
         );
 
@@ -581,7 +693,7 @@ public class PurchaseDialog extends javax.swing.JDialog {
         String tableColumns[] = {"Products", "Units", "Free Units", "Rate", "Discount", "Total"};
         String data[][] = new String[purchaseLines.size()][tableColumns.length];
         
-        Double total = 0d;
+        grandTotal = 0d;
         for(int i = 0; i < purchaseLines.size(); i++){
             
             PurchaseLine purchaseLine = purchaseLines.get(i);
@@ -595,14 +707,28 @@ public class PurchaseDialog extends javax.swing.JDialog {
                 Formats.DOUBLE.formatValue(purchaseLine.total),
             };
             
-            total += purchaseLine.total;
+            grandTotal += purchaseLine.total;
         }
         
-        lblTotal.setText( Formats.DOUBLE.formatValue(total) );
+        lblGrandTotal.setText(Formats.DOUBLE.formatValue(grandTotal) );
         
         DefaultTableModel model = (DefaultTableModel) tablePurchaseLines.getModel();
         model.setDataVector(data, tableColumns);
         tablePurchaseLines.setDefaultEditor(Object.class, null);
+        
+        
+        try { paidThroughCash = Double.parseDouble(txtPaidThroughCash.getText()); }
+        catch(Exception ex) { paidThroughCash = 0; }
+        
+        try { paidThroughCheque = Double.parseDouble(txtPaidThroughCheque.getText()); }
+        catch(Exception ex) { paidThroughCheque = 0; }
+        
+        try { paidThroughCard = Double.parseDouble(txtPaidThroughCard.getText()); }
+        catch(Exception ex) { paidThroughCard = 0; }
+        
+        balancePayable = grandTotal - paidThroughCash - paidThroughCheque - paidThroughCard;
+        txtBalancePayable.setText( Double.toString(balancePayable) );
+        
     }
     
     private void btnAddUpdateLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUpdateLineActionPerformed
@@ -654,31 +780,290 @@ public class PurchaseDialog extends javax.swing.JDialog {
         refreshTableAndTotal();
     }//GEN-LAST:event_btnRemoveSelectedLineActionPerformed
 
+    private boolean isPurchaseValid(){
+        
+        if( !this.checkIfPaymentIsValid(null) ) {
+            return false;
+        }
+        
+        if(dpPurchaseDate.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Please select Date");
+            return false;
+        }
+        
+        if( m_SupplierModel.getSelectedKey() == null ){
+            JOptionPane.showMessageDialog(null, "Please select Supplier");
+            return false;
+        }
+        
+        if( this.m_LocationsModel.getSelectedKey() == null ){
+            JOptionPane.showMessageDialog(null, "Please select Location");
+            return false;
+        }
+        
+        if(txtInvoiceNo.getText() == "") {
+            JOptionPane.showMessageDialog(null, "Please enter Invoice Number");
+            return false;
+        }
+        
+        return true;
+    }
+    
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+
+        if(!isPurchaseValid()){
+            
+            return;
+        }
         
         Transaction t = new Transaction(s) {
             @Override
             public Object transact() throws BasicException {
                 
+                try
+                {
+                    savePurchase();
+                }
+                catch(Exception ex) {
+                    throw new BasicException((String)ex.getMessage());
+                }
 
-                // and delete the receipt
-//                new StaticSentence(s, "DELETE FROM TAXLINES WHERE RECEIPT = ?", SerializerWriteString.INSTANCE).exec(ticket.getId());
-//                new StaticSentence(s, "DELETE FROM PAYMENTS WHERE RECEIPT = ?", SerializerWriteString.INSTANCE).exec(ticket.getId());
-//                new StaticSentence(s, "DELETE FROM TICKETLINES WHERE TICKET = ?", SerializerWriteString.INSTANCE).exec(ticket.getId());
-//                new StaticSentence(s, "DELETE FROM TICKETS WHERE ID = ?", SerializerWriteString.INSTANCE).exec(ticket.getId());
-//                new StaticSentence(s, "DELETE FROM RECEIPTS WHERE ID = ?", SerializerWriteString.INSTANCE).exec(ticket.getId());
                 return null;
             }
         };
         try {
             t.execute();
             JOptionPane.showMessageDialog(null, "Saved Successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
+            this.setVisible(false);
         } catch (BasicException ex) {
             JOptionPane.showMessageDialog(null, "No Saved. Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void txtPaidThroughCashFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPaidThroughCashFocusLost
+        numberInputLostFocus(evt);
+        checkIfPaymentIsValid(txtPaidThroughCash);
+    }//GEN-LAST:event_txtPaidThroughCashFocusLost
+
+    private void txtPaidThroughChequeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPaidThroughChequeFocusLost
+        numberInputLostFocus(evt);
+        checkIfPaymentIsValid(txtPaidThroughCheque);
+    }//GEN-LAST:event_txtPaidThroughChequeFocusLost
+
+    private void txtPaidThroughCardFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPaidThroughCardFocusLost
+        numberInputLostFocus(evt);
+        checkIfPaymentIsValid(txtPaidThroughCard);
+    }//GEN-LAST:event_txtPaidThroughCardFocusLost
+
+    private void txtBalancePayableFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBalancePayableFocusLost
+        numberInputLostFocus(evt);
+    }//GEN-LAST:event_txtBalancePayableFocusLost
+
+    private boolean checkIfPaymentIsValid(JTextField textField) {
+        this.refreshTableAndTotal();
+        
+        if(balancePayable < 0) {
+            JOptionPane.showMessageDialog(null, "Balance Payable should not be less then zero", "Error", JOptionPane.ERROR_MESSAGE);
+            
+            if(textField != null) {
+                textField.setText("0");
+            }            
+            
+            this.refreshTableAndTotal();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private void savePurchase() throws Exception
+    {
+        if(this.isNewInvoice) {
+            this.currentPurchaseId = UUID.randomUUID().toString();
+        }
+        
+        String supplierId = m_SupplierModel.getSelectedKey().toString();
+        String locationId = this.m_LocationsModel.getSelectedKey().toString();
+        
+        
+        // PURCHASES TABLE
+        new StaticSentence(s, "DELETE FROM PURCHASES WHERE ID = ?", SerializerWriteString.INSTANCE).exec(this.currentPurchaseId);
+        new StaticSentence(s, "INSERT INTO PURCHASES ( ID, PURCHASE_DATE, INVOICE_NUMBER, PARTY_ID, LOCATION_ID, TOTAL, CASH_PAID, CARD_PAID, CHEQUE_PAID, BALANCE_PAYABLE ) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasic(new Datas[]{
+                Datas.STRING, Datas.TIMESTAMP, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE }))
+                .exec( this.currentPurchaseId, dpPurchaseDate.getDate(), txtInvoiceNo.getText(), supplierId, locationId, grandTotal, paidThroughCash, paidThroughCard, paidThroughCheque, balancePayable );
+        
+        // PURCHASES LINES TABLE
+        new StaticSentence(s, "DELETE FROM PURCHASE_LINES WHERE PURCHASE_ID = ?", SerializerWriteString.INSTANCE).exec(this.currentPurchaseId);
+        for(int i = 0; i < purchaseLines.size(); i++){
+            
+            PurchaseLine purchaseLine = purchaseLines.get(i);
+            
+            new StaticSentence(s, "INSERT INTO PURCHASE_LINES ( ID, PURCHASE_ID, PRODUCT_ID, UNITS, FREE_UNITS, RATE, DISCOUNT_PERCENT, TOTAL ) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasic(new Datas[]{
+                Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE}))
+                .exec( UUID.randomUUID().toString(), this.currentPurchaseId, purchaseLine.productId, purchaseLine.units, purchaseLine.freeUnits, purchaseLine.rate, purchaseLine.discountPercent, purchaseLine.total );
+        }
+        
+        // UPDATE SUPPLIER BALANCE
+        new StaticSentence(s, "UPDATE SUPPLIERS SET CURRENT_BALANCE = CURRENT_BALANCE - ?", new SerializerWriteBasic(new Datas[]{
+                Datas.DOUBLE, Datas.DOUBLE}))
+                .exec( oldBalancePayable, 0d );
+        
+        new StaticSentence(s, "UPDATE SUPPLIERS SET CURRENT_BALANCE = CURRENT_BALANCE + ?", new SerializerWriteBasic(new Datas[]{
+                Datas.DOUBLE, Datas.DOUBLE}))
+                .exec( (Double)balancePayable, 0d );
+        
+        // SUPPLIER_LEDGER TABLE
+        new StaticSentence(s, "DELETE FROM PARTY_LEDGER WHERE TRANSACTION_TYPE = ? and TRANSACTION_ID = ?", new SerializerWriteBasic(new Datas[]{
+                Datas.STRING, Datas.STRING}))
+                .exec( AppLocal.purchaseTypeString, this.currentPurchaseId );
+        
+        new StaticSentence(s, "INSERT INTO PARTY_LEDGER (ID, TRANSACTION_DATE, TRANSACTION_TYPE, TRANSACTION_ID, PARTY_TYPE, PARTY_ID, AMOUNT) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasic(new Datas[]{
+                Datas.STRING, Datas.TIMESTAMP, Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE}))
+                .exec( UUID.randomUUID().toString(), dpPurchaseDate.getDate(), AppLocal.purchaseTypeString, this.currentPurchaseId, AppLocal.supplierTypeString, supplierId, balancePayable );
+        
+        // STOCK DIARY
+        new StaticSentence(s, "DELETE FROM STOCKDIARY WHERE TRANSACTION_ID = ?", new SerializerWriteBasic(new Datas[]{
+                Datas.STRING, Datas.DOUBLE}))
+                .exec( this.currentPurchaseId, 0d );
+        
+        for(int i = 0; i < purchaseLines.size(); i++){
+            
+            PurchaseLine purchaseLine = purchaseLines.get(i);
+            
+            new StaticSentence(s, "INSERT INTO STOCKDIARY (ID, DATENEW, REASON, LOCATION, PRODUCT, UNITS, PRICE, APPUSER, TRANSACTION_ID) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasic(new Datas[]{
+                Datas.STRING, 
+                Datas.TIMESTAMP, 
+                Datas.INT, 
+                Datas.STRING, 
+                Datas.STRING, 
+                Datas.DOUBLE, 
+                Datas.DOUBLE, 
+                Datas.STRING, 
+                Datas.STRING}))
+                .exec( 
+                        UUID.randomUUID().toString(), 
+                        dpPurchaseDate.getDate(), 
+                        1,     
+                        locationId, 
+                        purchaseLine.productId, 
+                        purchaseLine.units + purchaseLine.freeUnits, 
+                        purchaseLine.rate, 
+                        m_app.getAppUserView().getUser().getId(), 
+                        this.currentPurchaseId 
+                );
+        }
+        
+        // STOCK CURRENT
+        for(int i = 0; i < oldPurchaseLines.size(); i++){
+            
+            PurchaseLine purchaseLine = oldPurchaseLines.get(i);
+            
+            new StaticSentence(s, "UPDATE STOCKCURRENT SET UNITS = UNITS - ? WHERE LOCATION = ? AND PRODUCT = ?", new SerializerWriteBasic(new Datas[]{
+                Datas.DOUBLE, Datas.STRING, Datas.STRING}))
+                .exec( purchaseLine.units + purchaseLine.freeUnits, oldLocationId, purchaseLine.productId );
+        }
+        for(int i = 0; i < purchaseLines.size(); i++){
+            
+            PurchaseLine purchaseLine = purchaseLines.get(i);
+            
+            new StaticSentence(s, "UPDATE STOCKCURRENT SET UNITS = UNITS + ? WHERE LOCATION = ? AND PRODUCT = ?", new SerializerWriteBasic(new Datas[]{
+                Datas.DOUBLE, Datas.STRING, Datas.STRING}))
+                .exec( purchaseLine.units + purchaseLine.freeUnits, locationId, purchaseLine.productId );
+            
+            new StaticSentence(s, "REPLACE INTO STOCKCURRENT (LOCATION, PRODUCT, UNITS) VALUES "
+                    + "(?, ?, ?)", new SerializerWriteBasic(new Datas[]{
+                Datas.STRING, Datas.STRING, Datas.DOUBLE}))
+                .exec( locationId, purchaseLine.productId, purchaseLine.units + purchaseLine.freeUnits );
+        }
+        
+        // PAYMENTS
+        if(paidThroughCash != 0) {
+            dlReceiptsAndPayments.makePaymentOrReceiptEntry(
+                AppLocal.paymentThroughCash, 
+                -paidThroughCash, 
+                this.currentPurchaseId,
+                null,
+                null,
+                "Payment through cash to supplier against Inv No. " + txtInvoiceNo.getText(),
+                dpPurchaseDate.getDate());
+        }
+        
+        if(paidThroughCard != 0) {
+            dlReceiptsAndPayments.makePaymentOrReceiptEntry(
+                AppLocal.paymentThroughCard, 
+                -paidThroughCard, 
+                this.currentPurchaseId,
+                null,
+                null,
+                "Payment through card to supplier against Inv No. " + txtInvoiceNo.getText(),
+                dpPurchaseDate.getDate());
+        }
+        
+        if(paidThroughCheque != 0) {
+            dlReceiptsAndPayments.makePaymentOrReceiptEntry(
+                AppLocal.paymentThroughCheque, 
+                -paidThroughCheque, 
+                this.currentPurchaseId,
+                null,
+                null,
+                "Payment through cheque to supplier against Inv No. " + txtInvoiceNo.getText(),
+                dpPurchaseDate.getDate());
+        }
+        
+        // UPDATE COST
+        if(isNewInvoice) {
+            
+            String useWeightedAverageCostingString = dlSystem.getSettingValue(AppLocal.settingUseWeightedAverageCosting);
+            boolean useWeightedAverageCosting = useWeightedAverageCostingString == "0" ? false : true;
+            
+            for(int i = 0; i < purchaseLines.size(); i++){
+            
+                PurchaseLine purchaseLine = purchaseLines.get(i);
+
+                if(useWeightedAverageCosting == false) {
+                    new StaticSentence(s, "UPDATE PRODUCTS SET PRICEBUY = ? WHERE ID = ?", 
+                        new SerializerWriteBasic(new Datas[]{
+                        Datas.DOUBLE, Datas.STRING}))
+                        .exec( purchaseLine.rate, purchaseLine.productId );
+                } else {
+                    
+                    double currentQty = 0;
+                    double currentCost = 0;
+                    
+                    currentQty = (double)new StaticSentence(s,
+                        "SELECT SUM(UNITS) FROM STOCKCURRENT WHERE PRODUCT = ?;",
+                        SerializerWriteString.INSTANCE,
+                        SerializerReadDouble.INSTANCE).find(purchaseLine.productId);
+                    
+                    currentCost = (double)new StaticSentence(s,
+                        "SELECT PRICEBUY FROM PRODUCTS WHERE ID = ?",
+                        SerializerWriteString.INSTANCE,
+                        SerializerReadDouble.INSTANCE).find(purchaseLine.productId);
+                    
+                    double totalCurrentCost = currentQty * currentCost;
+                    totalCurrentCost += purchaseLine.total;
+                    currentQty += purchaseLine.units + purchaseLine.freeUnits;
+                    
+                    if(totalCurrentCost > 0 && currentQty > 0) {
+                        double averageCost = totalCurrentCost / currentQty;
+                        
+                        new StaticSentence(s,
+                            "UPDATE PRODUCTS SET PRICEBUY = ? WHERE ID = ?",
+                            new SerializerWriteBasic(new Datas[]{
+                            Datas.DOUBLE, Datas.STRING}))
+                            .exec( averageCost, purchaseLine.productId );
+                    }
+                    
+                }
+            }
+        }
+    }
+    
     private void numberInputLostFocus(FocusEvent evt) {
         JTextField field = (JTextField)evt.getSource();
         String text = field.getText();
@@ -727,6 +1112,11 @@ public class PurchaseDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -738,13 +1128,18 @@ public class PurchaseDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblTotal;
+    private javax.swing.JLabel lblGrandTotal;
+    private javax.swing.JComboBox m_jLocation;
     private javax.swing.JComboBox<String> m_jSuppliers;
     private javax.swing.JTable tablePurchaseLines;
+    private javax.swing.JTextField txtBalancePayable;
     private javax.swing.JTextField txtBarcode;
     private javax.swing.JTextField txtDiscountPercent;
     private javax.swing.JTextField txtFreeUnits;
     private javax.swing.JTextField txtInvoiceNo;
+    private javax.swing.JTextField txtPaidThroughCard;
+    private javax.swing.JTextField txtPaidThroughCash;
+    private javax.swing.JTextField txtPaidThroughCheque;
     private javax.swing.JTextField txtProduct;
     private javax.swing.JTextField txtRate;
     private javax.swing.JTextField txtTotal;

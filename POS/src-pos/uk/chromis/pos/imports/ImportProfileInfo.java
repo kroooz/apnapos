@@ -144,7 +144,7 @@ public class ImportProfileInfo implements Serializable {
     public String getQuantity() {
         return quantity;
     }
-
+    
     public String getSecurity() {
         return security;
     }

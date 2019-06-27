@@ -177,6 +177,10 @@ public class JPaymentCashPos extends javax.swing.JPanel implements JPaymentInter
          * @param amount
          */
         public void addButton(String image, double amount) {
+            
+            if(true)    // disabled currency buttons
+                return; // disabled currency buttons
+            
             JButton btn = new JButton();
 //added 19.04.13 JDL removal of text on payment buttons if required.   
             try {

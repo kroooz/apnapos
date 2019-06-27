@@ -29,30 +29,109 @@
     <changeSet author="Apna POS" id="Add Purchases Tables" >    
     
         <createTable tableName="PURCHASES">
-            <column name="ID" type="varchar(255)" />
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="PURCHASE_DATE" type="datetime" />
             <column name="INVOICE_NUMBER" type="varchar(255)" />
-            <column name="SUPPLIER_ID" type="varchar(255)" />
+            <column name="PARTY_ID" type="varchar(255)" />
+            <column name="LOCATION_ID" type="varchar(255)" />
+            <column name="TOTAL" type="double" />     
+            <column name="CASH_PAID" type="double" />
+            <column name="CARD_PAID" type="double" />
+            <column name="CHEQUE_PAID" type="double" />
+            <column name="BALANCE_PAYABLE" type="double" />
         </createTable>
 
         <createTable tableName="PURCHASE_LINES">
-            <column name="ID" type="varchar(255)" />
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="PURCHASE_ID" type="varchar(255)" />    
             <column name="PRODUCT_ID" type="varchar(255)" />
             <column name="UNITS" type="double" />
             <column name="FREE_UNITS" type="double" />
             <column name="RATE" type="double" />
-            <column name="DISCOUNT" type="double" />
-            <column name="TOTAL" type="double" />        
+            <column name="DISCOUNT_PERCENT" type="double" />
+            <column name="TOTAL" type="double" />     
         </createTable>
+        
+        <createIndex tableName="PURCHASE_LINES"
+                    indexName="index_purchase_id"
+                    unique="false">
+            <column name="PURCHASE_ID" type="varchar(255)"/>
+        </createIndex> 
 
-        <createTable tableName="SUPPLIERS_LEDGER">
-            <column name="ID" type="varchar(255)" />
+        <createTable tableName="PARTY_LEDGER">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="TRANSACTION_DATE" type="datetime" />
             <column name="TRANSACTION_TYPE" type="varchar(255)" />
-            <column name="SUPPLIER_ID" type="varchar(255)" />
+            <column name="TRANSACTION_ID" type="varchar(255)" />
+            <column name="PARTY_TYPE" type="varchar(255)" />
+            <column name="PARTY_ID" type="varchar(255)" />
             <column name="AMOUNT" type="double" />
         </createTable>
+        
+        <createIndex tableName="PARTY_LEDGER"
+                    indexName="index_transaction_date"
+                    unique="false">
+            <column name="TRANSACTION_DATE" type="datetime" />
+        </createIndex> 
+        
+        <createIndex tableName="PARTY_LEDGER"
+                    indexName="index_transaction_type"
+                    unique="false">
+            <column name="TRANSACTION_TYPE" type="varchar(255)" />
+        </createIndex> 
+        
+        <createIndex tableName="PARTY_LEDGER"
+                    indexName="TRANSACTION_ID"
+                    unique="false">
+            <column name="TRANSACTION_ID" type="varchar(255)" />
+        </createIndex> 
+        
+        <createIndex tableName="PARTY_LEDGER"
+                    indexName="PARTY_ID"
+                    unique="false">
+            <column name="PARTY_ID" type="varchar(255)" />
+        </createIndex> 
+        
+        <createIndex tableName="PARTY_LEDGER"
+                    indexName="PARTY_TYPE"
+                    unique="false">
+            <column name="PARTY_TYPE" type="varchar(255)" />
+        </createIndex> 
 
+    </changeSet>
+    
+    <changeSet author="Apna POS" id="Add TRANSACTION_ID in STOCKDIARY">
+        <addColumn tableName="STOCKDIARY">
+            <column name="TRANSACTION_ID" type="varchar(255)" defaultValue="null" />
+        </addColumn>
+    </changeSet>
+    
+    <changeSet author="Apna POS" id="Add INDEX ON TRANSACTION_ID in STOCKDIARY">
+        <createIndex tableName="STOCKDIARY"
+                    indexName="INDEX_TRANSACTION_ID"
+                    unique="false" >
+            <column name="TRANSACTION_ID" type="varchar(255)" />
+        </createIndex> 
+    </changeSet>
+    
+    <changeSet author="Apna POS" id="Add INDEX ON TRANSID in PAYMENTS">
+        <createIndex tableName="PAYMENTS"
+                    indexName="INDEX_TRANSID"
+                    unique="false" >
+            <column name="TRANSID" type="varchar(255)" />
+        </createIndex> 
+    </changeSet>
+    
+    <changeSet author="Apna POS" id="Add CURRENT_BALANCE IN SUPPLIERS TABLE">
+        <addColumn tableName="SUPPLIERS">
+            <column name="CURRENT_BALANCE" type="double" />
+        </addColumn>
     </changeSet>
           
     <changeSet author="Apna POS" id="Update to ApnaPOS version to 1.2">    

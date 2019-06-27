@@ -88,6 +88,9 @@ public class StartPOS {
 
 //           Usman's Computer
 //             String MotherBoard = "QCQLWS042702WB";
+
+//           Adnan's Computer
+//             String MotherBoard = "/20K8DZ1/CN722003BD02PD/";
             
             
             // CODE TO CHECK IF LICENSE IS VALID
@@ -119,7 +122,16 @@ public class StartPOS {
                     readFile(path + fileName, "UTF-8") :
                     Long.toString(System.currentTimeMillis());
             
-            Long lastUseMillis = Long.parseLong(lastUseMillisString.replaceAll("\\p{C}", ""));
+            Long lastUseMillis = 0l;
+            try
+            {
+                lastUseMillis = Long.parseLong(lastUseMillisString.replaceAll("\\p{C}", ""));
+            }
+            catch(Exception ex)
+            {
+                lastUseMillis = System.currentTimeMillis();
+            }
+            
             Long currentUseMillis = System.currentTimeMillis();
             
             if(currentUseMillis < lastUseMillis){

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+
+
+    <property name="boolean.type" value="boolean" dbms="derby, postgresql"/>
+    <property name="boolean.type" value="bit" dbms="mysql"/>
+   
+    <property name="blob.type" value="blob" dbms="derby"/>
+    <property name="blob.type" value="bytea" dbms="postgresql"/>
+    <property name="blob.type" value="mediumblob" dbms="mysql"/>
+     
+      
+    <changeSet author="Apna POS" id="Add cost column in ticketlines tables" >   
+        <addColumn tableName="TICKETLINES">       
+            <column name="COST" type="double" defaultValue="0"/> 
+        </addColumn>                                               
+    </changeSet>
+    
+    <changeSet author="Apna POS" id="Add Settings Table" >
+        <createTable tableName="SETTINGS">
+            <column name="SETTING_KEY" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="SETTING_VALUE" type="varchar(1000)" />
+        </createTable>
+    </changeSet>
+          
+    <changeSet author="Apna POS" id="Update to ApnaPOS version to 1.3">    
+        <update tableName="APPLICATIONS">
+            <column name="VERSION" value="1.3"/>   
+            <column name="VERSIONINT" valueNumeric="13"/>         
+        </update>  
+    </changeSet> 
+                                            
+</databaseChangeLog>

@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -1297,6 +1298,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jLabel1 = new javax.swing.JLabel();
         jFileName = new javax.swing.JTextField();
         jbtnDbDriverLib = new javax.swing.JButton();
+        jbtnDbDriverLib1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -1395,8 +1397,8 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jParamsLocation = new uk.chromis.pos.reports.JParamsLocation();
         pb = new javax.swing.JProgressBar();
 
-        setOpaque(false);
         setPreferredSize(new java.awt.Dimension(630, 430));
+        setOpaque(false);
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
 
@@ -1413,13 +1415,23 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
             }
         });
 
-        jbtnDbDriverLib.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/fileopen.png"))); // NOI18N
-        jbtnDbDriverLib.setMaximumSize(new java.awt.Dimension(64, 32));
-        jbtnDbDriverLib.setMinimumSize(new java.awt.Dimension(64, 32));
-        jbtnDbDriverLib.setPreferredSize(new java.awt.Dimension(64, 32));
+        jbtnDbDriverLib.setText("Select File");
+        jbtnDbDriverLib.setMaximumSize(null);
+        jbtnDbDriverLib.setMinimumSize(null);
+        jbtnDbDriverLib.setPreferredSize(null);
         jbtnDbDriverLib.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnDbDriverLibActionPerformed(evt);
+            }
+        });
+
+        jbtnDbDriverLib1.setText("Template");
+        jbtnDbDriverLib1.setMaximumSize(null);
+        jbtnDbDriverLib1.setMinimumSize(null);
+        jbtnDbDriverLib1.setPreferredSize(null);
+        jbtnDbDriverLib1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnDbDriverLib1ActionPerformed(evt);
             }
         });
 
@@ -1438,7 +1450,9 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                         .addGap(35, 35, 35)
                         .addComponent(jFileName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jbtnDbDriverLib, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jbtnDbDriverLib, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbtnDbDriverLib1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jHeaderLayout.setVerticalGroup(
@@ -1450,7 +1464,9 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                     .addGroup(jHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jFileName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jbtnDbDriverLib, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jbtnDbDriverLib, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbtnDbDriverLib1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5))
         );
 
@@ -1486,93 +1502,93 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jLabel13.setText(bundle.getString("label.csvnotchanged")); // NOI18N
         jLabel13.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jTextRecords.setBackground(new java.awt.Color(224, 223, 227));
         jTextRecords.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextRecords.setForeground(new java.awt.Color(102, 102, 102));
         jTextRecords.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextRecords.setBackground(new java.awt.Color(224, 223, 227));
         jTextRecords.setBorder(null);
         jTextRecords.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextRecords.setEnabled(false);
+        jTextRecords.setForeground(new java.awt.Color(102, 102, 102));
         jTextRecords.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextNew.setBackground(new java.awt.Color(224, 223, 227));
         jTextNew.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextNew.setForeground(new java.awt.Color(102, 102, 102));
         jTextNew.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextNew.setBackground(new java.awt.Color(224, 223, 227));
         jTextNew.setBorder(null);
         jTextNew.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextNew.setEnabled(false);
+        jTextNew.setForeground(new java.awt.Color(102, 102, 102));
         jTextNew.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextInvalid.setBackground(new java.awt.Color(224, 223, 227));
         jTextInvalid.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextInvalid.setForeground(new java.awt.Color(102, 102, 102));
         jTextInvalid.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextInvalid.setBackground(new java.awt.Color(224, 223, 227));
         jTextInvalid.setBorder(null);
         jTextInvalid.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextInvalid.setEnabled(false);
+        jTextInvalid.setForeground(new java.awt.Color(102, 102, 102));
         jTextInvalid.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextUpdate.setBackground(new java.awt.Color(224, 223, 227));
         jTextUpdate.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextUpdate.setForeground(new java.awt.Color(102, 102, 102));
         jTextUpdate.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextUpdate.setBackground(new java.awt.Color(224, 223, 227));
         jTextUpdate.setBorder(null);
         jTextUpdate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextUpdate.setEnabled(false);
+        jTextUpdate.setForeground(new java.awt.Color(102, 102, 102));
         jTextUpdate.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextMissing.setBackground(new java.awt.Color(224, 223, 227));
         jTextMissing.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextMissing.setForeground(new java.awt.Color(102, 102, 102));
         jTextMissing.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextMissing.setBackground(new java.awt.Color(224, 223, 227));
         jTextMissing.setBorder(null);
         jTextMissing.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextMissing.setEnabled(false);
+        jTextMissing.setForeground(new java.awt.Color(102, 102, 102));
         jTextMissing.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextBadPrice.setBackground(new java.awt.Color(224, 223, 227));
         jTextBadPrice.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextBadPrice.setForeground(new java.awt.Color(102, 102, 102));
         jTextBadPrice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextBadPrice.setBackground(new java.awt.Color(224, 223, 227));
         jTextBadPrice.setBorder(null);
         jTextBadPrice.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextBadPrice.setEnabled(false);
+        jTextBadPrice.setForeground(new java.awt.Color(102, 102, 102));
         jTextBadPrice.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextNoChange.setBackground(new java.awt.Color(224, 223, 227));
         jTextNoChange.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextNoChange.setForeground(new java.awt.Color(102, 102, 102));
         jTextNoChange.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextNoChange.setBackground(new java.awt.Color(224, 223, 227));
         jTextNoChange.setBorder(null);
         jTextNoChange.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextNoChange.setEnabled(false);
+        jTextNoChange.setForeground(new java.awt.Color(102, 102, 102));
         jTextNoChange.setPreferredSize(new java.awt.Dimension(70, 25));
 
         jLabel19.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel19.setText(bundle.getString("label.csvbadcats")); // NOI18N
         jLabel19.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jTextBadCats.setBackground(new java.awt.Color(224, 223, 227));
         jTextBadCats.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextBadCats.setForeground(new java.awt.Color(102, 102, 102));
         jTextBadCats.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextBadCats.setBackground(new java.awt.Color(224, 223, 227));
         jTextBadCats.setBorder(null);
         jTextBadCats.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextBadCats.setEnabled(false);
+        jTextBadCats.setForeground(new java.awt.Color(102, 102, 102));
         jTextBadCats.setPreferredSize(new java.awt.Dimension(70, 25));
 
         jTextUpdates1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jTextUpdates1.setText(bundle.getString("label.csvquantityupdated")); // NOI18N
         jTextUpdates1.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jTextQuantityUpdate.setBackground(new java.awt.Color(224, 223, 227));
         jTextQuantityUpdate.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextQuantityUpdate.setForeground(new java.awt.Color(102, 102, 102));
         jTextQuantityUpdate.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextQuantityUpdate.setBackground(new java.awt.Color(224, 223, 227));
         jTextQuantityUpdate.setBorder(null);
         jTextQuantityUpdate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextQuantityUpdate.setEnabled(false);
+        jTextQuantityUpdate.setForeground(new java.awt.Color(102, 102, 102));
         jTextQuantityUpdate.setPreferredSize(new java.awt.Dimension(70, 25));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -2540,6 +2556,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jComboSell.setSelectedItem("Sell Price");
         jComboQuantity.setSelectedItem("Quantity");
         jComboCategory.setSelectedItem("Category");
+        jComboBoxVarPrice.setSelectedItem("Is Variable Price (1 or 0)");
         jComboDefaultCategory.setSelectedItem(reject_bad_categories_text);
         
         // check if mapping is successful
@@ -2818,6 +2835,32 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         checkFieldMapping();
     }//GEN-LAST:event_jComboTaxActionPerformed
 
+    private void jbtnDbDriverLib1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDbDriverLib1ActionPerformed
+        
+        try{
+            JFileChooser chooser = new JFileChooser();
+            chooser.setCurrentDirectory(new java.io.File("."));
+            chooser.setDialogTitle("Select Folder");
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            chooser.setAcceptAllFileFilterUsed(false);
+            chooser.setApproveButtonText("Select");
+
+            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+
+                PrintWriter writer = new PrintWriter(chooser.getSelectedFile() + "/template.csv", "UTF-8");
+                writer.println( "Reference, Barcode, Name, Sell Price, Buy Price, Category, Quantity, Is Variable Price (1 or 0)" );
+                writer.close();
+
+            } else {
+              System.out.println("No Selection ");
+            }
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "Error occurred: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jbtnDbDriverLib1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnDeleteProfile;
     private javax.swing.JButton jBtnLoadProfile;
@@ -2920,6 +2963,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
     private javax.swing.JLabel jTextUpdates1;
     private javax.swing.JLabel jWarningLbl;
     private javax.swing.JButton jbtnDbDriverLib;
+    private javax.swing.JButton jbtnDbDriverLib1;
     private javax.swing.JComboBox m_jLocation;
     private javax.swing.JProgressBar pb;
     // End of variables declaration//GEN-END:variables

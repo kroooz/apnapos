@@ -23,6 +23,7 @@
 
 package uk.chromis.pos.sales;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Font;
@@ -140,8 +141,17 @@ public class JProductLineEdit extends javax.swing.JDialog {
                 m_jPriceTax.setEnabled(false);
                 m_jTaxrate.setEnabled(false);
                 
-                boldLabel(jLabelQty);
+                highlightLabel(jLabelQty);
                 m_jUnits.activate(); 
+                break;
+            case ("price"):
+                m_jName.setEnabled(false);
+                m_jUnits.setEnabled(false);
+                m_jPriceTax.setEnabled(false);
+                m_jTaxrate.setEnabled(false);
+                
+                highlightLabel(jLabelPrice);
+                m_jPrice.activate(); 
                 break;
             default:
                 throw new BasicException("EditType not valid");
@@ -157,10 +167,11 @@ public class JProductLineEdit extends javax.swing.JDialog {
         return returnLine;
     }
     
-    private void boldLabel(JLabel lbl){
-        Font f = lbl.getFont();
+    private void highlightLabel(JLabel lbl){
+        //Font f = lbl.getFont();
         // bold
-        lbl.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+        //lbl.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+        lbl.setForeground(Color.red);
     }
 
     private void printTotals() {
@@ -279,7 +290,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
 
         jPanel5 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabelPrice = new javax.swing.JLabel();
         jLabelQty = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -308,12 +319,12 @@ public class JProductLineEdit extends javax.swing.JDialog {
 
         jPanel2.setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText(AppLocal.getIntString("label.price")); // NOI18N
-        jPanel2.add(jLabel1);
-        jLabel1.setBounds(10, 100, 90, 25);
+        jLabelPrice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabelPrice.setText(AppLocal.getIntString("label.price")); // NOI18N
+        jPanel2.add(jLabelPrice);
+        jLabelPrice.setBounds(10, 100, 90, 25);
 
-        jLabelQty.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabelQty.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabelQty.setText(AppLocal.getIntString("label.units")); // NOI18N
         jPanel2.add(jLabelQty);
         jLabelQty.setBounds(10, 50, 90, 40);
@@ -493,12 +504,12 @@ public class JProductLineEdit extends javax.swing.JDialog {
     }//GEN-LAST:event_m_jButtonUpdateActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabelPrice;
     private javax.swing.JLabel jLabelQty;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

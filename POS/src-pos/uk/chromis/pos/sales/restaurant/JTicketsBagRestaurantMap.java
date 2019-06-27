@@ -55,7 +55,7 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
 import uk.chromis.pos.forms.DataLogicSystem;
-import uk.chromis.pos.sales.DataLogicReceipts;
+import uk.chromis.pos.sales.DataLogicReceiptsAndPayments;
 import uk.chromis.pos.sales.JTicketsBag;
 import uk.chromis.pos.sales.SharedTicketInfo;
 import uk.chromis.pos.sales.TicketsEditor;
@@ -90,7 +90,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
     private Place m_PlaceClipboard;
     private CustomerInfo customer;
 
-    private DataLogicReceipts dlReceipts = null;
+    private DataLogicReceiptsAndPayments dlReceipts = null;
     private DataLogicSales dlSales = null;
     private DataLogicSystem dlSystem = null;
     private final RestaurantDBUtils restDB;
@@ -127,7 +127,7 @@ public class JTicketsBagRestaurantMap extends JTicketsBag {
         restDB = new RestaurantDBUtils();
         transparentButtons = AppConfig.getInstance().getBoolean("table.transparentbuttons");
 
-        dlReceipts = (DataLogicReceipts) app.getBean("uk.chromis.pos.sales.DataLogicReceipts");
+        dlReceipts = (DataLogicReceiptsAndPayments) app.getBean("uk.chromis.pos.sales.DataLogicReceiptsAndPayments");
         dlSales = (DataLogicSales) m_App.getBean("uk.chromis.pos.forms.DataLogicSales");
         dlSystem = (DataLogicSystem) m_App.getBean("uk.chromis.pos.forms.DataLogicSystem");
 

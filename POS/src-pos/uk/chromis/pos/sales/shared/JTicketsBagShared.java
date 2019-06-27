@@ -40,7 +40,7 @@ import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.DataLogicSales;
-import uk.chromis.pos.sales.DataLogicReceipts;
+import uk.chromis.pos.sales.DataLogicReceiptsAndPayments;
 import uk.chromis.pos.sales.JPanelTicket;
 import uk.chromis.pos.sales.JTicketsBag;
 import uk.chromis.pos.sales.SharedTicketInfo;
@@ -56,7 +56,7 @@ import uk.chromis.pos.util.AutoLogoff;
 public class JTicketsBagShared extends JTicketsBag {
 
     private String m_sCurrentTicket = null;
-    private DataLogicReceipts dlReceipts = null;
+    private DataLogicReceiptsAndPayments dlReceipts = null;
     private DataLogicSales dlSales;
 
     /**
@@ -69,7 +69,7 @@ public class JTicketsBagShared extends JTicketsBag {
 
         super(app, panelticket);
 
-        dlReceipts = (DataLogicReceipts) app.getBean("uk.chromis.pos.sales.DataLogicReceipts");
+        dlReceipts = (DataLogicReceiptsAndPayments) app.getBean("uk.chromis.pos.sales.DataLogicReceiptsAndPayments");
         dlSales = (DataLogicSales) app.getBean("uk.chromis.pos.forms.DataLogicSales");
 
         initComponents();
