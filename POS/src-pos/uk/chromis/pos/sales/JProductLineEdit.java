@@ -29,16 +29,24 @@ import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.KeyStroke;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.Session;
+import uk.chromis.editor.JEditorAbstract;
 import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
@@ -64,6 +72,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
     private PreparedStatement pstmt;
     private DataLogicSystem dlSystem;
     private DataLogicSync dlSync;
+    private JEditorAbstract[] editorFields = new JEditorAbstract[4];
 
     /**
      * Creates new form JProductLineEdit
@@ -79,9 +88,14 @@ public class JProductLineEdit extends javax.swing.JDialog {
         super(parent, modal);
     }
 
-    private TicketLineInfo init(Window window, AppView app, TicketLineInfo oLine, String editType) throws BasicException {
+    private TicketLineInfo init(Window window, AppView app, TicketLineInfo oLine, String[] editableFields, String activatedField) throws BasicException {
         // Inicializo los componentes
         initComponents();
+        
+        editorFields[0] = m_jName;
+        editorFields[1] = m_jPrice;
+        editorFields[2] = m_jUnits;
+        editorFields[3] = m_jPriceTax;
 
         dlSystem = (DataLogicSystem) app.getBean("uk.chromis.pos.forms.DataLogicSystem");
         dlSync = (DataLogicSync) app.getBean("uk.chromis.pos.sync.DataLogicSync");
@@ -130,32 +144,59 @@ public class JProductLineEdit extends javax.swing.JDialog {
             m_jUnits.activate();
         }
         
-        switch(editType)
+        if(Arrays.stream(editableFields).anyMatch("all"::equals)) {
+            m_jName.setEnabled(true);
+            m_jPrice.setEnabled(true);
+            m_jPriceTax.setEnabled(true);
+            m_jTaxrate.setEnabled(true);
+            m_jUnits.setEnabled(true);
+        }
+        else {
+            // disable all fields first
+            m_jName.setEnabled(false);
+            m_jPrice.setEnabled(false);
+            m_jPriceTax.setEnabled(false);
+            m_jTaxrate.setEnabled(false);
+            m_jUnits.setEnabled(false);
+            
+            if(Arrays.stream(editableFields).anyMatch("qty"::equals)) {
+                m_jUnits.setEnabled(true);
+            }
+            
+            if(Arrays.stream(editableFields).anyMatch("price"::equals)) {
+                m_jPrice.setEnabled(true);
+            }
+        }
+        
+        switch(activatedField)
         {
-            case ("all"):
-                // do nothing
-                break;
             case ("qty"):
-                m_jName.setEnabled(false);
-                m_jPrice.setEnabled(false);
-                m_jPriceTax.setEnabled(false);
-                m_jTaxrate.setEnabled(false);
-                
-                highlightLabel(jLabelQty);
+                //highlightLabel(jLabelQty);
                 m_jUnits.activate(); 
                 break;
             case ("price"):
-                m_jName.setEnabled(false);
-                m_jUnits.setEnabled(false);
-                m_jPriceTax.setEnabled(false);
-                m_jTaxrate.setEnabled(false);
-                
-                highlightLabel(jLabelPrice);
+                //highlightLabel(jLabelPrice);
                 m_jPrice.activate(); 
                 break;
             default:
-                throw new BasicException("EditType not valid");
+                throw new BasicException("Activated Field not valid");
         }
+        
+        this.jPanel5.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.CTRL_MASK), "CtrlUpArrow");
+        this.jPanel5.getActionMap().put("CtrlUpArrow", new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                activatePreviousField();
+            }
+        });
+        
+        this.jPanel5.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.CTRL_MASK), "CtrlDownArrow");
+        this.jPanel5.getActionMap().put("CtrlDownArrow", new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                activateNextField();
+            }
+        });
 
         printTotals();
 
@@ -165,6 +206,42 @@ public class JProductLineEdit extends javax.swing.JDialog {
         setVisible(true);
 
         return returnLine;
+    }
+    
+    private void activatePreviousField() {
+        
+        for(int i = 0; i < this.editorFields.length; i++) {
+            if( this.editorFields[i].getActive() ) {
+                
+                for(int j = i - 1; j >= 0; j--) {
+                    if(this.editorFields[j].isEnabled()) {
+                        this.editorFields[i].deactivate();
+                        this.editorFields[j].activate();
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        
+    }
+    
+    private void activateNextField() {
+        
+        for(int i = 0; i < this.editorFields.length; i++) {
+            if( this.editorFields[i].getActive() ) {
+                
+                for(int j = i + 1; j < this.editorFields.length; j++) {
+                    if(this.editorFields[j].isEnabled()) {
+                        this.editorFields[i].deactivate();
+                        this.editorFields[j].activate();
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        
     }
     
     private void highlightLabel(JLabel lbl){
@@ -267,7 +344,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
      * @return
      * @throws BasicException
      */
-    public static TicketLineInfo showMessage(Component parent, AppView app, TicketLineInfo oLine, String editType) throws BasicException {
+    public static TicketLineInfo showMessage(Component parent, AppView app, TicketLineInfo oLine, String[] editableFields, String activatedField) throws BasicException {
 
         Window window = getWindow(parent);
 
@@ -277,7 +354,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
         } else {
             myMsg = new JProductLineEdit((Dialog) window, true);
         }
-        return myMsg.init(window, app, oLine, editType);
+        return myMsg.init(window, app, oLine, editableFields, activatedField);
     }
 
     /**
@@ -304,6 +381,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
         m_jTotal = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         m_jSubtotal = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         m_jButtonUpdate = new javax.swing.JButton();
         m_jButtonCancel = new javax.swing.JButton();
@@ -319,41 +397,41 @@ public class JProductLineEdit extends javax.swing.JDialog {
 
         jPanel2.setLayout(null);
 
-        jLabelPrice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabelPrice.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabelPrice.setText(AppLocal.getIntString("label.price")); // NOI18N
         jPanel2.add(jLabelPrice);
-        jLabelPrice.setBounds(10, 100, 90, 25);
+        jLabelPrice.setBounds(10, 110, 110, 25);
 
-        jLabelQty.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabelQty.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabelQty.setText(AppLocal.getIntString("label.units")); // NOI18N
         jPanel2.add(jLabelQty);
-        jLabelQty.setBounds(10, 50, 90, 40);
+        jLabelQty.setBounds(10, 150, 110, 40);
 
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel3.setText(AppLocal.getIntString("label.pricetax")); // NOI18N
         jPanel2.add(jLabel3);
-        jLabel3.setBounds(10, 130, 90, 25);
+        jLabel3.setBounds(10, 210, 120, 25);
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel4.setText(AppLocal.getIntString("label.item")); // NOI18N
         jPanel2.add(jLabel4);
-        jLabel4.setBounds(10, 20, 90, 25);
+        jLabel4.setBounds(10, 60, 110, 25);
 
         m_jName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jPanel2.add(m_jName);
-        m_jName.setBounds(100, 20, 240, 25);
+        m_jName.setBounds(140, 50, 240, 40);
 
         m_jUnits.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jPanel2.add(m_jUnits);
-        m_jUnits.setBounds(100, 50, 240, 40);
+        m_jUnits.setBounds(140, 150, 240, 40);
 
         m_jPrice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jPanel2.add(m_jPrice);
-        m_jPrice.setBounds(100, 100, 240, 25);
+        m_jPrice.setBounds(140, 100, 240, 40);
 
         m_jPriceTax.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jPanel2.add(m_jPriceTax);
-        m_jPriceTax.setBounds(100, 130, 240, 25);
+        m_jPriceTax.setBounds(140, 200, 240, 40);
 
         m_jTaxrate.setBackground(javax.swing.UIManager.getDefaults().getColor("TextField.disabledBackground"));
         m_jTaxrate.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -363,17 +441,17 @@ public class JProductLineEdit extends javax.swing.JDialog {
         m_jTaxrate.setPreferredSize(new java.awt.Dimension(150, 25));
         m_jTaxrate.setRequestFocusEnabled(false);
         jPanel2.add(m_jTaxrate);
-        m_jTaxrate.setBounds(100, 160, 210, 25);
+        m_jTaxrate.setBounds(100, 280, 210, 25);
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText(AppLocal.getIntString("label.tax")); // NOI18N
+        jLabel5.setText("Use Ctrl + Up / Down Keys");
         jPanel2.add(jLabel5);
-        jLabel5.setBounds(10, 160, 90, 25);
+        jLabel5.setBounds(10, 10, 340, 25);
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText(AppLocal.getIntString("label.totalcash")); // NOI18N
         jPanel2.add(jLabel6);
-        jLabel6.setBounds(10, 220, 90, 25);
+        jLabel6.setBounds(10, 340, 90, 25);
 
         m_jTotal.setBackground(javax.swing.UIManager.getDefaults().getColor("TextField.disabledBackground"));
         m_jTotal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -383,12 +461,12 @@ public class JProductLineEdit extends javax.swing.JDialog {
         m_jTotal.setPreferredSize(new java.awt.Dimension(150, 25));
         m_jTotal.setRequestFocusEnabled(false);
         jPanel2.add(m_jTotal);
-        m_jTotal.setBounds(100, 220, 210, 25);
+        m_jTotal.setBounds(100, 340, 210, 25);
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText(AppLocal.getIntString("label.subtotalcash")); // NOI18N
         jPanel2.add(jLabel7);
-        jLabel7.setBounds(10, 190, 90, 25);
+        jLabel7.setBounds(10, 310, 90, 25);
 
         m_jSubtotal.setBackground(javax.swing.UIManager.getDefaults().getColor("TextField.disabledBackground"));
         m_jSubtotal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -398,7 +476,12 @@ public class JProductLineEdit extends javax.swing.JDialog {
         m_jSubtotal.setPreferredSize(new java.awt.Dimension(150, 25));
         m_jSubtotal.setRequestFocusEnabled(false);
         jPanel2.add(m_jSubtotal);
-        m_jSubtotal.setBounds(100, 190, 210, 25);
+        m_jSubtotal.setBounds(100, 310, 210, 25);
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText(AppLocal.getIntString("label.tax")); // NOI18N
+        jPanel2.add(jLabel8);
+        jLabel8.setBounds(10, 280, 90, 25);
 
         jPanel5.add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -460,7 +543,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.EAST);
 
-        setSize(new java.awt.Dimension(696, 446));
+        setSize(new java.awt.Dimension(696, 571));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -509,6 +592,7 @@ public class JProductLineEdit extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelPrice;
     private javax.swing.JLabel jLabelQty;
     private javax.swing.JPanel jPanel1;

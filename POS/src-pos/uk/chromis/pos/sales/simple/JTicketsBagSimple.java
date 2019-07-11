@@ -57,7 +57,7 @@ public class JTicketsBagSimple extends JTicketsBag {
         m_panelticket.setActiveTicket(new TicketInfo(), null);
         
         // Authorization
-        m_jDelTicket.setEnabled(m_App.getAppUserView().getUser().hasPermission("uk.chromis.pos.sales.JPanelTicketEdits"));
+        m_jDelTicket.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.CancelSale"));
 
     }
 

@@ -1,5 +1,171 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="07cd759a-04f9-4dbc-8803-8d5792a223f6" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../LicenseFileGenerator/dist/LicenseFileGenerator.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../LicenseFileGenerator/dist/LicenseFileGenerator.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AliApnaPos.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/royalblueimages.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/royalblueimages.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locales/pos_messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/locales/pos_messages.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-beans/uk/chromis/format/Formats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-beans/uk/chromis/format/Formats.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/config/Configuration.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/config/Configuration.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/config/ConfigurationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/config/ConfigurationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/config/JPanelConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/config/JPanelConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/customers/OrderCustomerList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/customers/OrderCustomerList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/forms/AppLocal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/forms/AppLocal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/forms/DataLogicSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/forms/DataLogicSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/forms/StartPOS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/forms/StartPOS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/imports/ImportProfileInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/imports/ImportProfileInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/imports/JPanelCSVImport.form" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/imports/JPanelCSVImport.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/imports/JPanelCSVImport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/imports/JPanelCSVImport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/liquibase/scripts/apnaposmigrations/AddCurrentBalanceColumnInSuppliersTable.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/liquibase/scripts/apnaposmigrations/AddedPurchaseTypeColumn.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/liquibase/scripts/apnaposmigrations/ApnaPosUpdates.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/liquibase/scripts/apnaposmigrations/ApnaPosUpdates.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/liquibase/scripts/apnaposmigrations/PurchasesMigrations.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/liquibase/scripts/apnaposmigrations/PurchasesMigrations.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/liquibase/scripts/apnaposmigrations/migrations.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/liquibase/scripts/apnaposmigrations/migrations.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/liquibase/scripts/create/addprimarykeys.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/liquibase/scripts/create/addprimarykeys.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/panels/JPanelCloseMoney.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/panels/JPanelCloseMoney.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/payment/JPaymentCashPos.form" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/payment/JPaymentCashPos.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/payment/JPaymentCashPos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/payment/JPaymentCashPos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/payment/JPaymentSelect.form" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/payment/JPaymentSelect.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/payment/JPaymentSelect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/payment/JPaymentSelect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/DataLogicReceipts.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/DataLogicReceiptsAndPayments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/JPanelTicket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/JPanelTicket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/JProductLineEdit.form" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/JProductLineEdit.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/JProductLineEdit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/JProductLineEdit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/restaurant/JTicketsBagRestaurantMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/restaurant/JTicketsBagRestaurantMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/shared/JTicketsBagShared.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/sales/shared/JTicketsBagShared.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/suppliers/DataLogicSuppliers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/suppliers/DataLogicSuppliers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/suppliers/PurchaseDialog.form" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/suppliers/PurchaseDialog.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/suppliers/PurchaseDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/suppliers/PurchaseDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/suppliers/PurchasesPanel.form" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/suppliers/PurchasesPanel.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/suppliers/PurchasesPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/suppliers/PurchasesPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/templates/Menu.Root.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/templates/Menu.Root.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/templates/Printer.Ticket.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/templates/Printer.Ticket.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/templates/Role.Administrator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/templates/Role.Administrator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/templates/Role.Manager.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/templates/Role.Manager.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-pos/uk/chromis/pos/templates/printer.ticket.logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/src-pos/uk/chromis/pos/templates/printer.ticket.logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/../readme.md" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1460" />
+    <option name="height" value="876" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="POS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="POS" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="POS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="POS" type="462c0819:PsiDirectoryNode" />
+              <item name="src-pos" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="POS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="POS" type="462c0819:PsiDirectoryNode" />
+              <item name="src-pos" type="462c0819:PsiDirectoryNode" />
+              <item name="uk" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="POS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="POS" type="462c0819:PsiDirectoryNode" />
+              <item name="src-pos" type="462c0819:PsiDirectoryNode" />
+              <item name="uk" type="462c0819:PsiDirectoryNode" />
+              <item name="chromis" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="POS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="POS" type="462c0819:PsiDirectoryNode" />
+              <item name="src-pos" type="462c0819:PsiDirectoryNode" />
+              <item name="uk" type="462c0819:PsiDirectoryNode" />
+              <item name="chromis" type="462c0819:PsiDirectoryNode" />
+              <item name="pos" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="07cd759a-04f9-4dbc-8803-8d5792a223f6" name="Default Changelist" comment="" />
+      <created>1561649331152</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1561649331152</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
+    <layout>
+      <window_info id="Image Layers" />
+      <window_info id="Designer" />
+      <window_info id="UI Designer" />
+      <window_info id="Capture Tool" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21393643" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Palette" />
+      <window_info anchor="right" id="Theme Preview" />
+      <window_info anchor="right" id="Maven" />
+      <window_info anchor="right" id="Capture Analysis" />
+      <window_info anchor="right" id="Palette&#9;" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
   <component name="masterDetails">
     <states>
       <state key="ProjectJDKs.UI">

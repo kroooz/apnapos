@@ -93,6 +93,8 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
                     jbtnFirstActionPerformed(evt);
                 }
             });
+            
+            jbtnFirst.setText("FIRST");
             add(jbtnFirst);
         }
 
@@ -108,11 +110,13 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
                     jbtnPrevActionPerformed(evt);
                 }
             });
+            
+            jbtnPrev.setText("PREVIOUS");
             add(jbtnPrev);
         }
 
         jbtnRefresh = new javax.swing.JButton();
-        jbtnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/1downarrow.png")));
+        jbtnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/refresh.png")));
         jbtnRefresh.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jbtnRefresh.setFocusPainted(false);
         jbtnRefresh.setFocusable(false);
@@ -122,6 +126,8 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
                 jbtnRefreshActionPerformed(evt);
             }
         });
+        
+        jbtnRefresh.setText("REFRESH");
         add(jbtnRefresh);
 
         if (iButtons == BUTTONS_ALL) {
@@ -136,6 +142,8 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
                     jbtnNextActionPerformed(evt);
                 }
             });
+            
+            jbtnNext.setText("NEXT");
             add(jbtnNext);
         }
 
@@ -151,6 +159,8 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
                     jbtnLastActionPerformed(evt);
                 }
             });
+            
+            jbtnLast.setText("LAST");
             add(jbtnLast);
         }
 
@@ -168,6 +178,7 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
                     jbtnReloadActionPerformed(evt);
                 }
             });
+            jbtnReload.setText("RELOAD");
             add(jbtnReload);
 
             add(new javax.swing.JSeparator());
@@ -188,6 +199,8 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
                     jbtnFindActionPerformed(evt);
                 }
             });
+            
+            jbtnFind.setText("FIND");
             add(jbtnFind);  
         }
         
@@ -204,6 +217,7 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
                     jbtnSortActionPerformed(evt);
                 }
             });
+            jbtnSort.setText("SORT");
             add(jbtnSort);
         }       
         
@@ -358,7 +372,7 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
     }// </editor-fold>//GEN-END:initComponents
    
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -782,6 +782,10 @@ public class PurchaseDialog extends javax.swing.JDialog {
 
     private boolean isPurchaseValid(){
         
+        if(this.txtInvoiceNo.getText().equals("")) {
+            this.txtInvoiceNo.setText("N/A");
+        }
+        
         if( !this.checkIfPaymentIsValid(null) ) {
             return false;
         }
@@ -974,11 +978,6 @@ public class PurchaseDialog extends javax.swing.JDialog {
             new StaticSentence(s, "UPDATE STOCKCURRENT SET UNITS = UNITS + ? WHERE LOCATION = ? AND PRODUCT = ?", new SerializerWriteBasic(new Datas[]{
                 Datas.DOUBLE, Datas.STRING, Datas.STRING}))
                 .exec( purchaseLine.units + purchaseLine.freeUnits, locationId, purchaseLine.productId );
-            
-            new StaticSentence(s, "REPLACE INTO STOCKCURRENT (LOCATION, PRODUCT, UNITS) VALUES "
-                    + "(?, ?, ?)", new SerializerWriteBasic(new Datas[]{
-                Datas.STRING, Datas.STRING, Datas.DOUBLE}))
-                .exec( locationId, purchaseLine.productId, purchaseLine.units + purchaseLine.freeUnits );
         }
         
         // PAYMENTS
@@ -1039,6 +1038,8 @@ public class PurchaseDialog extends javax.swing.JDialog {
                         "SELECT SUM(UNITS) FROM STOCKCURRENT WHERE PRODUCT = ?;",
                         SerializerWriteString.INSTANCE,
                         SerializerReadDouble.INSTANCE).find(purchaseLine.productId);
+                    
+                    currentQty -= purchaseLine.units + purchaseLine.freeUnits;
                     
                     currentCost = (double)new StaticSentence(s,
                         "SELECT PRICEBUY FROM PRODUCTS WHERE ID = ?",

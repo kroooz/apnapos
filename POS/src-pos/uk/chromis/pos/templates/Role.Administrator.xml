@@ -34,12 +34,13 @@
 	<class name="uk.chromis.pos.forms.MenuEmployees"/>
 	<class name="/uk/chromis/reports/invaliddata.bs"/>
 	<class name="uk.chromis.pos.sales.JPanelTicketEdits"/>
+        <class name="sales.CancelSale"/>
 	<class name="/uk/chromis/reports/customers_list.bs"/>
 	<class name="uk.chromis.pos.imports.JPanelCSVImport"/>
 	<class name="/uk/chromis/reports/saletaxes.bs"/>
 	<class name="/uk/chromis/reports/productscatalog.bs"/>
 	<class name="payment.discount"/>
-	<class name="payment.cheque"/>
+<!--	<class name="payment.cheque"/>-->
 	<class name="/uk/chromis/reports/piesalescat.bs"/>
 	<class name="/uk/chromis/reports/extendedcashregisterlog.bs"/>
 	<class name="button.refundit"/>
@@ -56,12 +57,12 @@
 	<class name="/uk/chromis/reports/usersales.bs"/>
 	<class name="/uk/chromis/reports/stockchanges.bs"/>
 	<class name="button.linediscount"/>
-	<class name="payment.custom"/>
+<!--	<class name="payment.custom"/>-->
 	<class name="button.refundeditsale"/>
 	<class name="uk.chromis.pos.admin.PeoplePanel"/>
 	<class name="/uk/chromis/reports/products.bs"/>
 	<class name="uk.chromis.pos.inventory.ProductsWarehousePanel"/>
-	<class name="payment.bank"/>
+	<!--<class name="payment.bank"/>-->
 	<class name="/uk/chromis/reports/inventoryb.bs"/>
 	<class name="/uk/chromis/reports/cashregisterlog.bs"/>
 	<class name="/uk/chromis/reports/newproducts.bs"/>
@@ -93,7 +94,7 @@
 	<class name="uk.chromis.pos.inventory.AttributeUsePanel"/>
 	<class name="/uk/chromis/reports/customersdebtors.bs"/>
 	<class name="sales.RemoveLines"/>
-        <class name="sales.EditLines"/>
+<!--        <class name="sales.EditLines"/>-->
 	<class name="uk.chromis.pos.admin.RolesPanel"/>
 	<class name="refund.cheque"/>
 	<class name="/uk/chromis/reports/productsalesprofit.bs"/>
@@ -121,6 +122,7 @@
 	<class name="/uk/chromis/reports/inventorydiff.bs"/>
 	<class name="uk.chromis.pos.inventory.AuxiliarPanel"/>
 	<class name="sales.RefundTicket"/>
+        <class name="sales.ReduceQtyAboveZero"/>
 	<class name="/uk/chromis/reports/dailyschedulereport.bs"/>
 	<class name="uk.chromis.pos.mant.JPanelPlaces"/>
 	<class name="sales.EditTicket"/>
@@ -136,5 +138,6 @@
         <class name="uk.chromis.pos.sales.JPanelUnlockTables"/>
         <class name="uk.chromis.pos.suppliers.SuppliersPanel"/>
         <class name="uk.chromis.pos.suppliers.PurchasesPanel"/>
+        <class name="uk.chromis.pos.suppliers.SupplierPaymentPanel"/>
         <class name="uk.chromis.pos.forms.MenuSuppliers"/>
  </permissions>        

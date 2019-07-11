@@ -407,7 +407,8 @@ public class PromotionSupport {
                     productline.getProductTaxCategoryID(),
                     productline.getMultiply(),
                     discount,
-                    productline.getTaxInfo());
+                    productline.getTaxInfo(), 
+                    productline.getPriceBuy());
             discountline.setPromotionAdded(true);
             discountline.setProperty("product.promotionid", productline.getPromotionId());
 
@@ -440,7 +441,8 @@ public class PromotionSupport {
                     productline.getProductTaxCategoryID(),
                     setQty,
                     setPrice,
-                    productline.getTaxInfo());
+                    productline.getTaxInfo(),
+                    productline.getPriceBuy());
             discountline.setPromotionAdded(true);
             discountline.setProperty("product.promotionid", productline.getPromotionId());
 
@@ -464,7 +466,7 @@ public class PromotionSupport {
                 null,
                 sDiscountMessage,
                 tcID,
-                qty, price, tax);
+                qty, price, tax, 0.0);
 
         discountline.setPromotionAdded(true);
         discountline.setProperty("product.promotionid", promotion.getID());

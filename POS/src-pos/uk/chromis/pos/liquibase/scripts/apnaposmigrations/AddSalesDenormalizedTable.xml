@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+
+
+    <property name="boolean.type" value="boolean" dbms="derby, postgresql"/>
+    <property name="boolean.type" value="bit" dbms="mysql"/>
+   
+    <property name="blob.type" value="blob" dbms="derby"/>
+    <property name="blob.type" value="bytea" dbms="postgresql"/>
+    <property name="blob.type" value="mediumblob" dbms="mysql"/>
+    
+    
+    <changeSet author="Apna POS" id="Add SALES_DENORMALIZED TABLE" >    
+    
+        <createTable tableName="SALES_DENORMALIZED">
+            <column name="ID" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TICKET_ID" type="varchar(255)" />
+            <column name="SALE_DATE" type="datetime" />
+            <column name="CATEGORY_ID" type="varchar(255)" />
+            <column name="ITEM_ID" type="varchar(255)" />
+            <column name="ITEM_NAME" type="varchar(255)" />
+            <column name="UNITS" type="double" />
+            <column name="PRICE" type="double" />
+            <column name="COST" type="double" />
+            <column name="SITEGUID" type="varchar(255)" />
+            <column name="IS_SYNCED" type="${boolean.type}" defaultValueBoolean="false"/> 
+        </createTable>
+
+        <createIndex tableName="SALES_DENORMALIZED"
+                    indexName="IX_TICKET_ID"
+                    unique="false">
+            <column name="TICKET_ID" type="varchar(255)" />
+        </createIndex>
+        
+        <createIndex tableName="SALES_DENORMALIZED"
+                    indexName="IX_SALE_DATE"
+                    unique="false">
+            <column name="SALE_DATE" type="datetime" />
+        </createIndex>
+        
+        <createIndex tableName="SALES_DENORMALIZED"
+                    indexName="IX_CAT_ID"
+                    unique="false">
+            <column name="CATEGORY_ID" type="varchar(255)" />
+        </createIndex>
+        
+        <createIndex tableName="SALES_DENORMALIZED"
+                    indexName="IX_ITEM_ID"
+                    unique="false">
+            <column name="ITEM_ID" type="varchar(255)" />
+        </createIndex>
+        
+        <createIndex tableName="SALES_DENORMALIZED"
+                    indexName="IX_ITEM_NAME"
+                    unique="false">
+            <column name="ITEM_NAME" type="varchar(255)" />
+        </createIndex>
+        
+    </changeSet>
+    
+    <changeSet author="Apna POS" id="Update to ApnaPOS version to 1.4">    
+        <update tableName="APPLICATIONS">
+            <column name="VERSION" value="1.4"/>   
+            <column name="VERSIONINT" valueNumeric="14"/>         
+        </update>  
+    </changeSet> 
+                                            
+</databaseChangeLog>

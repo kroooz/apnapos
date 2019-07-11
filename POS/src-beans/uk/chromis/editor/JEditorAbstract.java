@@ -171,6 +171,10 @@ public abstract class JEditorAbstract extends javax.swing.JPanel implements Edit
         reprintText();
     }
     
+    public boolean getActive() {
+        return m_bActive;
+    }
+    
     
             
     /**

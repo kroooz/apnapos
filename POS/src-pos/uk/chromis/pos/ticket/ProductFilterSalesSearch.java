@@ -36,6 +36,7 @@ import uk.chromis.data.gui.ComboBoxValModel;
 import uk.chromis.data.loader.QBFCompareEnum;
 import uk.chromis.data.loader.SentenceList;
 import uk.chromis.data.user.EditorCreator;
+import uk.chromis.editor.JEditorAbstract;
 import uk.chromis.editor.JEditorKeys;
 import uk.chromis.editor.JEditorString;
 import uk.chromis.pos.forms.AppLocal;
@@ -50,6 +51,7 @@ public class ProductFilterSalesSearch extends javax.swing.JPanel implements Edit
     private final SentenceList m_sentcat;
     private ComboBoxValModel m_CategoryModel;
     private String siteGuid;
+    private JEditorAbstract[] editorFields = new JEditorAbstract[2];
 
     /**
      * Creates new form ProductFilterSales
@@ -68,14 +70,14 @@ public class ProductFilterSalesSearch extends javax.swing.JPanel implements Edit
         m_sentcat = dlSales.getCategoriesList(siteGuid);
         m_CategoryModel = new ComboBoxValModel();
         
+        editorFields[0] = m_jtxtName;
+        editorFields[1] = m_jtxtBarCode;
+        
         setKeyBindings();
 
     }
     
     private void setKeyBindings(){
-        
-        jLabelName.setText( jLabelName.getText() + " (Ctrl + N)" );
-        jLabelBarcode.setText( jLabelBarcode.getText() + " (Ctrl + B)" );
         
         m_jtxtName.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK), "NAMEFocus");
         m_jtxtName.getActionMap().put("NAMEFocus", new AbstractAction(){
@@ -92,6 +94,59 @@ public class ProductFilterSalesSearch extends javax.swing.JPanel implements Edit
                 m_jtxtBarCode.activate();
             }
         });
+        
+        
+        this.jLabelName.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.CTRL_MASK), "CtrlUpArrow");
+        this.jLabelName.getActionMap().put("CtrlUpArrow", new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                activatePreviousField();
+            }
+        });
+        
+        this.jLabelName.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.CTRL_MASK), "CtrlDownArrow");
+        this.jLabelName.getActionMap().put("CtrlDownArrow", new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                activateNextField();
+            }
+        });
+        
+    }
+    
+    private void activatePreviousField() {
+        
+        for(int i = 0; i < this.editorFields.length; i++) {
+            if( this.editorFields[i].getActive() ) {
+                
+                for(int j = i - 1; j >= 0; j--) {
+                    if(this.editorFields[j].isEnabled()) {
+                        this.editorFields[i].deactivate();
+                        this.editorFields[j].activate();
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        
+    }
+    
+    private void activateNextField() {
+        
+        for(int i = 0; i < this.editorFields.length; i++) {
+            if( this.editorFields[i].getActive() ) {
+                
+                for(int j = i + 1; j < this.editorFields.length; j++) {
+                    if(this.editorFields[j].isEnabled()) {
+                        this.editorFields[i].deactivate();
+                        this.editorFields[j].activate();
+                        break;
+                    }
+                }
+                break;
+            }
+        }
         
     }
 
@@ -180,6 +235,7 @@ public class ProductFilterSalesSearch extends javax.swing.JPanel implements Edit
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jInStock = new javax.swing.JCheckBox();
+        jLabel5 = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -194,7 +250,7 @@ public class ProductFilterSalesSearch extends javax.swing.JPanel implements Edit
             }
         });
         add(m_jtxtBarCode);
-        m_jtxtBarCode.setBounds(210, 60, 290, 40);
+        m_jtxtBarCode.setBounds(210, 90, 290, 40);
 
         m_jtxtName.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jtxtName.setNextFocusableComponent(m_jtxtBarCode);
@@ -204,7 +260,7 @@ public class ProductFilterSalesSearch extends javax.swing.JPanel implements Edit
             }
         });
         add(m_jtxtName);
-        m_jtxtName.setBounds(210, 10, 290, 40);
+        m_jtxtName.setBounds(210, 40, 290, 40);
 
         m_jCategory.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         m_jCategory.addActionListener(new java.awt.event.ActionListener() {
@@ -213,27 +269,27 @@ public class ProductFilterSalesSearch extends javax.swing.JPanel implements Edit
             }
         });
         add(m_jCategory);
-        m_jCategory.setBounds(210, 110, 260, 25);
+        m_jCategory.setBounds(210, 140, 260, 25);
 
         jLabelBarcode.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabelBarcode.setText(AppLocal.getIntString("label.prodbarcode")); // NOI18N
         add(jLabelBarcode);
-        jLabelBarcode.setBounds(20, 60, 190, 40);
+        jLabelBarcode.setBounds(20, 90, 190, 40);
 
         jLabelName.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabelName.setText(AppLocal.getIntString("label.prodname")); // NOI18N
         add(jLabelName);
-        jLabelName.setBounds(20, 10, 190, 40);
+        jLabelName.setBounds(20, 40, 190, 40);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText(AppLocal.getIntString("label.prodcategory")); // NOI18N
         add(jLabel2);
-        jLabel2.setBounds(20, 110, 110, 25);
+        jLabel2.setBounds(20, 140, 110, 25);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText(AppLocal.getIntString("label.showinstockonly")); // NOI18N
         add(jLabel4);
-        jLabel4.setBounds(20, 140, 110, 25);
+        jLabel4.setBounds(20, 170, 110, 25);
 
         jInStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -241,7 +297,12 @@ public class ProductFilterSalesSearch extends javax.swing.JPanel implements Edit
             }
         });
         add(jInStock);
-        jInStock.setBounds(210, 140, 30, 18);
+        jInStock.setBounds(210, 170, 30, 18);
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText("Use Ctrl + Up / Down Keys");
+        add(jLabel5);
+        jLabel5.setBounds(20, 10, 340, 25);
     }// </editor-fold>//GEN-END:initComponents
 
     private void FilterPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_FilterPropertyChange
@@ -261,6 +322,7 @@ public class ProductFilterSalesSearch extends javax.swing.JPanel implements Edit
     private javax.swing.JCheckBox jInStock;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelBarcode;
     private javax.swing.JLabel jLabelName;
     private javax.swing.JComboBox m_jCategory;

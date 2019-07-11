@@ -272,17 +272,14 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_jTicketId.setRequestFocusEnabled(false);
         m_jButtons.add(m_jTicketId);
 
-        jButton2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jButton2.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/search24.png"))); // NOI18N
-        jButton2.setText(AppLocal.getIntString("button.print")); // NOI18N
+        jButton2.setText(AppLocal.getIntString("tiptext.searchtickets")); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         jButton2.setToolTipText(bundle.getString("tiptext.searchtickets")); // NOI18N
         jButton2.setFocusPainted(false);
         jButton2.setFocusable(false);
         jButton2.setMargin(new java.awt.Insets(0, 4, 0, 4));
-        jButton2.setMaximumSize(new java.awt.Dimension(50, 40));
-        jButton2.setMinimumSize(new java.awt.Dimension(50, 40));
-        jButton2.setPreferredSize(new java.awt.Dimension(50, 40));
         jButton2.setRequestFocusEnabled(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -291,17 +288,14 @@ public class JTicketsBagTicket extends JTicketsBag {
         });
         m_jButtons.add(jButton2);
 
-        m_jEdit.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        m_jEdit.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
         m_jEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_editline.png"))); // NOI18N
-        m_jEdit.setText(AppLocal.getIntString("button.print")); // NOI18N
+        m_jEdit.setText(AppLocal.getIntString("tiptext.editcurrentticket")); // NOI18N
         m_jEdit.setToolTipText(bundle.getString("tiptext.editcurrentticket")); // NOI18N
         m_jEdit.setEnabled(false);
         m_jEdit.setFocusPainted(false);
         m_jEdit.setFocusable(false);
         m_jEdit.setMargin(new java.awt.Insets(0, 4, 0, 4));
-        m_jEdit.setMaximumSize(new java.awt.Dimension(50, 40));
-        m_jEdit.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_jEdit.setPreferredSize(new java.awt.Dimension(50, 40));
         m_jEdit.setRequestFocusEnabled(false);
         m_jEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -310,16 +304,13 @@ public class JTicketsBagTicket extends JTicketsBag {
         });
         m_jButtons.add(m_jEdit);
 
-        m_jRefund.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        m_jRefund.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
         m_jRefund.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/inbox.png"))); // NOI18N
-        m_jRefund.setText(AppLocal.getIntString("button.print")); // NOI18N
+        m_jRefund.setText(AppLocal.getIntString("tiptext.receiptrefund")); // NOI18N
         m_jRefund.setToolTipText(bundle.getString("tiptext.receiptrefund")); // NOI18N
         m_jRefund.setFocusPainted(false);
         m_jRefund.setFocusable(false);
         m_jRefund.setMargin(new java.awt.Insets(0, 4, 0, 4));
-        m_jRefund.setMaximumSize(new java.awt.Dimension(50, 40));
-        m_jRefund.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_jRefund.setPreferredSize(new java.awt.Dimension(50, 40));
         m_jRefund.setRequestFocusEnabled(false);
         m_jRefund.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -328,16 +319,13 @@ public class JTicketsBagTicket extends JTicketsBag {
         });
         m_jButtons.add(m_jRefund);
 
-        m_jPrint.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        m_jPrint.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
         m_jPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/printer24.png"))); // NOI18N
-        m_jPrint.setText(AppLocal.getIntString("button.print")); // NOI18N
+        m_jPrint.setText(AppLocal.getIntString("tiptext.reprintreceipt")); // NOI18N
         m_jPrint.setToolTipText(bundle.getString("tiptext.reprintreceipt")); // NOI18N
         m_jPrint.setFocusPainted(false);
         m_jPrint.setFocusable(false);
         m_jPrint.setMargin(new java.awt.Insets(0, 4, 0, 4));
-        m_jPrint.setMaximumSize(new java.awt.Dimension(50, 40));
-        m_jPrint.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_jPrint.setPreferredSize(new java.awt.Dimension(50, 40));
         m_jPrint.setRequestFocusEnabled(false);
         m_jPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

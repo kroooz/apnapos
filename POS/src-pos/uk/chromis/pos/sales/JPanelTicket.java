@@ -44,6 +44,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
@@ -60,6 +61,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.SwingWorker;
 
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
@@ -111,11 +113,14 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.catalog.JCatalog;
+import uk.chromis.pos.forms.AppUser;
 import uk.chromis.pos.printer.DeviceDisplayAdvance;
 import uk.chromis.pos.ticket.TicketType;
 import uk.chromis.pos.promotion.DataLogicPromotions;
 import uk.chromis.pos.promotion.PromotionSupport;
 import uk.chromis.pos.sync.DataLogicSync;
+import uk.chromis.pos.sync.JPanelTillBranchSync;
+import static uk.chromis.pos.sync.JPanelTillBranchSync.isPreviousSyncComplete;
 import uk.chromis.pos.util.AutoLogoff;
 import uk.chromis.pos.ticket.PlayWave;
 import uk.chromis.pos.xsite.XSiteStockCheck;
@@ -190,6 +195,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     public static Boolean autoLogoffAfterSales;
     public static Boolean autoLogoffToTables;
     public static Boolean autoLogoffAfterKitchen;
+    private boolean dontAllowSalesIfNotEnoughQuantity;
 
     public JPanelTicket() {
         initComponents();
@@ -344,6 +350,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
 // end of Screen display code
         }
+        
+        
+        
 
         if (this instanceof JPanelTicketSales) {
             // 2016-10-14 TJMChan - Sales screen Layout code starts here.
@@ -363,23 +372,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             if (AppConfig.getInstance().getProperty("machine.saleslayout") != null) {
                 JSalesLayoutManager.createLayout();
                 
-                if (AppConfig.getInstance().getProperty("machine.saleslayout").equals("Layout0")) {
-                    
-                    boolean showcatprod = AppConfig.getInstance().getBoolean("machine.showcatprod");
-                    boolean shownumkeys = AppConfig.getInstance().getBoolean("machine.shownumkeys");
-                    
-                    if(!showcatprod)
-                    {
-                        this.catcontainer.setVisible(false);
-                    }
-                    
-                    if(!shownumkeys)
-                    {
-                        this.m_jContEntries.setPreferredSize(new Dimension(0, 0));
-                    }
-                    
-                }
-                else if (AppConfig.getInstance().getProperty("machine.saleslayout").equals("Layout1")) {
+                if (AppConfig.getInstance().getProperty("machine.saleslayout").equals("Layout1")) {
                     southcomponent = getSouthComponent();
                     catcontainer.add(southcomponent, BorderLayout.CENTER);
                     JPanel southpanel = (JPanel) southcomponent;
@@ -467,6 +460,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         
         this.setKeyboardBindings();
         this.makeButtonsLabelsUpperCase();
+        
+        String dontAllowSalesIfNotEnoughQuantityString = dlSystem.getSettingValue(AppLocal.settingDontAllowSalesIfNotEnoughQuantity);
+        dontAllowSalesIfNotEnoughQuantity = dontAllowSalesIfNotEnoughQuantityString == null || "0".equals(dontAllowSalesIfNotEnoughQuantityString) ? false : true;
+        
+        btnSync.setVisible(dlSync.isTillBranchSyncEnabled() && dlSync.isTillBranchSyncStarted());
     }
     
     private void hideButtonsIfNoPermission(){
@@ -519,6 +517,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 public void actionPerformed(ActionEvent e) {
                     shortKeyPressed = true;
                     btnReprintActionPerformed(null);
+                    shortKeyPressed = false;
                 }
             });
         }
@@ -534,6 +533,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 public void actionPerformed(ActionEvent e) {
                     shortKeyPressed = true;
                     m_jDeleteActionPerformed(null);
+                    JPanelTicket.shortKeyPressed = false;
                 }
             });
         }
@@ -549,6 +549,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 public void actionPerformed(ActionEvent e) {
                     shortKeyPressed = true;
                     m_jListActionPerformed(null);
+                    JPanelTicket.shortKeyPressed = false;
                 }
             });
         }
@@ -564,6 +565,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 public void actionPerformed(ActionEvent e) {
                     shortKeyPressed = true;
                     m_jEditLineActionPerformed(null);
+                    JPanelTicket.shortKeyPressed = false;
                 }
             });
         }
@@ -579,6 +581,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 public void actionPerformed(ActionEvent e) {
                     shortKeyPressed = true;
                     m_jEditQuantityActionPerformed(null);
+                    JPanelTicket.shortKeyPressed = false;
                 }
             });
         }
@@ -664,8 +667,90 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             
             this.lastMergedRowIndex = m_oTicket.getLinesCount() - 1;
         }
+    }
+
+    private void checkQuantity(int lineIndex) {
         
-        
+        try
+        {
+            if(lineIndex < 0) {
+                return;
+            }
+            
+            if(lineIndex > m_oTicket.getLinesCount() - 1){
+                return;
+            }
+            
+            TicketLineInfo line = m_oTicket.getLine(lineIndex);
+            
+            if(this.dontAllowSalesIfNotEnoughQuantity) {
+                String productId = line.getProductID();
+                
+                String hostname = AppConfig.getInstance().getProperty("machine.hostname");
+                Properties p = dlSystem.getResourceAsProperties(hostname + "/properties");
+                String loc = p.getProperty("location");
+                
+                String locationGuid = this.dlSync.getLocationGuid(loc);
+                
+                ProductInfoExt productExt = this.dlSales.getProductInfo(productId, locationGuid);
+                
+                if(productExt.isService()) {
+                    // dont check quantity for service item
+                    return;
+                }
+
+                double units = dlSales.findProductStock(loc, productId, null);
+                
+                double lineUnits = line.getMultiply();
+                
+                double otherLineUnits = 0;
+                
+                for(int i = 0; i < m_oTicket.getLines().size(); i++){
+                    
+                    if(i != lineIndex){
+                        TicketLineInfo otherLine = m_oTicket.getLine(i);
+                        if(otherLine.getProductID().equalsIgnoreCase(productId)) {
+                            otherLineUnits += otherLine.getMultiply();
+                        }
+                    }
+                    
+                }
+                
+                double diff = units - lineUnits - otherLineUnits;
+                
+                if(units <= 0) {
+                    new PlayWave("error.wav").start();
+                    removeTicketLine(lineIndex, false, null);
+                    JOptionPane.showOptionDialog(null, 
+                        "Not enough quantity available of item: " + line.getProductName(), 
+                        "Check", JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE, null, new Object[]{}, null);
+                    
+                    return;
+                }
+                
+                if(diff < 0.0) {
+                    
+                    double newUnitsValue = units - otherLineUnits;
+                    
+                    if(newUnitsValue > 0) {
+                        line.setMultiply(newUnitsValue);
+                    }
+                    else {
+                        removeTicketLine(lineIndex, false, null);
+                    }
+                    
+                    new PlayWave("error.wav").start();
+                    JOptionPane.showOptionDialog(null, 
+                        "Not enough quantity available of item: " + line.getProductName(), 
+                        "Check", JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE, null, new Object[]{}, null);
+                    return;
+                }
+                
+            }
+        }
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error occurred while checking quantity: " + ex.getMessage());
+        }
     }
 
     private class logout extends AbstractAction {
@@ -767,7 +852,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         // Authorization for buttons
         btnSplit.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Total"));
-        m_jDelete.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.RemoveLines"));
         //     m_jNumberKey.setMinusEnabled(m_App.getAppUserView().getUser().hasPermission("sales.EditLines"));
         m_jNumberKey.setEqualsEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Total"));
         m_jbtnconfig.setPermissions(m_App.getAppUserView().getUser());
@@ -808,6 +892,38 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         AutoLogoff.getInstance().activateTimer();
                     }
                 }
+        }
+        
+        
+        if (AppConfig.getInstance().getProperty("machine.saleslayout").equals("Layout0")) {
+                    
+            boolean showcatprod = AppConfig.getInstance().getBoolean("machine.showcatprod");
+            boolean shownumkeys = AppConfig.getInstance().getBoolean("machine.shownumkeys");
+
+            if(!showcatprod)
+            {
+                System.out.println(catcontainer.getComponent(0));
+                if (catcontainer.getComponent(0) instanceof JCatalog) {
+                    this.catcontainer.setVisible(false);
+                }
+                else if(catcontainer.getComponent(0) instanceof JTicketCatalogLines) {
+                    
+                    JTicketCatalogLines jTicketCatalogLines = (JTicketCatalogLines)catcontainer.getComponent(0);
+                    if(jTicketCatalogLines.getCurrentView().equalsIgnoreCase("catalog")) {
+                        this.catcontainer.setVisible(false);
+                    }
+                    else
+                    {
+                        this.catcontainer.setVisible(true);
+                    }
+                }
+                
+            }
+
+            if(!shownumkeys)
+            {
+                this.m_jContEntries.setPreferredSize(new Dimension(0, 0));
+            }
         }
 
         m_jNumberKey.setEnabled(true);
@@ -920,7 +1036,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
             setTicketName(m_oTicket.getName(m_oTicketExt));
 
-            if(!removeAllItemsAndAddAgain){
+            if(removeAllItemsAndAddAgain){
                 m_ticketlines.clearTicketLines();
                 for (int i = 0; i < m_oTicket.getLinesCount(); i++) {
                     m_ticketlines.addTicketLine(m_oTicket.getLine(i));
@@ -932,8 +1048,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
             
             mergeSimilarRows();
-            
-            
+            this.checkQuantity(m_oTicket.getLinesCount() - 1);
             
             m_ticketlines.refresh();
             try{
@@ -1002,6 +1117,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private void addTicketLine(ProductInfoExt oProduct, double dMul, double dPrice) {
+        
         if (oProduct.isVprice()) {
             
             dPrice = oProduct.getPriceSell();
@@ -1013,7 +1129,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             addTicketLine(new TicketLineInfo(oProduct, dMul, dPrice, tax, (java.util.Properties) (oProduct.getProperties().clone())));
             
             new PlayWave("error.wav").start();
-            this.editLine("price");
+            this.editLine(new String[]{"price", "qty"}, "price");
             
         } else {
             TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(), m_oTicket.getCustomer());
@@ -1142,7 +1258,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         refreshTicket(false);
     }
 
-    private void removeTicketLine(int i) {
+    private void removeTicketLine(int i, Boolean addInformationInLinesRemovedReport, String userName) {
+        
+        userName = userName == null ? m_App.getAppUserView().getUser().getName() : userName;
+        
+        //default true
+        addInformationInLinesRemovedReport = addInformationInLinesRemovedReport == null ? true : addInformationInLinesRemovedReport;
 
         if (("OK".equals(m_oTicket.getLine(i).getProperty("sendstatus")) && m_App.getAppUserView().getUser().hasPermission("kitchen.DeleteLine"))
                 || (!"OK".equals(m_oTicket.getLine(i).getProperty("sendstatus")) && m_App.getAppUserView().getUser().hasPermission("sales.RemoveLines"))) {
@@ -1157,16 +1278,18 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     ticketID = "No Sale";
                 }
 
-                dlSystem.execLineRemoved(
+                if(addInformationInLinesRemovedReport){
+                    dlSystem.execLineRemoved(
                         new Object[]{
                             UUID.randomUUID().toString(),
-                            m_App.getAppUserView().getUser().getName(),
+                            userName,
                             ticketID,
                             m_oTicket.getLine(i).getProductID(),
                             m_oTicket.getLine(i).getProductName(),
                             m_oTicket.getLine(i).getMultiply(),
                             m_oTicket.getLine(i).getPrice()
                         });
+                }
 
                 if (m_oTicket.getLine(i).isProductCom()) {
                     m_oTicket.removeLine(i);
@@ -1883,13 +2006,18 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         paintTicketLine(i, newline);
                     } else {
                         newline.setMultiply(newline.getMultiply() + 1.0);
+                        if(newline.getMultiply() == 0) {
+                            newline.setMultiply(1);
+                        }
                         paintTicketLine(i, newline);
                     }
                     new PlayWave("beep.wav").start(); // playing WAVE file
                 }
+                this.checkQuantity(i);
+                this.refreshTicket(true);
             } else if (cTrans == '-'
-                    && m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERZERO
-                    && m_App.getAppUserView().getUser().hasPermission("sales.RemoveLines")) {
+                    && m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERZERO ) {
+                
                 int i = m_ticketlines.getSelectedIndex();
                 if (i < 0) {
                     if (AppConfig.getInstance().getBoolean("till.customsounds")) {
@@ -1903,17 +2031,34 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
                         newline.setMultiply(newline.getMultiply() + 1.0);
                         if (newline.getMultiply() >= 0) {
-                            removeTicketLine(i);
+                            removeTicketLine(i, true, null);
                         } else {
                             paintTicketLine(i, newline);
                         }
                     } else {
                         // substract one unit to the selected line
-                        newline.setMultiply(newline.getMultiply() - 1.0);
-                        if (newline.getMultiply() <= 0.0) {
-                            removeTicketLine(i); // elimino la linea
-                        } else {
-                            paintTicketLine(i, newline);
+                        
+                        if( newline.getMultiply() > 1 ) {
+                            
+                            AppUser user = this.getUserHavingAtleastOnePermission(
+                                new String[]{ "sales.RefundTicket", "sales.ReduceQtyAboveZero" }, 
+                                true);
+                        
+                            if(user != null) {
+                                newline.setMultiply(newline.getMultiply() - 1.0);
+                                paintTicketLine(i, newline);
+                            }
+                        }
+                        else
+                        {
+                            AppUser user = this.getUserHavingAtleastOnePermission(
+                                new String[]{ "sales.RefundTicket" }, 
+                                true);
+                            
+                            if(user != null) {
+                                newline.setMultiply(-1);
+                                paintTicketLine(i, newline);
+                            }
                         }
                     }
                     new PlayWave("delete.wav").start(); // playing WAVE file
@@ -1935,6 +2080,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         newline.setPrice(Math.abs(newline.getPrice()));
                         paintTicketLine(i, newline);
                     } else {
+                        
                         newline.setMultiply(dPor);
                         newline.setPrice(Math.abs(newline.getPrice()));
                         paintTicketLine(i, newline);
@@ -2599,6 +2745,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         btnCustomer = new javax.swing.JButton();
         btnSplit = new javax.swing.JButton();
         btnReprint1 = new javax.swing.JButton();
+        btnSync = new javax.swing.JButton();
         m_jPanelBag = new javax.swing.JPanel();
         m_jPanTicket = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -2740,6 +2887,21 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         });
         m_jButtons.add(btnReprint1);
+
+        btnSync.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/reload.png"))); // NOI18N
+        btnSync.setText(bundle.getString("tiptext.sync")); // NOI18N
+        btnSync.setToolTipText(bundle.getString("tiptext.sync")); // NOI18N
+        btnSync.setFocusPainted(false);
+        btnSync.setFocusable(false);
+        btnSync.setMargin(new java.awt.Insets(10, 4, 10, 4));
+        btnSync.setMinimumSize(new java.awt.Dimension(50, 40));
+        btnSync.setRequestFocusEnabled(false);
+        btnSync.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSyncbtnReprintActionPerformed(evt);
+            }
+        });
+        m_jButtons.add(btnSync);
 
         m_jOptions.add(m_jButtons, java.awt.BorderLayout.LINE_START);
 
@@ -3213,10 +3375,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_m_jbtnScaleActionPerformed
 
     private void m_jEditLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jEditLineActionPerformed
-        this.editLine("all");
+        JOptionPane.showMessageDialog(null, "Funcionality Disabled");
+        //this.editLine(new String[]{"all"}, "price");
     }//GEN-LAST:event_m_jEditLineActionPerformed
 
-    private void editLine(String editType){
+    private void editLine(String[] editableFields, String activatedField){
         AutoLogoff.getInstance().deactivateTimer();
         int i = m_ticketlines.getSelectedIndex();
         if (i < 0) {
@@ -3227,13 +3390,45 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         } else {
             try {
-                TicketLineInfo newline = JProductLineEdit.showMessage(this, m_App, m_oTicket.getLine(i), editType);
+                TicketLineInfo originalLine = m_oTicket.getLine(i);
+                TicketLineInfo newline = JProductLineEdit.showMessage(this, m_App, m_oTicket.getLine(i), editableFields, activatedField);
+                
                 if (newline != null) {
                     // line has been modified
+                    
+                    double newQuantity = newline.getMultiply();
+                    double originalQuantity = originalLine.getMultiply();
+                    
+                    AppUser user = null;
+                    if(newQuantity < 0) {
+                     
+                        user = this.getUserHavingAtleastOnePermission(
+                            new String[]{ "sales.RefundTicket" }, 
+                            true);
+                        
+                        if(user == null) {
+                            return;
+                        }
+                        
+                    }
+                    
+                    if(newQuantity < originalQuantity) {
+                        user = this.getUserHavingAtleastOnePermission(
+                            new String[]{ "sales.RefundTicket", "sales.ReduceQtyAboveZero" }, 
+                            true);
+                        
+                        if(user == null) {
+                            return;
+                        }
+                    }
+                    
                     paintTicketLine(i, newline);
                     if (newline.getUpdated()) {
                         reLoadCatalog();
                     }
+                    
+                    this.checkQuantity(i);
+                    this.refreshTicket(true);
                 }
                 new PlayWave("edit.wav").start(); // playing WAVE file 
             } catch (BasicException e) {
@@ -3248,6 +3443,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_m_jEnterActionPerformed
 
     private void m_jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDeleteActionPerformed
+        
+        //sales.RemoveLines
+        
+        
         int i = m_ticketlines.getSelectedIndex();
         if (m_oTicket.getLine(i).getProductID().equals("sc999-001")) {
             m_oTicket.setNoSC("1");
@@ -3255,10 +3454,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         if ((m_oTicket.getTicketType().equals(TicketType.REFUND)) && (!m_oTicket.getLine(i).isProductCom())) {
             JRefundLines.addBackLine(m_oTicket.getLine(i).printName(), m_oTicket.getLine(i).getMultiply(), m_oTicket.getLine(i).getPrice(), m_oTicket.getLine(i).getProperty("orgLine"));
-            removeTicketLine(i);
+            removeTicketLine(i, true, null);
             while (i < m_oTicket.getLinesCount() && m_oTicket.getLine(i).isProductCom()) {
                 JRefundLines.addBackLine(m_oTicket.getLine(i).printName(), m_oTicket.getLine(i).getMultiply(), m_oTicket.getLine(i).getPrice(), m_oTicket.getLine(i).getProperty("orgLine"));
-                removeTicketLine(i);
+                removeTicketLine(i, true, null);
             }
         } else if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
             Toolkit.getDefaultToolkit().beep();
@@ -3272,10 +3471,32 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 Toolkit.getDefaultToolkit().beep();
             }
         } else {
-            removeTicketLine(i); // elimino la linea           
+            AppUser user = getUserHavingAtleastOnePermission(new String[]{ "sales.RemoveLines" }, true);
+            
+            if(user != null) {
+                removeTicketLine(i, true, user.getName());
+            }
         }
     }//GEN-LAST:event_m_jDeleteActionPerformed
 
+    private AppUser getUserHavingAtleastOnePermission(String[] permissions, boolean showMessage) {
+        
+        // retun current user if has permission
+        for(String permission : permissions) {
+            if(m_App.getAppUserView().getUser().hasPermission(permission)) {
+                return m_App.getAppUserView().getUser();
+            }
+        }
+        
+        //JDialogAuthentication authDialog = new JDialogAuthentication(null, true, permissions, dlSystem);
+        //authDialog.setVisible(true);
+        
+        if(showMessage) {
+            JOptionPane.showMessageDialog(null, "User does not have permission to perform this operation");
+        }
+        return null;
+    }
+    
     private void m_jUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jUpActionPerformed
 
         m_ticketlines.selectionUp();
@@ -3511,6 +3732,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         }
         AutoLogoff.getInstance().activateTimer();
+        this.shortKeyPressed = false;
     }//GEN-LAST:event_btnReprintActionPerformed
 
     private void m_checkStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_checkStockActionPerformed
@@ -3551,7 +3773,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_btnLogout
 
     private void m_jEditQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jEditQuantityActionPerformed
-        this.editLine("qty");
+        this.editLine(new String[]{"qty"}, "qty");
     }//GEN-LAST:event_m_jEditQuantityActionPerformed
 
     private void jLineDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLineDiscountActionPerformed
@@ -3589,7 +3811,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         line.getProductTaxCategoryID(),
                         line.getMultiply(),
                         (double)Math.rint(line.getPrice() * discountrate *100) /100d,
-                        line.getTaxInfo());
+                        line.getTaxInfo(),
+                        line.getPriceBuy());
                     newLine.setBarcode(line.getBarcode());
                     newLine.setDiscounted("yes");
 
@@ -3614,11 +3837,26 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         hideButtonsIfNoPermission();
     }//GEN-LAST:event_formAncestorAdded
 
+    private void btnSyncbtnReprintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncbtnReprintActionPerformed
+        if(JPanelTillBranchSync.isPreviousSyncComplete)
+        {
+            JPanelTillBranchSync jPanelTillBranchSync = new JPanelTillBranchSync();
+            SwingWorker syncWorker = jPanelTillBranchSync.createSyncWorker();
+            syncWorker.execute();
+            JOptionPane.showMessageDialog(null, "Sync Started");
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Sync is already running");
+        }
+    }//GEN-LAST:event_btnSyncbtnReprintActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCustomer;
     private javax.swing.JButton btnReprint1;
     private javax.swing.JButton btnSplit;
+    private javax.swing.JButton btnSync;
     private javax.swing.JPanel catcontainer;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jEditAttributes;

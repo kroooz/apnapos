@@ -92,6 +92,8 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
         if (AppConfig.getInstance().getBoolean("display.longnames")) {
             setListWidth(300);
         }
+        
+        jproductfilterws.jBtnSearch.addActionListener(new ReloadActionListener());
     }
 
     @Override

@@ -91,6 +91,7 @@ public class JTicketsBagShared extends JTicketsBag {
                 public void actionPerformed(ActionEvent e) {
                     JPanelTicket.shortKeyPressed = true;
                     m_jNewTicketActionPerformed(null);
+                    JPanelTicket.shortKeyPressed = false;
                 }
             });
         }
@@ -106,6 +107,7 @@ public class JTicketsBagShared extends JTicketsBag {
                 public void actionPerformed(ActionEvent e) {
                     JPanelTicket.shortKeyPressed = true;
                     m_jDelTicketActionPerformed(null);
+                    JPanelTicket.shortKeyPressed = false;
                 }
             });
         }
@@ -120,6 +122,7 @@ public class JTicketsBagShared extends JTicketsBag {
                 public void actionPerformed(ActionEvent e) {
                     JPanelTicket.shortKeyPressed = true;
                     m_jListTicketsActionPerformed(null);
+                    JPanelTicket.shortKeyPressed = false;
                 }
             });
         }
@@ -137,8 +140,7 @@ public class JTicketsBagShared extends JTicketsBag {
         selectValidTicket();
 
         // Authorisation
-        m_jDelTicket.setEnabled(m_App.getAppUserView().getUser().hasPermission("uk.chromis.pos.sales.JPanelTicketEdits"));
-
+        m_jDelTicket.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.CancelSale"));
     }
 
     /**
@@ -395,9 +397,15 @@ public class JTicketsBagShared extends JTicketsBag {
     }//GEN-LAST:event_m_jListTicketsActionPerformed
 
     private void m_jDelTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDelTicketActionPerformed
+        
+        if( !m_App.getAppUserView().getUser().hasPermission("sales.CancelSale") ) {
+            JOptionPane.showMessageDialog(null, "No Permission");
+        }
+        
         AutoLogoff.getInstance().deactivateTimer();
         int res = JOptionPane.showConfirmDialog(this, AppLocal.getIntString("message.wannadelete"), AppLocal.getIntString("title.editor"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (res == JOptionPane.YES_OPTION) {
+            
             deleteTicket();
         }
         AutoLogoff.getInstance().activateTimer();

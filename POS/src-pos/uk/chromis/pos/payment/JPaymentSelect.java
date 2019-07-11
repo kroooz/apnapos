@@ -34,7 +34,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.customers.CustomerInfoExt;
 import uk.chromis.pos.forms.AppConfig;
@@ -78,6 +80,8 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         this.app = app;
         dlSystem = (DataLogicSystem) app.getBean("uk.chromis.pos.forms.DataLogicSystem");
         printselected = true;
+        
+        setPrintingButtonText();
     }
 
     public void setPrintSelected(boolean value) {
@@ -162,7 +166,20 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
                     AppLocal.getIntString(jpay.getLabelKey()),
                     new javax.swing.ImageIcon(getClass().getResource(jpay.getIconKey())),
                     jpayinterface.getComponent());
+            
+            JLabel label = new JLabel(AppLocal.getIntString(jpay.getLabelKey()));
+            label.setAlignmentX(Component.RIGHT_ALIGNMENT);
+            label.setPreferredSize(new Dimension(160, 50));
+            label.setHorizontalTextPosition(JLabel.TRAILING); // Set the text position regarding its icon
+            label.setIcon(new javax.swing.ImageIcon(getClass().getResource(jpay.getIconKey())));
+
+            m_jTabPayment.setTabComponentAt(m_jTabPayment.getTabCount() - 1, label); // Here set the custom tab component
+            
         }
+    }
+
+    private void setPrintingButtonText() {
+        m_jButtonPrint.setText( m_jButtonPrint.isSelected() ? "Printing On" : "Printing Off" );
     }
 
     public interface JPaymentCreator {
@@ -341,7 +358,8 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
 
         @Override
         public JPaymentInterface createJPayment() {
-            return new JPaymentRefund(JPaymentSelect.this, "cashrefund");
+            //return new JPaymentRefund(JPaymentSelect.this, "cashrefund");
+            return new JPaymentRefund(JPaymentSelect.this, "cash");
         }
 
         @Override
@@ -636,8 +654,21 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         m_jButtonPrint.setFocusPainted(false);
         m_jButtonPrint.setFocusable(false);
         m_jButtonPrint.setMargin(new java.awt.Insets(8, 16, 8, 16));
+        m_jButtonPrint.setMaximumSize(null);
+        m_jButtonPrint.setMinimumSize(null);
+        m_jButtonPrint.setPreferredSize(null);
         m_jButtonPrint.setRequestFocusEnabled(false);
         m_jButtonPrint.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/printer24.png"))); // NOI18N
+        m_jButtonPrint.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                m_jButtonPrintItemStateChanged(evt);
+            }
+        });
+        m_jButtonPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jButtonPrintActionPerformed(evt);
+            }
+        });
         jPanel5.add(m_jButtonPrint, java.awt.BorderLayout.LINE_START);
 
         getContentPane().add(jPanel5, java.awt.BorderLayout.SOUTH);
@@ -717,6 +748,14 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         dispose();
 
     }//GEN-LAST:event_m_jButtonCancelActionPerformed
+
+    private void m_jButtonPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonPrintActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_m_jButtonPrintActionPerformed
+
+    private void m_jButtonPrintItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_m_jButtonPrintItemStateChanged
+        setPrintingButtonText();
+    }//GEN-LAST:event_m_jButtonPrintItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;

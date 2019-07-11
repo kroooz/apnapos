@@ -46,6 +46,8 @@ public class JTicketCatalogLines extends javax.swing.JPanel {
     private CatalogSelector m_catalog;
     private DataLogicSync dlSync;
     private String siteGuid;
+    private String currentView = "";
+
     
     /** Creates new form JTicketCatalogLines
      * @param app
@@ -116,7 +118,12 @@ public class JTicketCatalogLines extends javax.swing.JPanel {
     
     private void showView(String sView) {
         CardLayout cl = (CardLayout)(this.getLayout());
-            cl.show(this, sView);       
+        cl.show(this, sView);   
+        currentView = sView;
+    }
+    
+    public String getCurrentView() {
+        return currentView;
     }
     
     /** This method is called from within the constructor to

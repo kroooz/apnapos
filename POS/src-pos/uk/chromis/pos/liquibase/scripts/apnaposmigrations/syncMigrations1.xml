@@ -22,11 +22,11 @@
         
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="TILL_BRANCH_SYNC"/>
+                <tableExists tableName="SYNC_TILL_BRANCH"/>
             </not>
         </preConditions>
         
-        <createTable tableName="TILL_BRANCH_SYNC">
+        <createTable tableName="SYNC_TILL_BRANCH">
             <column name="LAST_SYNC_DATETIME" type="datetime" />
             <column name="BRANCH_DB_ENGINE" type="varchar(1000)" />
             <column name="BRANCH_DB_DRIVERLIB" type="varchar(1000)" />

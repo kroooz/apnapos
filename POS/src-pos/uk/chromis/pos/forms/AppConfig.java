@@ -246,6 +246,16 @@ public class AppConfig implements AppProperties {
 
         m_propsconfig.setProperty("machine.uniqueinstance", "false");
         m_propsconfig.setProperty("screen.receipt.columns", "42");
+        
+        // Sales Screen Shortkeys
+        m_propsconfig.setProperty("sales_shortkeys.reprint", "F1");
+        m_propsconfig.setProperty("sales_shortkeys.newsale", "F2");
+        m_propsconfig.setProperty("sales_shortkeys.cancelsale", "F3");
+        m_propsconfig.setProperty("sales_shortkeys.holds", "F4");
+        m_propsconfig.setProperty("sales_shortkeys.removeline", "F5");
+        m_propsconfig.setProperty("sales_shortkeys.search", "F6");
+        m_propsconfig.setProperty("sales_shortkeys.editquantity", "F7");
+        m_propsconfig.setProperty("sales_shortkeys.editline", "F8");
 
     }
 

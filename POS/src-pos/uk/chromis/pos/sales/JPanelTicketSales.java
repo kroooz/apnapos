@@ -98,7 +98,12 @@ public class JPanelTicketSales extends JPanelTicket {
     @Override
     public void activate() throws BasicException {
         super.activate();
-        m_cat.loadCatalog(siteGuid);
+        
+        boolean showcatprod = AppConfig.getInstance().getBoolean("machine.showcatprod");
+        
+        if(showcatprod) {
+            m_cat.loadCatalog(siteGuid);
+        }
     }
 
     @Override

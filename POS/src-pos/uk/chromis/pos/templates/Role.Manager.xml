@@ -36,20 +36,22 @@
 <permissions>
     <class name="uk.chromis.pos.sales.JPanelTicketSales"/>
     <class name="uk.chromis.pos.sales.JPanelTicketEdits"/>
+    <class name="sales.CancelSale"/>
     <class name="uk.chromis.pos.customers.CustomersPayment"/>
     <class name="uk.chromis.pos.panels.JPanelPayments"/>
     <class name="uk.chromis.pos.panels.JPanelCloseMoney"/>
 
     <class name="sales.RemoveLines"/>
-    <class name="sales.EditLines"/>
+<!--    <class name="sales.EditLines"/>-->
     <class name="sales.EditTicket"/>
     <class name="sales.RefundTicket"/>
+    <class name="sales.ReduceQtyAboveZero"/>
     <class name="sales.PrintTicket"/>
     <class name="sales.Total"/>
     <class name="sales.ChangeTaxOptions"/>
-    <class name="payment.bank"/>
+    <!--<class name="payment.bank"/>-->
     <class name="payment.cash"/>
-    <class name="payment.cheque"/>
+    <!--<class name="payment.cheque"/>-->
     <class name="payment.paper"/>
     <class name="payment.magcard"/>
     <class name="payment.discount"/>
@@ -177,5 +179,6 @@
     <class name="/uk/chromis/reports/promotions.bs"/>
     
     <class name="uk.chromis.pos.suppliers.PurchasesPanel"/>
+    <class name="uk.chromis.pos.suppliers.SupplierPaymentPanel"/>
     
 </permissions>

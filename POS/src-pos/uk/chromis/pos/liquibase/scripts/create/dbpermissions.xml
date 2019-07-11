@@ -64,6 +64,13 @@
             <column name="DISPLAYNAME" value="##label.displayname2"/>
             <column name="DESCRIPTION" value="##label.description2"/>
         </insert>
+        
+        <insert tableName="DBPERMISSIONS">
+            <column name="CLASSNAME" value="sales.CancelSale"/>
+            <column name="SECTION" value="##label.sectionsales"/>
+            <column name="DISPLAYNAME" value="##label.CancelSale"/>
+            <column name="DESCRIPTION" value="##label.CancelSale"/>
+        </insert>
  
         <insert tableName="DBPERMISSIONS">
             <column name="CLASSNAME" value="uk.chromis.pos.customers.CustomersPayment"/>
@@ -120,6 +127,14 @@
             <column name="DISPLAYNAME" value="##label.displayname9"/>
             <column name="DESCRIPTION" value="##label.description9"/>
         </insert>
+        
+        <insert tableName="DBPERMISSIONS">
+            <column name="CLASSNAME" value="sales.ReduceQtyAboveZero"/>
+            <column name="SECTION" value="##label.sectionsales"/>
+            <column name="DISPLAYNAME" value="##label.ReduceQtyAboveZero"/>
+            <column name="DESCRIPTION" value="##label.ReduceQtyAboveZero"/>
+        </insert>
+        
         <insert tableName="DBPERMISSIONS">				
             <column name="CLASSNAME" value="sales.PrintTicket"/>
             <column name="SECTION" value="##label.sectionsales"/>

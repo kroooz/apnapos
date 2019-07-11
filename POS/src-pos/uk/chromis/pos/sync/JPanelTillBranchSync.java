@@ -17,11 +17,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import uk.chromis.basic.BasicException;
@@ -52,7 +55,55 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
     private String tillSiteGuid = "";
     private String branchSiteGuid = "";
     private int batchSize = 100;
-    public boolean isPreviousSyncComplete = true;
+    public static boolean isPreviousSyncComplete = true;
+    
+    public static String[] branchToTillTables = new String[]
+    {
+        "ROLES",
+        "PEOPLE",
+        "CATEGORIES",
+        "TAXCATEGORIES",
+        "TAXES",
+        "TAXCUSTCATEGORIES",
+        "FLOORS",
+        "PLACES",
+        "CUSTOMERS",
+        "THIRDPARTIES",
+        "BREAKS",
+        "LOCATIONS",
+        "PROMOTIONS",
+        "ATTRIBUTE",
+        "ATTRIBUTEVALUE",
+        "ATTRIBUTESET",
+        "ATTRIBUTESETINSTANCE",
+        "ATTRIBUTEUSE",
+        "ATTRIBUTEINSTANCE",
+        "PRODUCTS",
+        "PRODUCTS_COM",
+        "PRODUCTS_KIT",
+        "DBPERMISSIONS",
+        "STOCKCURRENT"
+    };
+
+    public static String[] tillToBranchTables = new String[]
+    {
+        "CLOSEDCASH",
+        "SHIFTS",
+        "SHIFT_BREAKS",
+        "LEAVES",
+        "VOUCHERS",
+        "RESERVATIONS",
+        "RESERVATION_CUSTOMERS",
+        "STOCKDIARY",
+        "RECEIPTS",
+        "TICKETS",
+        "TICKETLINES",
+        "SALES_DENORMALIZED",
+        "PAYMENTS",
+        "TAXLINES",
+        "DRAWEROPENED",
+        "LINEREMOVED"
+    };
     
     /**
      * Creates new form JPanelTillBranchSync
@@ -82,6 +133,8 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
         jButtonStartStop = new javax.swing.JButton();
         jLabelSyncStatus = new javax.swing.JLabel();
         jLabelLastSyncedAt = new javax.swing.JLabel();
+        jButtonSyncNow = new javax.swing.JButton();
+        jButtonClearLog = new javax.swing.JButton();
 
         jLabel1.setText("Sync Status:");
 
@@ -114,6 +167,20 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
         jLabelLastSyncedAt.setText("___");
         jLabelLastSyncedAt.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        jButtonSyncNow.setText("Sync Now");
+        jButtonSyncNow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSyncNowActionPerformed(evt);
+            }
+        });
+
+        jButtonClearLog.setText("Clear Log");
+        jButtonClearLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonClearLogActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -121,24 +188,29 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabelSyncStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabelLastSyncedAt, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonConfigurations)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonStartStop)
-                .addGap(4, 4, 4))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabelSyncStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabelLastSyncedAt, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonClearLog)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonSyncNow)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonConfigurations)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonStartStop)
+                        .addGap(2, 2, 2))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,6 +229,8 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonClearLog)
+                    .addComponent(jButtonSyncNow)
                     .addComponent(jButtonConfigurations)
                     .addComponent(jButtonStartStop))
                 .addContainerGap())
@@ -165,9 +239,9 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
 
     private void jButtonStartStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartStopActionPerformed
 
-        boolean isTillBranchSyncRunning = this.dlSync.isTillBranchSyncRunning();
-        boolean newValue = !isTillBranchSyncRunning;
-        this.dlSync.updateIsTillBranchSyncRunning(newValue);
+        boolean isTillBranchSyncStarted = this.dlSync.isTillBranchSyncStarted();
+        boolean newValue = !isTillBranchSyncStarted;
+        this.dlSync.updateIsTillBranchSyncStarted(newValue);
         
         this.enableDisableButtons();
         updateLog();
@@ -179,10 +253,40 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
         configFrom.setVisible(true);
     }//GEN-LAST:event_jButtonConfigurationsActionPerformed
 
+    private void jButtonClearLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearLogActionPerformed
+        
+        try
+        {
+            this.dlSync.clearTillBranchSyncLog();
+            JOptionPane.showMessageDialog(null, "Log cleared successfully");
+            updateLog();
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "Error: "+ ex.getMessage());
+        }
+    }//GEN-LAST:event_jButtonClearLogActionPerformed
+
+    private void jButtonSyncNowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSyncNowActionPerformed
+        
+        if(isPreviousSyncComplete)
+        {
+            SwingWorker syncWorker = this.createSyncWorker();
+            syncWorker.execute();
+            JOptionPane.showMessageDialog(null, "Sync Started");
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Sync is already running");
+        }
+    }//GEN-LAST:event_jButtonSyncNowActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonClearLog;
     private javax.swing.JButton jButtonConfigurations;
     private javax.swing.JButton jButtonStartStop;
+    private javax.swing.JButton jButtonSyncNow;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -242,16 +346,17 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
 
     private void enableDisableButtons() {
         
-        boolean isTillBranchSyncRunning = this.dlSync.isTillBranchSyncRunning();
+        boolean isTillBranchSyncStarted = this.dlSync.isTillBranchSyncStarted();
         
-        if(isTillBranchSyncRunning){
+        jButtonSyncNow.setEnabled(isTillBranchSyncStarted);
+        if(isTillBranchSyncStarted){
             jButtonStartStop.setText("Stop");
         }
         else {
             jButtonStartStop.setText("Start");
         }
         
-        jButtonConfigurations.setEnabled(!isTillBranchSyncRunning);
+        jButtonConfigurations.setEnabled(!isTillBranchSyncStarted);
         
     }
     
@@ -260,8 +365,8 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
         
         try
         {
-            boolean isTillBranchSyncRunning = this.dlSync.isTillBranchSyncRunning();
-            jLabelSyncStatus.setText( isTillBranchSyncRunning ? "Started" : "Stopped" );
+            boolean isTillBranchSyncStarted = this.dlSync.isTillBranchSyncStarted();
+            jLabelSyncStatus.setText( isTillBranchSyncStarted ? "Started" : "Stopped" );
 
             lastSyncDate = dlSync.getTillBranchLastSyncedAt();
             if(lastSyncDate != null)
@@ -300,9 +405,12 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
                     AppConfig.getInstance().getProperty("db.URL"));
         }
         
-        String branchUser = AppConfig.getInstance().getProperty("sync.branch_db.user");
-        String branchPassword = AppConfig.getInstance().getProperty("sync.branch_db.password");
-        String branchURL = AppConfig.getInstance().getProperty("sync.branch_db.URL");
+        HashMap map = this.dlSync.getTillBranchSyncConfig();
+        
+        String branchUser = (String)map.get("BRANCH_DB_USER");
+        String branchPassword = (String)map.get("BRANCH_DB_PASSWORD");
+        String branchURL = (String)map.get("BRANCH_DB_URL");
+        
         if( branchConnection == null || branchConnection.isClosed() ){
             branchConnection = openConnection(branchUser,
                     branchPassword,
@@ -325,6 +433,7 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
             sDBPassword = cypher.decrypt(sDBPassword.substring(6));
         }
         try {
+            DriverManager.setLoginTimeout(10);
             return DriverManager.getConnection(sURL, sDBUser, sDBPassword);
         } catch (SQLException ex) {
             throw ex;
@@ -435,6 +544,8 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
                 s2.addBatch("SET FOREIGN_KEY_CHECKS = 1");
                 s2.executeBatch();
             }
+            
+            insertSyncLog("Sync completed for table: " + tableName);
         }
         
     }
@@ -547,6 +658,8 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
                 
                 to.commit();
             }
+            
+            insertSyncLog("Sync completed for table: " + tableName);
         }
         
     }
@@ -570,6 +683,7 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
                 case "STOCKDIARY":
                 case "RECEIPTS":
                 case "TICKETS":
+                case "SALES_DENORMALIZED":
                 case "PAYMENTS":
                 case "TAXLINES":
                 case "DRAWEROPENED":
@@ -611,6 +725,7 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
                 case "STOCKDIARY":
                 case "RECEIPTS":
                 case "TICKETS":
+                case "SALES_DENORMALIZED":
                 case "PAYMENTS":
                 case "TAXLINES":
                 case "DRAWEROPENED":
@@ -661,17 +776,17 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
                 // Start Progress
                 //setProgress(0);
                 
-                boolean isTillBranchSyncRunning = false;
+                boolean isTillBranchSyncStarted = false;
                 
                 try
                 {
-                    isTillBranchSyncRunning = dlSync.isTillBranchSyncRunning();
+                    isTillBranchSyncStarted = dlSync.isTillBranchSyncStarted();
                 }
                 catch(Exception ex){
                     ex.printStackTrace();
                 }
                 
-                if(!isTillBranchSyncRunning)
+                if(!isTillBranchSyncStarted)
                 {
                     return true;
                 }
@@ -694,54 +809,6 @@ public class JPanelTillBranchSync extends javax.swing.JPanel implements JPanelVi
                     System.out.println(ex.getMessage());
                     return false;
                 }
-                
-                
-                String[] branchToTillTables = new String[]
-                {
-                    "ROLES",
-                    "PEOPLE",
-                    "CATEGORIES",
-                    "TAXCATEGORIES",
-                    "TAXES",
-                    "TAXCUSTCATEGORIES",
-                    "FLOORS",
-                    "PLACES",
-                    "CUSTOMERS",
-                    "THIRDPARTIES",
-                    "BREAKS",
-                    "LOCATIONS",
-                    "PROMOTIONS",
-                    "ATTRIBUTE",
-                    "ATTRIBUTEVALUE",
-                    "ATTRIBUTESET",
-                    "ATTRIBUTESETINSTANCE",
-                    "ATTRIBUTEUSE",
-                    "ATTRIBUTEINSTANCE",
-                    "PRODUCTS",
-                    "PRODUCTS_COM",
-                    "PRODUCTS_KIT",
-                    "DBPERMISSIONS",
-                    "STOCKCURRENT"
-                };
-                
-                String[] tillToBranchTables = new String[]
-                {
-                    "CLOSEDCASH",
-                    "SHIFTS",
-                    "SHIFT_BREAKS",
-                    "LEAVES",
-                    "VOUCHERS",
-                    "RESERVATIONS",
-                    "RESERVATION_CUSTOMERS",
-                    "STOCKDIARY",
-                    "RECEIPTS",
-                    "TICKETS",
-                    "TICKETLINES",
-                    "PAYMENTS",
-                    "TAXLINES",
-                    "DRAWEROPENED",
-                    "LINEREMOVED"
-                };
                 
                 // Sync Branch To Till Tables
                 for (int i = 0; i < branchToTillTables.length; i++) {

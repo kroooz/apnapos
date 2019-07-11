@@ -87,10 +87,7 @@ public class JTicketsBagTicketBag extends javax.swing.JPanel {
         m_jBtnDelete.setToolTipText(bundle.getString("tiptext.deletecurrent")); // NOI18N
         m_jBtnDelete.setFocusPainted(false);
         m_jBtnDelete.setFocusable(false);
-        m_jBtnDelete.setMargin(new java.awt.Insets(0, 4, 0, 4));
-        m_jBtnDelete.setMaximumSize(new java.awt.Dimension(50, 40));
-        m_jBtnDelete.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_jBtnDelete.setPreferredSize(new java.awt.Dimension(50, 40));
+        m_jBtnDelete.setMargin(new java.awt.Insets(10, 4, 10, 4));
         m_jBtnDelete.setRequestFocusEnabled(false);
         m_jBtnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,10 +102,7 @@ public class JTicketsBagTicketBag extends javax.swing.JPanel {
         m_jBtnCancel.setToolTipText(bundle.getString("tiptext.cancelaction")); // NOI18N
         m_jBtnCancel.setFocusPainted(false);
         m_jBtnCancel.setFocusable(false);
-        m_jBtnCancel.setMargin(new java.awt.Insets(0, 4, 0, 4));
-        m_jBtnCancel.setMaximumSize(new java.awt.Dimension(50, 40));
-        m_jBtnCancel.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_jBtnCancel.setPreferredSize(new java.awt.Dimension(50, 40));
+        m_jBtnCancel.setMargin(new java.awt.Insets(10, 4, 10, 4));
         m_jBtnCancel.setRequestFocusEnabled(false);
         m_jBtnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,10 +119,7 @@ public class JTicketsBagTicketBag extends javax.swing.JPanel {
         m_jBtnCancel1.setText(AppLocal.getIntString("Button.Cancel")); // NOI18N
         m_jBtnCancel1.setFocusPainted(false);
         m_jBtnCancel1.setFocusable(false);
-        m_jBtnCancel1.setMargin(new java.awt.Insets(8, 14, 8, 14));
-        m_jBtnCancel1.setMaximumSize(new java.awt.Dimension(50, 40));
-        m_jBtnCancel1.setMinimumSize(new java.awt.Dimension(50, 40));
-        m_jBtnCancel1.setPreferredSize(new java.awt.Dimension(50, 40));
+        m_jBtnCancel1.setMargin(new java.awt.Insets(10, 14, 10, 14));
         m_jBtnCancel1.setRequestFocusEnabled(false);
         m_jBtnCancel1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

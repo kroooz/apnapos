@@ -220,6 +220,10 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
 
         container.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         container.setLayout(new java.awt.BorderLayout());
+
+        toolbar.setMinimumSize(null);
+        toolbar.setPreferredSize(new java.awt.Dimension(0, 180));
+        toolbar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
         container.add(toolbar, java.awt.BorderLayout.NORTH);
 
         add(container, java.awt.BorderLayout.CENTER);

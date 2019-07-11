@@ -28,8 +28,8 @@ public class AppLocal {
  
     public static final String APP_NAME = "Apna POS";
     public static final String APP_ID = "apnapos";
-    public static final String APP_VERSION = "1.3";
-    public static final int APP_VERSIONINT = 13;
+    public static final String APP_VERSION = "1.4";
+    public static final int APP_VERSIONINT = 14;
     public static final String APP_DEMO = "";
    
     private static final LocaleResources m_resources;
@@ -46,6 +46,7 @@ public class AppLocal {
     public static final String paymentThroughCard = "magcard";
     public static final String paymentThroughCheque = "cheque";
     public static final String settingUseWeightedAverageCosting = "use_weighted_average_costing";
+    public static final String settingDontAllowSalesIfNotEnoughQuantity = "dont_allow_sales_if_not_enough_quantity";
 
     static {
         m_resources = new LocaleResources();

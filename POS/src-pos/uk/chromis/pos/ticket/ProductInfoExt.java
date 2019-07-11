@@ -314,6 +314,8 @@ public class ProductInfoExt {
     public final Double getCommission() {
         return m_dCommission;
     }
+    
+    
 
     public final void setCommission(Double dCommission) {
         m_dCommission = dCommission;

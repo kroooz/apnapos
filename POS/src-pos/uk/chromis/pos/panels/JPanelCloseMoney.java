@@ -915,7 +915,7 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
                 // Cerramos la caja si esta pendiente de cerrar.
                 if (m_App.getActiveCashDateEnd() == null) {
                     new StaticSentence(m_App.getSession(), 
-                            "UPDATE CLOSEDCASH SET DATEEND = ?, NOSALES = ?, OPENINGCASH = ?, ACTUALCASH = ?, CASHSHORTAGEEXCESS = ?, ACTUALCARD = ?, CARDSHORTAGEEXCESS = ? WHERE HOST = ? AND MONEY = ?", 
+                            "UPDATE CLOSEDCASH SET DATEEND = ?, NOSALES = ?, OPENINGCASH = ?, ACTUALCASH = ?, CASHSHORTAGEEXCESS = ?, ACTUALCARD = ?, CARDSHORTAGEEXCESS = ?, IS_SYNCED = 0 WHERE HOST = ? AND MONEY = ?", 
                             new SerializerWriteBasic(new Datas[]{Datas.TIMESTAMP, Datas.INT, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.STRING, Datas.STRING}))
                             .exec(new Object[]{dNow, result, openingCash, actualCash, cashExcessShortage, actualCard, cardExcessShortage, m_App.getProperties().getHost(), m_App.getActiveCashIndex()});
                 }

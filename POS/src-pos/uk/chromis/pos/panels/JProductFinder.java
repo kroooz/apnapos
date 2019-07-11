@@ -286,8 +286,6 @@ public class JProductFinder extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        m_jProductSelect.setMinimumSize(null);
-        m_jProductSelect.setPreferredSize(null);
         m_jProductSelect.setLayout(new java.awt.BorderLayout());
 
         jButton3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -329,7 +327,6 @@ public class JProductFinder extends javax.swing.JDialog {
 
         jScrollPane2.setMaximumSize(null);
         jScrollPane2.setMinimumSize(null);
-        jScrollPane2.setPreferredSize(null);
         jScrollPane2.setViewportView(jTableProducts);
 
         jPanel5.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -383,12 +380,14 @@ public class JProductFinder extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(m_jKeys, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(m_jKeys, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 314, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(963, 581));
+        setSize(new java.awt.Dimension(963, 659));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

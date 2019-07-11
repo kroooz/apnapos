@@ -8,4 +8,5 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <include file="uk/chromis/pos/liquibase/scripts/apnaposmigrations/AddSettingsTableAndCosColumnInTicketLines.xml"/>
+    <include file="uk/chromis/pos/liquibase/scripts/apnaposmigrations/AddSalesDenormalizedTable.xml"/>
 </databaseChangeLog>

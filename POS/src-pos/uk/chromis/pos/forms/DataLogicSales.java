@@ -1266,9 +1266,33 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 }
                 );
 
-                SentenceExec ticketlineinsert = new PreparedSentence(s, "INSERT INTO TICKETLINES (TICKET, LINE, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, TAXID, ATTRIBUTES, REFUNDQTY, TAXRATE, TAXAMOUNT, COMMISSION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteBuilder.INSTANCE);
+                SentenceExec ticketlineinsert = new PreparedSentence(s, "INSERT INTO TICKETLINES (TICKET, LINE, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, TAXID, ATTRIBUTES, REFUNDQTY, TAXRATE, TAXAMOUNT, COMMISSION, COST) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteBuilder.INSTANCE);
 
+                String hostname = AppConfig.getInstance().getProperty("machine.hostname");
+                Properties prop = m_dlSystem.getResourceAsProperties(hostname + "/properties");
+                String loc = prop.getProperty("location");
+                String locationGuid = m_dlSync.getLocationGuid(loc);
+                
                 for (TicketLineInfo l : ticket.getLines()) {
+                    
+                    // INSERT INTO DENORMALIZED SALES TABLE
+                    new StaticSentence(s, "INSERT INTO SALES_DENORMALIZED ( ID, TICKET_ID, SALE_DATE, CATEGORY_ID, "
+                            + " ITEM_ID, ITEM_NAME, UNITS, PRICE, COST, SITEGUID ) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasic(new Datas[]{
+                    Datas.STRING, Datas.STRING, Datas.TIMESTAMP, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.STRING }))
+                    .exec( 
+                            UUID.randomUUID().toString(), 
+                            ticket.getId(), 
+                            ticket.getDate(),
+                            l.getProductCategoryID(),
+                            l.getProductID(),
+                            l.getProductName(),
+                            l.getMultiply(),
+                            l.getPrice(),
+                            l.getPriceBuy(),
+                            locationGuid);
+                    // END - INSERT INTO DENORMALIZED SALES TABLE
+                    
 
                     ticketlineinsert.exec(l);
 

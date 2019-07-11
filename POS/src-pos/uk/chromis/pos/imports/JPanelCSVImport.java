@@ -1346,6 +1346,8 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jLabel23 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jComboQuantity = new javax.swing.JComboBox();
+        jLabelService = new javax.swing.JLabel();
+        jComboBoxService = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -1374,8 +1376,6 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jLabelProp2 = new javax.swing.JLabel();
         jCustom3 = new javax.swing.JPanel();
         jCustom2 = new javax.swing.JPanel();
-        jLabelService = new javax.swing.JLabel();
-        jComboBoxService = new javax.swing.JComboBox();
         jLabelAux = new javax.swing.JLabel();
         jComboBoxAux = new javax.swing.JComboBox();
         jLabelRemotePrint = new javax.swing.JLabel();
@@ -1397,8 +1397,8 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jParamsLocation = new uk.chromis.pos.reports.JParamsLocation();
         pb = new javax.swing.JProgressBar();
 
-        setPreferredSize(new java.awt.Dimension(630, 430));
         setOpaque(false);
+        setPreferredSize(new java.awt.Dimension(630, 430));
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
 
@@ -1442,18 +1442,18 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
             .addGroup(jHeaderLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(35, 35, 35)
+                .addGroup(jHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jHeaderLayout.createSequentialGroup()
-                        .addGap(390, 390, 390)
-                        .addComponent(jLabel17))
-                    .addGroup(jHeaderLayout.createSequentialGroup()
-                        .addGap(35, 35, 35)
+                        .addComponent(jLabel17)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jHeaderLayout.createSequentialGroup()
                         .addComponent(jFileName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jbtnDbDriverLib, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbtnDbDriverLib1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jbtnDbDriverLib, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jbtnDbDriverLib1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(179, 179, 179))))
         );
         jHeaderLayout.setVerticalGroup(
             jHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1502,93 +1502,93 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jLabel13.setText(bundle.getString("label.csvnotchanged")); // NOI18N
         jLabel13.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jTextRecords.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextRecords.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextRecords.setBackground(new java.awt.Color(224, 223, 227));
+        jTextRecords.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jTextRecords.setForeground(new java.awt.Color(102, 102, 102));
+        jTextRecords.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextRecords.setBorder(null);
         jTextRecords.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextRecords.setEnabled(false);
-        jTextRecords.setForeground(new java.awt.Color(102, 102, 102));
         jTextRecords.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextNew.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextNew.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextNew.setBackground(new java.awt.Color(224, 223, 227));
+        jTextNew.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jTextNew.setForeground(new java.awt.Color(102, 102, 102));
+        jTextNew.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextNew.setBorder(null);
         jTextNew.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextNew.setEnabled(false);
-        jTextNew.setForeground(new java.awt.Color(102, 102, 102));
         jTextNew.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextInvalid.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextInvalid.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextInvalid.setBackground(new java.awt.Color(224, 223, 227));
+        jTextInvalid.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jTextInvalid.setForeground(new java.awt.Color(102, 102, 102));
+        jTextInvalid.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextInvalid.setBorder(null);
         jTextInvalid.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextInvalid.setEnabled(false);
-        jTextInvalid.setForeground(new java.awt.Color(102, 102, 102));
         jTextInvalid.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextUpdate.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextUpdate.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextUpdate.setBackground(new java.awt.Color(224, 223, 227));
+        jTextUpdate.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jTextUpdate.setForeground(new java.awt.Color(102, 102, 102));
+        jTextUpdate.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextUpdate.setBorder(null);
         jTextUpdate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextUpdate.setEnabled(false);
-        jTextUpdate.setForeground(new java.awt.Color(102, 102, 102));
         jTextUpdate.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextMissing.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextMissing.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextMissing.setBackground(new java.awt.Color(224, 223, 227));
+        jTextMissing.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jTextMissing.setForeground(new java.awt.Color(102, 102, 102));
+        jTextMissing.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextMissing.setBorder(null);
         jTextMissing.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextMissing.setEnabled(false);
-        jTextMissing.setForeground(new java.awt.Color(102, 102, 102));
         jTextMissing.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextBadPrice.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextBadPrice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextBadPrice.setBackground(new java.awt.Color(224, 223, 227));
+        jTextBadPrice.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jTextBadPrice.setForeground(new java.awt.Color(102, 102, 102));
+        jTextBadPrice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextBadPrice.setBorder(null);
         jTextBadPrice.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextBadPrice.setEnabled(false);
-        jTextBadPrice.setForeground(new java.awt.Color(102, 102, 102));
         jTextBadPrice.setPreferredSize(new java.awt.Dimension(70, 25));
 
-        jTextNoChange.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextNoChange.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextNoChange.setBackground(new java.awt.Color(224, 223, 227));
+        jTextNoChange.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jTextNoChange.setForeground(new java.awt.Color(102, 102, 102));
+        jTextNoChange.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextNoChange.setBorder(null);
         jTextNoChange.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextNoChange.setEnabled(false);
-        jTextNoChange.setForeground(new java.awt.Color(102, 102, 102));
         jTextNoChange.setPreferredSize(new java.awt.Dimension(70, 25));
 
         jLabel19.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel19.setText(bundle.getString("label.csvbadcats")); // NOI18N
         jLabel19.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jTextBadCats.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextBadCats.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextBadCats.setBackground(new java.awt.Color(224, 223, 227));
+        jTextBadCats.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jTextBadCats.setForeground(new java.awt.Color(102, 102, 102));
+        jTextBadCats.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextBadCats.setBorder(null);
         jTextBadCats.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextBadCats.setEnabled(false);
-        jTextBadCats.setForeground(new java.awt.Color(102, 102, 102));
         jTextBadCats.setPreferredSize(new java.awt.Dimension(70, 25));
 
         jTextUpdates1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jTextUpdates1.setText(bundle.getString("label.csvquantityupdated")); // NOI18N
         jTextUpdates1.setPreferredSize(new java.awt.Dimension(100, 25));
 
-        jTextQuantityUpdate.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jTextQuantityUpdate.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextQuantityUpdate.setBackground(new java.awt.Color(224, 223, 227));
+        jTextQuantityUpdate.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jTextQuantityUpdate.setForeground(new java.awt.Color(102, 102, 102));
+        jTextQuantityUpdate.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextQuantityUpdate.setBorder(null);
         jTextQuantityUpdate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextQuantityUpdate.setEnabled(false);
-        jTextQuantityUpdate.setForeground(new java.awt.Color(102, 102, 102));
         jTextQuantityUpdate.setPreferredSize(new java.awt.Dimension(70, 25));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -1861,6 +1861,20 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
             }
         });
 
+        jLabelService.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabelService.setText("Service Item");
+
+        jComboBoxService.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jComboBoxService.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxService.setSelectedIndex(-1);
+        jComboBoxService.setEnabled(false);
+        jComboBoxService.setMaximumSize(new java.awt.Dimension(66, 23));
+        jComboBoxService.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jComboBoxFocusGained(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -1895,10 +1909,14 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                                     .addComponent(jComboBarcode, javax.swing.GroupLayout.Alignment.LEADING, 0, 1, Short.MAX_VALUE)
                                     .addComponent(jComboShortName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelService))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboQuantity, 0, 1, Short.MAX_VALUE)))
-                        .addGap(0, 8, Short.MAX_VALUE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboBoxService, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jComboQuantity, 0, 1, Short.MAX_VALUE))))
+                        .addGap(0, 14, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -1932,7 +1950,11 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addGap(3, 3, 3)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelService)
+                    .addComponent(jComboBoxService, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboSecurity, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -2061,7 +2083,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
                                     .addComponent(jComboTax, javax.swing.GroupLayout.Alignment.TRAILING, 0, 1, Short.MAX_VALUE)
                                     .addComponent(jComboCategory, 0, 1, Short.MAX_VALUE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addGap(0, 83, Short.MAX_VALUE)
+                                .addGap(0, 85, Short.MAX_VALUE)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jCheckAddStockLevels, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jCheckInCatalogue, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2220,22 +2242,6 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
 
         jCustom2.setMaximumSize(new java.awt.Dimension(320, 348));
         jCustom2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabelService.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabelService.setText("Service Item");
-        jCustom2.add(jLabelService, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 15, -1, -1));
-
-        jComboBoxService.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jComboBoxService.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBoxService.setSelectedIndex(-1);
-        jComboBoxService.setEnabled(false);
-        jComboBoxService.setMaximumSize(new java.awt.Dimension(66, 23));
-        jComboBoxService.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jComboBoxFocusGained(evt);
-            }
-        });
-        jCustom2.add(jComboBoxService, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 11, 200, -1));
 
         jLabelAux.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabelAux.setText("Aux Product");
@@ -2557,6 +2563,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
         jComboQuantity.setSelectedItem("Quantity");
         jComboCategory.setSelectedItem("Category");
         jComboBoxVarPrice.setSelectedItem("Is Variable Price (1 or 0)");
+        jComboBoxService.setSelectedItem("Is Service Item (1 or 0)");
         jComboDefaultCategory.setSelectedItem(reject_bad_categories_text);
         
         // check if mapping is successful
@@ -2848,7 +2855,7 @@ public class JPanelCSVImport extends JPanel implements JPanelView {
             if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 
                 PrintWriter writer = new PrintWriter(chooser.getSelectedFile() + "/template.csv", "UTF-8");
-                writer.println( "Reference, Barcode, Name, Sell Price, Buy Price, Category, Quantity, Is Variable Price (1 or 0)" );
+                writer.println( "Reference, Barcode, Name, Sell Price, Buy Price, Category, Quantity, Is Variable Price (1 or 0), Is Service Item (1 or 0)" );
                 writer.close();
 
             } else {

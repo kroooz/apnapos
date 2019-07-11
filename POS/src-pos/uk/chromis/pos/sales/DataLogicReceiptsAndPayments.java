@@ -248,6 +248,7 @@ public class DataLogicReceiptsAndPayments extends BeanFactoryDataSingle {
     
     /*
     paymentThrough: use AppLocal.paymentThroughCash, AppLocal.paymentThroughCard or AppLocal.paymentThroughCheque
+    amount: enter negative amount for PAYMENT and postive amount for RECEIPT
     transactionId: If payment is made in purchase Invoice or anyother entry, then set transactionId param equal to id of that transaction. Otherwise set it null
     partyId: if payment is made to Supplier or Customer (party) then enter the id of that Supplier or Customer otherwise set to null
     partyType: use AppLocal.customerTypeString or supplierTypeString. If no party is involved then set to null

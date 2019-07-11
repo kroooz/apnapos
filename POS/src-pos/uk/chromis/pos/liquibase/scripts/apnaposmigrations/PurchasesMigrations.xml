@@ -26,6 +26,15 @@
         </insert> 		  
     </changeSet>
     
+    <changeSet author="Apna POS" id="Grant access to supplier payment menu">      
+        <insert tableName="DBPERMISSIONS">
+            <column name="CLASSNAME" value="uk.chromis.pos.suppliers.SupplierPaymentPanel"/>
+            <column name="SECTION" value="##label.sectionstock"/>
+            <column name="DISPLAYNAME" value="##Menu.SupplierPayment"/>
+            <column name="DESCRIPTION" value="##Menu.SupplierPayment"/>  
+        </insert> 		  
+    </changeSet>
+    
     <changeSet author="Apna POS" id="Add Purchases Tables" >    
     
         <createTable tableName="PURCHASES">

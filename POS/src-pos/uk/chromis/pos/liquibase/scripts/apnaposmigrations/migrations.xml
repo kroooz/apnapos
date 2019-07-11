@@ -11,4 +11,5 @@
     <include file="uk/chromis/pos/liquibase/scripts/apnaposmigrations/syncMigrations1.xml"/>
     <include file="uk/chromis/pos/liquibase/scripts/apnaposmigrations/PurchasesMigrations.xml"/>
     <include file="uk/chromis/pos/liquibase/scripts/apnaposmigrations/AddSettingsTableAndCosColumnInTicketLines.xml"/>
+    <include file="uk/chromis/pos/liquibase/scripts/apnaposmigrations/AddSalesDenormalizedTable.xml"/>
 </databaseChangeLog>

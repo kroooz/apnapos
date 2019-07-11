@@ -68,14 +68,14 @@ public class StartPOS {
     private static final Logger logger = Logger.getLogger("uk.chromis.pos.forms.StartPOS");
     private static ServerSocket serverSocket;
     private static Boolean allowMulti = false;
-    public static Boolean resoucesPaneEnabled = false;
+    public static Boolean resoucesPaneEnabled = true;
     public static String topRatedEmailAddress = "toprated2019@gmail.com";
 
     private static boolean isLicenseValid() {
         
         try
         {
-            String ExpiryDateString = "2019-06-30"; // yyyy-MM-dd
+            String ExpiryDateString = "2019-07-30"; // yyyy-MM-dd
 
               // Dev Computer
             String MotherBoard = "/4GNVC2S/CN7360422O0BGT/";
@@ -87,10 +87,13 @@ public class StartPOS {
 //            String MotherBoard = "/FNK9B2S/CN7360418N018S/";
 
 //           Usman's Computer
-//             String MotherBoard = "QCQLWS042702WB";
+//             String MotherBoard = "/J3WTB2S/CN7360418R04KJ/";
 
-//           Adnan's Computer
+//           Server Computer
 //             String MotherBoard = "/20K8DZ1/CN722003BD02PD/";
+
+//          Windows7 Computer
+//            String MotherBoard = "..CN1374008B04SA.";
             
             
             // CODE TO CHECK IF LICENSE IS VALID
@@ -298,6 +301,7 @@ public class StartPOS {
         currentPath = System.getProperty("user.dir");
         if (!allowMulti) {
             if (!registerApp()) {
+                JOptionPane.showMessageDialog(null, "Already Running");
                 System.out.println("Already Running");
                 System.exit(0);
             }

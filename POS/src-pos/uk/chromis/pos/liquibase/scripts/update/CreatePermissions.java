@@ -170,6 +170,7 @@ public class CreatePermissions implements liquibase.change.custom.CustomTaskChan
         startPerms.add("refund.magcard");
         startPerms.add("refund.paper");
         startPerms.add("sales.RefundTicket");
+        startPerms.add("sales.ReduceQtyAboveZero");
         startPerms.add("uk.chromis.pos.admin.PeoplePanel");
         startPerms.add("uk.chromis.pos.admin.ResourcesPanel");
         startPerms.add("uk.chromis.pos.admin.RolesPanel");
@@ -204,6 +205,7 @@ public class CreatePermissions implements liquibase.change.custom.CustomTaskChan
         startPerms.add("uk.chromis.pos.panels.JPanelPrinter");
         startPerms.add("uk.chromis.pos.promotion.PromotionPanel");
         startPerms.add("uk.chromis.pos.sales.JPanelTicketEdits");
+        startPerms.add("sales.CancelSale");
 
         permissionsID = UUID.randomUUID().toString();
         personID = UUID.randomUUID().toString();

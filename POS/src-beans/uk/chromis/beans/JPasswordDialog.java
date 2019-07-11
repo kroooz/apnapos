@@ -222,7 +222,7 @@ public class JPasswordDialog extends javax.swing.JDialog {
 
         getContentPane().add(m_jPanelTitle, java.awt.BorderLayout.NORTH);
 
-        setSize(new java.awt.Dimension(258, 428));
+        setSize(new java.awt.Dimension(345, 514));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

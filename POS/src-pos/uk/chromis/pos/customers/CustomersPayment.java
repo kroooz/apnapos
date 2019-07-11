@@ -299,8 +299,10 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
+        btnCustomer.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
         btnCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_sml.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        btnCustomer.setText(bundle.getString("tiptext.customeraccount")); // NOI18N
         btnCustomer.setToolTipText(bundle.getString("tiptext.customeraccount")); // NOI18N
         btnCustomer.setFocusPainted(false);
         btnCustomer.setFocusable(false);
@@ -313,7 +315,9 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
         });
         jPanel6.add(btnCustomer);
 
+        btnSave.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/filesave.png"))); // NOI18N
+        btnSave.setText(bundle.getString("tiptext.save")); // NOI18N
         btnSave.setToolTipText(bundle.getString("tiptext.save")); // NOI18N
         btnSave.setFocusPainted(false);
         btnSave.setFocusable(false);
@@ -327,16 +331,13 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
         jPanel6.add(btnSave);
         jPanel6.add(jSeparator1);
 
-        btnPay.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnPay.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
         btnPay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/pay.png"))); // NOI18N
-        btnPay.setText(AppLocal.getIntString("button.pay")); // NOI18N
+        btnPay.setText(AppLocal.getIntString("tiptext.payaccount")); // NOI18N
         btnPay.setToolTipText(bundle.getString("tiptext.payaccount")); // NOI18N
         btnPay.setFocusPainted(false);
         btnPay.setFocusable(false);
         btnPay.setMargin(new java.awt.Insets(8, 14, 8, 14));
-        btnPay.setMaximumSize(new java.awt.Dimension(110, 44));
-        btnPay.setMinimumSize(new java.awt.Dimension(110, 44));
-        btnPay.setPreferredSize(new java.awt.Dimension(110, 44));
         btnPay.setRequestFocusEnabled(false);
         btnPay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

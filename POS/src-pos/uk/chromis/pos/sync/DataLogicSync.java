@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.loader.DataParams;
 import uk.chromis.data.loader.DataRead;
@@ -47,6 +48,7 @@ import uk.chromis.data.loader.SerializerWriteParams;
 import uk.chromis.data.loader.SerializerWriteString;
 import uk.chromis.data.loader.Session;
 import uk.chromis.data.loader.StaticSentence;
+import uk.chromis.data.loader.Transaction;
 import uk.chromis.pos.forms.BeanFactoryDataSingle;
 
 public class DataLogicSync extends BeanFactoryDataSingle {
@@ -91,7 +93,7 @@ public class DataLogicSync extends BeanFactoryDataSingle {
         try
         {
             StaticSentence sent = new StaticSentence(s,
-                "SELECT LAST_SYNC_DATETIME FROM TILL_BRANCH_SYNC LIMIT 1",
+                "SELECT LAST_SYNC_DATETIME FROM SYNC_TILL_BRANCH LIMIT 1",
                 null, SerializerReadDate.INSTANCE);
         
             lastSyncedDateTime = (Date)sent.find();
@@ -105,31 +107,33 @@ public class DataLogicSync extends BeanFactoryDataSingle {
         return lastSyncedDateTime;
     }
     
-    public boolean isTillBranchSyncRunning(){
-        boolean isTillBranchSyncRunning = false;
+    // it will return boolean that if sync has been started or stopped
+    public boolean isTillBranchSyncStarted(){
+        boolean isTillBranchSyncStarted = false;
         
         try
         {
             StaticSentence sent = new StaticSentence(s,
-                "SELECT IS_SYNC_STARTED FROM TILL_BRANCH_SYNC LIMIT 1",
+                "SELECT IS_SYNC_STARTED FROM SYNC_TILL_BRANCH LIMIT 1",
                 null, SerializerReadBoolean.INSTANCE);
         
-            isTillBranchSyncRunning = (boolean)sent.find();
+            isTillBranchSyncStarted = (boolean)sent.find();
         }
         catch(Exception ex)
         {
             
-            isTillBranchSyncRunning = false;
+            isTillBranchSyncStarted = false;
         }
         
-        return isTillBranchSyncRunning;
+        return isTillBranchSyncStarted;
     }
     
+    // It will return boolean whether sync is enabled between branch main computer and till computer
     public boolean isTillBranchSyncEnabled(){
         
         try
         {
-            PreparedSentence existingSyncConfigSent = new PreparedSentence(s, "SELECT COUNT(*) FROM TILL_BRANCH_SYNC", null, SerializerReadInteger.INSTANCE);
+            PreparedSentence existingSyncConfigSent = new PreparedSentence(s, "SELECT COUNT(*) FROM SYNC_TILL_BRANCH", null, SerializerReadInteger.INSTANCE);
             
             int existingSyncConfig = (int)existingSyncConfigSent.find();
             
@@ -143,12 +147,12 @@ public class DataLogicSync extends BeanFactoryDataSingle {
         
     }
     
-    void updateIsTillBranchSyncRunning(boolean value) {
+    void updateIsTillBranchSyncStarted(boolean value) {
         
         try {
             
             
-            new PreparedSentence(s, "UPDATE TILL_BRANCH_SYNC SET IS_SYNC_STARTED = ?;", SerializerWriteParams.INSTANCE)
+            new PreparedSentence(s, "UPDATE SYNC_TILL_BRANCH SET IS_SYNC_STARTED = ?;", SerializerWriteParams.INSTANCE)
                         .exec(new DataParams() {
                             @Override
                             public void writeValues() throws BasicException {
@@ -167,6 +171,12 @@ public class DataLogicSync extends BeanFactoryDataSingle {
         List log = (List) new StaticSentence(s, "SELECT LOG_DATETIME, LOG_TEXT FROM SYNC_LOG ORDER BY LOG_DATETIME DESC LIMIT " + logLimit, 
                 null, new SerializerReadBasic(new Datas[]{Datas.TIMESTAMP, Datas.STRING})).list();
         return log;
+    }
+    
+    public void clearTillBranchSyncLog() throws BasicException {
+        
+        new StaticSentence(s, "DELETE FROM SYNC_LOG", 
+                null, null).exec();
     }
     
     public void insertSyncLog(String log) {
@@ -275,7 +285,7 @@ public class DataLogicSync extends BeanFactoryDataSingle {
         
         try {
             
-            new StaticSentence(s, "UPDATE TILL_BRANCH_SYNC SET LAST_SYNC_DATETIME = CURRENT_TIMESTAMP;", 
+            new StaticSentence(s, "UPDATE SYNC_TILL_BRANCH SET LAST_SYNC_DATETIME = CURRENT_TIMESTAMP;", 
                 null, null).exec();
             
         } catch (BasicException ex) {
@@ -294,60 +304,59 @@ public class DataLogicSync extends BeanFactoryDataSingle {
             String SyncInterval) {
         
         try {
-            PreparedSentence existingSyncConfigSent = new PreparedSentence(s, "SELECT COUNT(*) FROM TILL_BRANCH_SYNC", null, SerializerReadInteger.INSTANCE);
             
-            int existingSyncConfig = (int)existingSyncConfigSent.find();
+            Transaction t = new Transaction(s) {
+                @Override
+                public Object transact() throws BasicException {
+
+                    try
+                    {
+                        
+                        new PreparedSentence(s, "DELETE FROM SYNC_TILL_BRANCH", null, null).exec();
             
-            if(existingSyncConfig == 0)
-            {
-                new PreparedSentence(s, "INSERT INTO TILL_BRANCH_SYNC "
-                        + "(" 
-                        + "BRANCH_DB_ENGINE, "
-                        + "BRANCH_DB_DRIVERLIB, "
-                        + "BRANCH_DB_DRIVERCLASS, "
-                        + "BRANCH_DB_URL, "
-                        + "BRANCH_DB_USER, "
-                        + "BRANCH_DB_PASSWORD, "
-                        + "BRANCH_DB_SYNC_INTERVAL) VALUES (?, ?, ?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE)
-                        .exec(new DataParams() {
-                            @Override
-                            public void writeValues() throws BasicException {
-                                setString(1, BranchDbEngine);
-                                setString(2, BranchDbDriverLib);
-                                setString(3, BranchDbDriverClass);
-                                setString(4, BranchDbUrl);
-                                setString(5, BranchDbUser);
-                                setString(6, BranchDbPassword);
-                                setString(7, SyncInterval);
-                            }
-                        });
-            }
-            else
-            {
-                new PreparedSentence(s, "UPDATE TILL_BRANCH_SYNC " 
-                        + "SET BRANCH_DB_ENGINE = ?, "
-                        + "BRANCH_DB_DRIVERLIB = ?, "
-                        + "BRANCH_DB_DRIVERCLASS = ?, "
-                        + "BRANCH_DB_URL = ?, "
-                        + "BRANCH_DB_USER = ?, "
-                        + "BRANCH_DB_PASSWORD = ?, "
-                        + "BRANCH_DB_SYNC_INTERVAL = ?", SerializerWriteParams.INSTANCE)
-                        .exec(new DataParams() {
-                            @Override
-                            public void writeValues() throws BasicException {
-                                setString(1, BranchDbEngine);
-                                setString(2, BranchDbDriverLib);
-                                setString(3, BranchDbDriverClass);
-                                setString(4, BranchDbUrl);
-                                setString(5, BranchDbUser);
-                                setString(6, BranchDbPassword);
-                                setString(7, SyncInterval);
-                            }
-                        });
-            }
+                        new PreparedSentence(s, "INSERT INTO SYNC_TILL_BRANCH "
+                            + "(" 
+                            + "LAST_SYNC_DATETIME, "
+                            + "BRANCH_DB_ENGINE, "
+                            + "BRANCH_DB_DRIVERLIB, "
+                            + "BRANCH_DB_DRIVERCLASS, "
+                            + "BRANCH_DB_URL, "
+                            + "BRANCH_DB_USER, "
+                            + "BRANCH_DB_PASSWORD, "
+                            + "BRANCH_DB_SYNC_INTERVAL) VALUES ('2000-01-01', ?, ?, ?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE)
+                            .exec(new DataParams() {
+                                @Override
+                                public void writeValues() throws BasicException {
+                                    setString(1, BranchDbEngine);
+                                    setString(2, BranchDbDriverLib);
+                                    setString(3, BranchDbDriverClass);
+                                    setString(4, BranchDbUrl);
+                                    setString(5, BranchDbUser);
+                                    setString(6, BranchDbPassword);
+                                    setString(7, SyncInterval);
+                                }
+                            });
+                        
+                        // clear till tables
+                        new PreparedSentence(s, "SET FOREIGN_KEY_CHECKS = 0",null,null).exec();
+                        for(String tableName: JPanelTillBranchSync.branchToTillTables) {
+                            new PreparedSentence(s, "DELETE FROM " + tableName, null, null).exec();
+                        }
+                        new PreparedSentence(s, "SET FOREIGN_KEY_CHECKS = 1",null,null).exec();
+                        
+                    }
+                    catch(Exception ex) {
+                        throw new BasicException((String)ex.getMessage());
+                    }
+
+                    return null;
+                }
+            };
             
-        } catch (BasicException ex) {
-            Logger.getLogger(DataLogicSync.class.getName()).log(Level.SEVERE, null, ex);
+            t.execute();
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
         }
         
     }
@@ -365,7 +374,7 @@ public class DataLogicSync extends BeanFactoryDataSingle {
                 + "BRANCH_DB_USER, "
                 + "BRANCH_DB_PASSWORD, "
                 + "BRANCH_DB_SYNC_INTERVAL "
-                + "FROM TILL_BRANCH_SYNC", 
+                + "FROM SYNC_TILL_BRANCH", 
                 SerializerWriteString.INSTANCE, 
                 new SerializerReadBasic(new Datas[]
                 {
