@@ -2056,7 +2056,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 true);
                             
                             if(user != null) {
-                                newline.setMultiply(-1);
+                                newline.setMultiply(newline.getMultiply() - 1.0);
+                                
+                                if(newline.getMultiply() == 0) {
+                                    newline.setMultiply(-1);
+                                }
+                                
                                 paintTicketLine(i, newline);
                             }
                         }
@@ -3488,8 +3493,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         }
         
-        //JDialogAuthentication authDialog = new JDialogAuthentication(null, true, permissions, dlSystem);
-        //authDialog.setVisible(true);
+//        JDialogAuthentication authDialog = new JDialogAuthentication(null, true, permissions, dlSystem);
+//        authDialog.setVisible(true);
         
         if(showMessage) {
             JOptionPane.showMessageDialog(null, "User does not have permission to perform this operation");
