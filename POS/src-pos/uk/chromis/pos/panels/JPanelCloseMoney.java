@@ -762,9 +762,9 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
         m_jCloseCash.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         m_jCloseCash.setIconTextGap(2);
         m_jCloseCash.setInheritsPopupMenu(true);
-        m_jCloseCash.setMaximumSize(new java.awt.Dimension(85, 33));
-        m_jCloseCash.setMinimumSize(new java.awt.Dimension(85, 33));
-        m_jCloseCash.setPreferredSize(new java.awt.Dimension(85, 33));
+        m_jCloseCash.setMaximumSize(null);
+        m_jCloseCash.setMinimumSize(null);
+        m_jCloseCash.setPreferredSize(null);
         m_jCloseCash.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jCloseCashActionPerformed(evt);
@@ -776,9 +776,9 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
         m_jPrintCash.setText(AppLocal.getIntString("Button.PrintCash")); // NOI18N
         m_jPrintCash.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         m_jPrintCash.setIconTextGap(2);
-        m_jPrintCash.setMaximumSize(new java.awt.Dimension(85, 33));
-        m_jPrintCash.setMinimumSize(new java.awt.Dimension(85, 33));
-        m_jPrintCash.setPreferredSize(new java.awt.Dimension(85, 33));
+        m_jPrintCash.setMaximumSize(null);
+        m_jPrintCash.setMinimumSize(null);
+        m_jPrintCash.setPreferredSize(null);
         m_jPrintCash.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jPrintCashActionPerformed(evt);
@@ -793,14 +793,14 @@ public class JPanelCloseMoney extends JPanel implements JPanelView, BeanFactoryA
                 .addContainerGap()
                 .addComponent(m_jPrintCash, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(m_jCloseCash, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addComponent(m_jCloseCash, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanelBottomLayout.setVerticalGroup(
             jPanelBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(m_jCloseCash, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(m_jPrintCash, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(m_jCloseCash, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(m_jPrintCash, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanelActualAmounts.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("panel.actual_amounts"))); // NOI18N

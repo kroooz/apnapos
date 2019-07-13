@@ -1258,15 +1258,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         refreshTicket(false);
     }
 
-    private void removeTicketLine(int i, Boolean addInformationInLinesRemovedReport, String userName) {
+    private void removeTicketLine(int i, Boolean addInformationInLinesRemovedReport, AppUser user) {
         
-        userName = userName == null ? m_App.getAppUserView().getUser().getName() : userName;
+        user = user == null ? m_App.getAppUserView().getUser() : user;
         
         //default true
         addInformationInLinesRemovedReport = addInformationInLinesRemovedReport == null ? true : addInformationInLinesRemovedReport;
 
-        if (("OK".equals(m_oTicket.getLine(i).getProperty("sendstatus")) && m_App.getAppUserView().getUser().hasPermission("kitchen.DeleteLine"))
-                || (!"OK".equals(m_oTicket.getLine(i).getProperty("sendstatus")) && m_App.getAppUserView().getUser().hasPermission("sales.RemoveLines"))) {
+        if (("OK".equals(m_oTicket.getLine(i).getProperty("sendstatus")) && user.hasPermission("kitchen.DeleteLine"))
+                || (!"OK".equals(m_oTicket.getLine(i).getProperty("sendstatus")) && user.hasPermission("sales.RemoveLines"))) {
             //read resource ticket.removeline and execute
             if (executeEventAndRefresh("ticket.removeline", new ScriptArg("index", i)) == null) {
                 new PlayWave("delete.wav").start(); // playing WAVE file 
@@ -1282,7 +1282,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     dlSystem.execLineRemoved(
                         new Object[]{
                             UUID.randomUUID().toString(),
-                            userName,
+                            user.getName(),
                             ticketID,
                             m_oTicket.getLine(i).getProductID(),
                             m_oTicket.getLine(i).getProductName(),
@@ -2056,7 +2056,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 true);
                             
                             if(user != null) {
-                                newline.setMultiply(-1);
+                                newline.setMultiply(newline.getMultiply() - 1.0);
+                                
+                                if(newline.getMultiply() == 0) {
+                                    newline.setMultiply(-1);
+                                }
+                                
                                 paintTicketLine(i, newline);
                             }
                         }
@@ -3474,7 +3479,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             AppUser user = getUserHavingAtleastOnePermission(new String[]{ "sales.RemoveLines" }, true);
             
             if(user != null) {
-                removeTicketLine(i, true, user.getName());
+                removeTicketLine(i, true, user);
             }
         }
     }//GEN-LAST:event_m_jDeleteActionPerformed
@@ -3488,8 +3493,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         }
         
-        //JDialogAuthentication authDialog = new JDialogAuthentication(null, true, permissions, dlSystem);
-        //authDialog.setVisible(true);
+        JDialogAuthentication authDialog = 
+                new JDialogAuthentication(null, true, permissions, JDialogAuthentication.PermissionCheckType.Any, dlSystem, dlSync);
+        authDialog.setLocationRelativeTo(null);
+        authDialog.setVisible(true);
+        
+        if( authDialog.authenticatedUser != null ) {
+            return authDialog.authenticatedUser;
+        }
         
         if(showMessage) {
             JOptionPane.showMessageDialog(null, "User does not have permission to perform this operation");
