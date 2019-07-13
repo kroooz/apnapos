@@ -78,10 +78,10 @@ public class StartPOS {
             String ExpiryDateString = "2019-07-30"; // yyyy-MM-dd
 
               // Dev Computer
-            String MotherBoard = "/4GNVC2S/CN7360422O0BGT/";
+//            String MotherBoard = "/4GNVC2S/CN7360422O0BGT/";
             
             // Boss' Computer
-//            String MotherBoard = "PGDZT038J660XE";
+            String MotherBoard = "PGDZT038J660XE";
 
 //            Ali's Computer
 //            String MotherBoard = "/FNK9B2S/CN7360418N018S/";
