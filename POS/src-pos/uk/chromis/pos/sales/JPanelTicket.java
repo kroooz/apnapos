@@ -633,6 +633,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private void mergeSimilarRows() {
         
+        if(true)
+            return;
+        
         this.lastMergedRowIndex = -1;   // reset
         
         int linesCount = m_oTicket.getLinesCount();
@@ -1100,6 +1103,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private void paintTicketLine(int index, TicketLineInfo oLine) {
+        
+        if(index < 0 || index >= m_ticketlines.getRowCount()) {
+            return;
+        }
+        
         if (executeEventAndRefresh("ticket.setline", new ScriptArg("index", index), new ScriptArg("line", oLine)) == null) {
             m_oTicket.setLine(index, oLine);
             m_ticketlines.setTicketLine(index, oLine);
@@ -1258,15 +1266,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         refreshTicket(false);
     }
 
-    private void removeTicketLine(int i, Boolean addInformationInLinesRemovedReport, String userName) {
+    private void removeTicketLine(int i, Boolean addInformationInLinesRemovedReport, AppUser user) {
         
-        userName = userName == null ? m_App.getAppUserView().getUser().getName() : userName;
+        user = user == null ? m_App.getAppUserView().getUser() : user;
         
         //default true
         addInformationInLinesRemovedReport = addInformationInLinesRemovedReport == null ? true : addInformationInLinesRemovedReport;
 
-        if (("OK".equals(m_oTicket.getLine(i).getProperty("sendstatus")) && m_App.getAppUserView().getUser().hasPermission("kitchen.DeleteLine"))
-                || (!"OK".equals(m_oTicket.getLine(i).getProperty("sendstatus")) && m_App.getAppUserView().getUser().hasPermission("sales.RemoveLines"))) {
+        if (("OK".equals(m_oTicket.getLine(i).getProperty("sendstatus")) && user.hasPermission("kitchen.DeleteLine"))
+                || (!"OK".equals(m_oTicket.getLine(i).getProperty("sendstatus")) && user.hasPermission("sales.RemoveLines"))) {
             //read resource ticket.removeline and execute
             if (executeEventAndRefresh("ticket.removeline", new ScriptArg("index", i)) == null) {
                 new PlayWave("delete.wav").start(); // playing WAVE file 
@@ -1282,7 +1290,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     dlSystem.execLineRemoved(
                         new Object[]{
                             UUID.randomUUID().toString(),
-                            userName,
+                            user.getName(),
                             ticketID,
                             m_oTicket.getLine(i).getProductID(),
                             m_oTicket.getLine(i).getProductName(),
@@ -2832,15 +2840,16 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         m_jButtons.setLayout(new javax.swing.BoxLayout(m_jButtons, javax.swing.BoxLayout.LINE_AXIS));
 
-        jButton1.setFont(new java.awt.Font("sansserif", 1, 11)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_add_sml.png"))); // NOI18N
         jButton1.setText(bundle.getString("button.customers")); // NOI18N
         jButton1.setToolTipText(bundle.getString("tiptext.gotocustomers")); // NOI18N
         jButton1.setFocusPainted(false);
         jButton1.setFocusable(false);
-        jButton1.setMargin(new java.awt.Insets(10, 4, 10, 4));
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setMargin(null);
         jButton1.setMinimumSize(new java.awt.Dimension(50, 40));
         jButton1.setRequestFocusEnabled(false);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -2853,9 +2862,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         btnCustomer.setToolTipText(bundle.getString("tiptext.findcustomers")); // NOI18N
         btnCustomer.setFocusPainted(false);
         btnCustomer.setFocusable(false);
-        btnCustomer.setMargin(new java.awt.Insets(10, 4, 10, 4));
+        btnCustomer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCustomer.setMargin(null);
         btnCustomer.setMinimumSize(new java.awt.Dimension(50, 40));
         btnCustomer.setRequestFocusEnabled(false);
+        btnCustomer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCustomerActionPerformed(evt);
@@ -2868,9 +2879,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         btnSplit.setToolTipText(bundle.getString("tiptext.splitsale")); // NOI18N
         btnSplit.setFocusPainted(false);
         btnSplit.setFocusable(false);
-        btnSplit.setMargin(new java.awt.Insets(10, 4, 10, 4));
+        btnSplit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSplit.setMargin(null);
         btnSplit.setMinimumSize(new java.awt.Dimension(50, 40));
         btnSplit.setRequestFocusEnabled(false);
+        btnSplit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSplit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSplitActionPerformed(evt);
@@ -2883,9 +2896,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         btnReprint1.setToolTipText(bundle.getString("tiptext.reprintlastticket")); // NOI18N
         btnReprint1.setFocusPainted(false);
         btnReprint1.setFocusable(false);
-        btnReprint1.setMargin(new java.awt.Insets(10, 4, 10, 4));
+        btnReprint1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnReprint1.setMargin(null);
         btnReprint1.setMinimumSize(new java.awt.Dimension(50, 40));
         btnReprint1.setRequestFocusEnabled(false);
+        btnReprint1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnReprint1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReprintActionPerformed(evt);
@@ -2898,9 +2913,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         btnSync.setToolTipText(bundle.getString("tiptext.sync")); // NOI18N
         btnSync.setFocusPainted(false);
         btnSync.setFocusable(false);
-        btnSync.setMargin(new java.awt.Insets(10, 4, 10, 4));
+        btnSync.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSync.setMargin(null);
         btnSync.setMinimumSize(new java.awt.Dimension(50, 40));
         btnSync.setRequestFocusEnabled(false);
+        btnSync.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSync.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSyncbtnReprintActionPerformed(evt);
@@ -2946,7 +2963,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jUp.setFocusPainted(false);
         m_jUp.setFocusable(false);
         m_jUp.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        m_jUp.setMargin(new java.awt.Insets(8, 0, 8, 0));
+        m_jUp.setMargin(null);
         m_jUp.setMaximumSize(new java.awt.Dimension(500, 36));
         m_jUp.setMinimumSize(new java.awt.Dimension(42, 36));
         m_jUp.setRequestFocusEnabled(false);
@@ -2963,7 +2980,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jDown.setFocusPainted(false);
         m_jDown.setFocusable(false);
         m_jDown.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        m_jDown.setMargin(new java.awt.Insets(8, 0, 8, 0));
+        m_jDown.setMargin(null);
         m_jDown.setMaximumSize(new java.awt.Dimension(500, 36));
         m_jDown.setMinimumSize(new java.awt.Dimension(42, 36));
         m_jDown.setRequestFocusEnabled(false);
@@ -2980,10 +2997,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jDelete.setFocusPainted(false);
         m_jDelete.setFocusable(false);
         m_jDelete.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        m_jDelete.setMargin(new java.awt.Insets(8, 0, 8, 0));
+        m_jDelete.setMargin(null);
         m_jDelete.setMaximumSize(new java.awt.Dimension(500, 36));
         m_jDelete.setMinimumSize(new java.awt.Dimension(42, 36));
-        m_jDelete.setPreferredSize(null);
         m_jDelete.setRequestFocusEnabled(false);
         m_jDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2998,10 +3014,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jList.setFocusPainted(false);
         m_jList.setFocusable(false);
         m_jList.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        m_jList.setMargin(new java.awt.Insets(8, 0, 8, 0));
+        m_jList.setMargin(null);
         m_jList.setMaximumSize(new java.awt.Dimension(500, 36));
         m_jList.setMinimumSize(new java.awt.Dimension(42, 36));
-        m_jList.setPreferredSize(null);
         m_jList.setRequestFocusEnabled(false);
         m_jList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3016,10 +3031,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jEditLine.setFocusPainted(false);
         m_jEditLine.setFocusable(false);
         m_jEditLine.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        m_jEditLine.setMargin(new java.awt.Insets(8, 0, 8, 0));
+        m_jEditLine.setMargin(null);
         m_jEditLine.setMaximumSize(new java.awt.Dimension(500, 36));
         m_jEditLine.setMinimumSize(new java.awt.Dimension(42, 36));
-        m_jEditLine.setPreferredSize(null);
         m_jEditLine.setRequestFocusEnabled(false);
         m_jEditLine.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3034,7 +3048,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jEditQuantity.setFocusPainted(false);
         m_jEditQuantity.setFocusable(false);
         m_jEditQuantity.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        m_jEditQuantity.setMargin(new java.awt.Insets(8, 0, 8, 0));
+        m_jEditQuantity.setMargin(null);
         m_jEditQuantity.setMaximumSize(new java.awt.Dimension(500, 36));
         m_jEditQuantity.setMinimumSize(new java.awt.Dimension(42, 36));
         m_jEditQuantity.setRequestFocusEnabled(false);
@@ -3051,7 +3065,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jLineDiscount.setFocusPainted(false);
         jLineDiscount.setFocusable(false);
         jLineDiscount.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLineDiscount.setMargin(new java.awt.Insets(8, 0, 8, 0));
+        jLineDiscount.setMargin(null);
         jLineDiscount.setMaximumSize(new java.awt.Dimension(500, 36));
         jLineDiscount.setMinimumSize(new java.awt.Dimension(42, 36));
         jLineDiscount.setRequestFocusEnabled(false);
@@ -3068,10 +3082,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jEditAttributes.setFocusPainted(false);
         jEditAttributes.setFocusable(false);
         jEditAttributes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jEditAttributes.setMargin(new java.awt.Insets(8, 0, 8, 0));
+        jEditAttributes.setMargin(null);
         jEditAttributes.setMaximumSize(new java.awt.Dimension(500, 36));
         jEditAttributes.setMinimumSize(new java.awt.Dimension(42, 36));
-        jEditAttributes.setPreferredSize(null);
         jEditAttributes.setRequestFocusEnabled(false);
         jEditAttributes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3086,10 +3099,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_checkStock.setFocusPainted(false);
         m_checkStock.setFocusable(false);
         m_checkStock.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        m_checkStock.setMargin(new java.awt.Insets(8, 0, 8, 0));
+        m_checkStock.setMargin(null);
         m_checkStock.setMaximumSize(new java.awt.Dimension(500, 36));
         m_checkStock.setMinimumSize(new java.awt.Dimension(42, 36));
-        m_checkStock.setPreferredSize(null);
         m_checkStock.setRequestFocusEnabled(false);
         m_checkStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -3479,7 +3491,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             AppUser user = getUserHavingAtleastOnePermission(new String[]{ "sales.RemoveLines" }, true);
             
             if(user != null) {
-                removeTicketLine(i, true, user.getName());
+                removeTicketLine(i, true, user);
             }
         }
     }//GEN-LAST:event_m_jDeleteActionPerformed
@@ -3493,8 +3505,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         }
         
-//        JDialogAuthentication authDialog = new JDialogAuthentication(null, true, permissions, dlSystem);
-//        authDialog.setVisible(true);
+        JDialogAuthentication authDialog = 
+                new JDialogAuthentication(null, true, permissions, JDialogAuthentication.PermissionCheckType.Any, dlSystem, dlSync);
+        authDialog.setLocationRelativeTo(null);
+        authDialog.setVisible(true);
+        
+        if( authDialog.authenticatedUser != null ) {
+            return authDialog.authenticatedUser;
+        }
         
         if(showMessage) {
             JOptionPane.showMessageDialog(null, "User does not have permission to perform this operation");
