@@ -416,10 +416,11 @@ public class JImageEditor extends javax.swing.JPanel {
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
-        jPanel2.setLayout(new java.awt.GridLayout(0, 1, 0, 5));
+        jPanel2.setLayout(new java.awt.GridLayout(0, 2, 0, 5));
 
         m_jbtnopen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/camera.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        m_jbtnopen.setText(bundle.getString("tiptext.openfolder")); // NOI18N
         m_jbtnopen.setToolTipText(bundle.getString("tiptext.openfolder")); // NOI18N
         m_jbtnopen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -429,6 +430,7 @@ public class JImageEditor extends javax.swing.JPanel {
         jPanel2.add(m_jbtnopen);
 
         m_jbtnclose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/fileclose.png"))); // NOI18N
+        m_jbtnclose.setText(bundle.getString("tiptext.removepicture")); // NOI18N
         m_jbtnclose.setToolTipText(bundle.getString("tiptext.removepicture")); // NOI18N
         m_jbtnclose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -438,6 +440,7 @@ public class JImageEditor extends javax.swing.JPanel {
         jPanel2.add(m_jbtnclose);
 
         m_jbtnzoomin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/viewmag+.png"))); // NOI18N
+        m_jbtnzoomin.setText(bundle.getString("tiptext.zoomin")); // NOI18N
         m_jbtnzoomin.setToolTipText(bundle.getString("tiptext.zoomin")); // NOI18N
         m_jbtnzoomin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -452,6 +455,7 @@ public class JImageEditor extends javax.swing.JPanel {
         jPanel2.add(m_jPercent);
 
         m_jbtnzoomout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/viewmag-.png"))); // NOI18N
+        m_jbtnzoomout.setText(bundle.getString("tiptext.zoomout")); // NOI18N
         m_jbtnzoomout.setToolTipText(bundle.getString("tiptext.zoomout")); // NOI18N
         m_jbtnzoomout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

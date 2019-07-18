@@ -1333,7 +1333,6 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jStockUnits.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jStockUnits.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         m_jStockUnits.setText("0");
-        m_jStockUnits.setBorder(null);
         mStock.add(m_jStockUnits);
         m_jStockUnits.setBounds(370, 160, 80, 25);
 

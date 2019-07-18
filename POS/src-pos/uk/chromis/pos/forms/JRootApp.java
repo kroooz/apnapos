@@ -598,7 +598,7 @@ public class JRootApp extends JPanel implements AppView {
     }
 
     // La accion del selector
-    private class AppUserAction extends AbstractAction {
+    public class AppUserAction extends AbstractAction {
 
         private final AppUser m_actionuser;
 

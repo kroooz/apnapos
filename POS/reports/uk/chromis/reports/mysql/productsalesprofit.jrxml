@@ -89,35 +89,35 @@
 					<textElement textAlignment="Right">
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{PARTIAL_COST_VALUE_TOTAL}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($V{PARTIAL_COST_VALUE_TOTAL})]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 					<reportElement x="492" y="5" width="70" height="20" uuid="484a8d1c-3356-45db-8932-b7d6b9bce125"/>
 					<textElement textAlignment="Right">
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{PARTIAL_EXPECTED_SALES_VALUE_TOTAL}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($V{PARTIAL_EXPECTED_SALES_VALUE_TOTAL})]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 					<reportElement x="564" y="5" width="70" height="20" uuid="109c9f75-b550-43eb-a625-29bfdca237f5"/>
 					<textElement textAlignment="Right">
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{PARTIAL_ACTUAL_SALES_VALUE_TOTAL}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($V{PARTIAL_ACTUAL_SALES_VALUE_TOTAL})]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 					<reportElement x="637" y="5" width="70" height="20" uuid="e11e4dbd-1a7e-438b-89f7-e4ccc06fbc15"/>
 					<textElement textAlignment="Right">
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{PARTIAL_EXPECTED_PROFIT_TOTAL}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($V{PARTIAL_EXPECTED_PROFIT_TOTAL})]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 					<reportElement x="711" y="5" width="70" height="20" uuid="bb5099b7-aea1-49ec-a0af-2e5286f5bd81"/>
 					<textElement textAlignment="Right">
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{PARTIAL_ACTUAL_PROFIT_TOTAL}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($V{PARTIAL_ACTUAL_PROFIT_TOTAL})]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -320,12 +320,12 @@
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="225" y="0" width="60" height="13" uuid="8a110a72-2205-435d-9a62-864dd6ebc86e"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{PRICEBUY}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{PRICEBUY})]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="285" y="0" width="60" height="13" uuid="23100a51-9682-45a5-b913-7a65ac0f346f"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{PRICESELL}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{PRICESELL})]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement x="345" y="0" width="60" height="13" uuid="f62e90e7-7fef-4a7a-8d88-c7525ed988d2"/>
@@ -335,27 +335,27 @@
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="405" y="0" width="60" height="13" uuid="08a80d53-a21b-4554-9cd6-f2f347365755"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{COST_VALUE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{COST_VALUE})]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="492" y="0" width="70" height="13" uuid="71d67bc2-1cf3-483d-b774-b3d0538f55e3"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{EXPECTED_SALES_VALUE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{EXPECTED_SALES_VALUE})]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="564" y="0" width="70" height="13" uuid="9660fe8e-d73c-4034-b6dd-0fa6a09c4f35"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{ACTUAL_SALES_VALUE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{ACTUAL_SALES_VALUE})]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="711" y="0" width="70" height="13" uuid="5c8ca451-d75d-4073-9c77-af3d00e01041"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{ACTUAL_PROFIT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{ACTUAL_PROFIT})]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="637" y="0" width="70" height="13" uuid="725dbf10-7516-4750-9a3e-545ff75545b3"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{EXPECTED_PROFIT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($F{EXPECTED_PROFIT})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -428,28 +428,28 @@
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{ACTUAL_PROFIT_TOTAL}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($V{ACTUAL_PROFIT_TOTAL})]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="637" y="5" width="70" height="20" uuid="a8b7c487-5a0d-425b-afd4-3c6296072027"/>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{EXPECTED_PROFIT_TOTAL}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($V{EXPECTED_PROFIT_TOTAL})]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="564" y="5" width="70" height="20" uuid="a6e03f5a-92e7-4820-bfcb-48de2439cf58"/>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{ACTUAL_SALES_VALUE_TOTAL}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($V{ACTUAL_SALES_VALUE_TOTAL})]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="492" y="5" width="70" height="20" uuid="ec7cc434-5dfc-4400-ac09-fd40ddbf7973"/>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{EXPECTED_SALES_VALUE_TOTAL}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($V{EXPECTED_SALES_VALUE_TOTAL})]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement key="line-5" mode="Opaque" x="345" y="3" width="437" height="1" forecolor="#000000" backcolor="#FFFFFF" uuid="efabb493-f7b5-4412-9003-bcce820fb82b"/>
@@ -462,7 +462,7 @@
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{COST_VALUE_TOTAL}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[uk.chromis.format.Formats.CURRENCY.formatValue($V{COST_VALUE_TOTAL})]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement x="345" y="5" width="60" height="20" uuid="63c02dd7-c1ed-4cf2-990a-6163af7c2269"/>

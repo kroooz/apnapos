@@ -212,6 +212,7 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
         container = new javax.swing.JPanel();
         toolbar = new javax.swing.JPanel();
 
@@ -226,12 +227,15 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
         toolbar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
         container.add(toolbar, java.awt.BorderLayout.NORTH);
 
-        add(container, java.awt.BorderLayout.CENTER);
+        jScrollPane1.setViewportView(container);
+
+        add(jScrollPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel container;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel toolbar;
     // End of variables declaration//GEN-END:variables
 

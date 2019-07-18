@@ -312,16 +312,20 @@ public class JTicketsBagShared extends JTicketsBag {
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+
         m_jNewTicket.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_new.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         m_jNewTicket.setText(bundle.getString("button.new_sale")); // NOI18N
         m_jNewTicket.setToolTipText(bundle.getString("tiptext.newsale")); // NOI18N
         m_jNewTicket.setFocusPainted(false);
         m_jNewTicket.setFocusable(false);
-        m_jNewTicket.setMargin(new java.awt.Insets(10, 4, 10, 4));
+        m_jNewTicket.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        m_jNewTicket.setMargin(null);
         m_jNewTicket.setMaximumSize(new java.awt.Dimension(50, 40));
         m_jNewTicket.setMinimumSize(new java.awt.Dimension(50, 40));
         m_jNewTicket.setRequestFocusEnabled(false);
+        m_jNewTicket.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         m_jNewTicket.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jNewTicketActionPerformed(evt);
@@ -334,10 +338,12 @@ public class JTicketsBagShared extends JTicketsBag {
         m_jDelTicket.setToolTipText(bundle.getString("tiptext.cancelsale")); // NOI18N
         m_jDelTicket.setFocusPainted(false);
         m_jDelTicket.setFocusable(false);
-        m_jDelTicket.setMargin(new java.awt.Insets(10, 4, 10, 4));
+        m_jDelTicket.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        m_jDelTicket.setMargin(null);
         m_jDelTicket.setMaximumSize(new java.awt.Dimension(50, 40));
         m_jDelTicket.setMinimumSize(new java.awt.Dimension(50, 40));
         m_jDelTicket.setRequestFocusEnabled(false);
+        m_jDelTicket.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         m_jDelTicket.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jDelTicketActionPerformed(evt);
@@ -352,11 +358,13 @@ public class JTicketsBagShared extends JTicketsBag {
         m_jListTickets.setFocusPainted(false);
         m_jListTickets.setFocusable(false);
         m_jListTickets.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        m_jListTickets.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         m_jListTickets.setIconTextGap(-3);
-        m_jListTickets.setMargin(new java.awt.Insets(10, 4, 10, 4));
+        m_jListTickets.setMargin(new java.awt.Insets(6, 0, 6, 0));
         m_jListTickets.setMaximumSize(new java.awt.Dimension(55, 40));
         m_jListTickets.setMinimumSize(new java.awt.Dimension(55, 40));
         m_jListTickets.setRequestFocusEnabled(false);
+        m_jListTickets.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         m_jListTickets.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jListTicketsActionPerformed(evt);
