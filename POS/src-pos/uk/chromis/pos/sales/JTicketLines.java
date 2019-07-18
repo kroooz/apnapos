@@ -388,6 +388,10 @@ public class JTicketLines extends javax.swing.JPanel {
 
         public void setRow(int index, TicketLineInfo oLine) {
 
+            if(index >= m_rows.size()) {
+                return;
+            }
+            
             String[] row = (String[]) m_rows.get(index);
             for (int i = 0; i < m_acolumns.length; i++) {
                 try {

@@ -133,6 +133,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
 
     @Override
     public void activate() throws BasicException {
+        System.out.println("abc");
         jeditor.activate();
         jproductfilterws.activate();
 

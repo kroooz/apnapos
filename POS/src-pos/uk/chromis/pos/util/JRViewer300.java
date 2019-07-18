@@ -828,7 +828,6 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel4.add(pnlLinks, gridBagConstraints);
 
-        jPanel5.setBackground(java.awt.Color.gray);
         jPanel5.setMinimumSize(new java.awt.Dimension(5, 5));
         jPanel5.setPreferredSize(new java.awt.Dimension(5, 5));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -844,7 +843,6 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         gridBagConstraints.gridy = 2;
         jPanel4.add(jPanel6, gridBagConstraints);
 
-        jPanel7.setBackground(java.awt.Color.gray);
         jPanel7.setMinimumSize(new java.awt.Dimension(5, 5));
         jPanel7.setPreferredSize(new java.awt.Dimension(5, 5));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -853,7 +851,6 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel4.add(jPanel7, gridBagConstraints);
 
-        jPanel8.setBackground(java.awt.Color.gray);
         jPanel8.setMinimumSize(new java.awt.Dimension(5, 5));
         jPanel8.setPreferredSize(new java.awt.Dimension(5, 5));
 
@@ -872,7 +869,6 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         gridBagConstraints.gridy = 0;
         jPanel4.add(jPanel9, gridBagConstraints);
 
-        lblPage.setBackground(java.awt.Color.white);
         lblPage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblPage.setOpaque(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -898,7 +894,10 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         jToolBar1.setFloatable(false);
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/filesave.png"))); // NOI18N
+        btnSave.setText(getBundleString("save"));
         btnSave.setToolTipText(getBundleString("save"));
+        btnSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -907,7 +906,10 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         jToolBar1.add(btnSave);
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/yast_printer.png"))); // NOI18N
+        btnPrint.setText(getBundleString("print"));
         btnPrint.setToolTipText(getBundleString("print"));
+        btnPrint.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPrint.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPrintActionPerformed(evt);
@@ -916,7 +918,10 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         jToolBar1.add(btnPrint);
 
         btnReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/reload.png"))); // NOI18N
+        btnReload.setText(getBundleString("reload"));
         btnReload.setToolTipText(getBundleString("reload"));
+        btnReload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnReload.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnReload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReloadActionPerformed(evt);
@@ -926,7 +931,10 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         jToolBar1.add(jSeparator1);
 
         btnActualSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/mime.png"))); // NOI18N
+        btnActualSize.setText(getBundleString("actual.size"));
         btnActualSize.setToolTipText(getBundleString("actual.size"));
+        btnActualSize.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnActualSize.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnActualSize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualSizeActionPerformed(evt);
@@ -935,7 +943,10 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         jToolBar1.add(btnActualSize);
 
         btnFitPage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/mime2.png"))); // NOI18N
+        btnFitPage.setText(getBundleString("fit.page"));
         btnFitPage.setToolTipText(getBundleString("fit.page"));
+        btnFitPage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnFitPage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnFitPage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFitPageActionPerformed(evt);
@@ -944,7 +955,10 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         jToolBar1.add(btnFitPage);
 
         btnFitWidth.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/mime3.png"))); // NOI18N
+        btnFitWidth.setText(getBundleString("fit.width"));
         btnFitWidth.setToolTipText(getBundleString("fit.width"));
+        btnFitWidth.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnFitWidth.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnFitWidth.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFitWidthActionPerformed(evt);
@@ -954,7 +968,10 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         jToolBar1.add(jSeparator2);
 
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/viewmag+.png"))); // NOI18N
+        btnZoomIn.setText(getBundleString("zoom.in"));
         btnZoomIn.setToolTipText(getBundleString("zoom.in"));
+        btnZoomIn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnZoomIn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnZoomIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnZoomInActionPerformed(evt);
@@ -980,7 +997,10 @@ public final class JRViewer300 extends javax.swing.JPanel implements JRHyperlink
         jToolBar1.add(cmbZoom);
 
         btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/viewmag-.png"))); // NOI18N
+        btnZoomOut.setText(getBundleString("zoom.out"));
         btnZoomOut.setToolTipText(getBundleString("zoom.out"));
+        btnZoomOut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnZoomOut.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnZoomOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnZoomOutActionPerformed(evt);
