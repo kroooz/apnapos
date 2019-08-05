@@ -40,6 +40,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -57,13 +60,17 @@ import uk.chromis.basic.BasicException;
 import uk.chromis.data.user.ListProvider;
 import uk.chromis.data.user.ListProviderCreator;
 import uk.chromis.format.Formats;
+import uk.chromis.pos.config.JPanelConfiguration;
 import uk.chromis.pos.forms.AppConfig;
 import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.DataLogicSales;
+import uk.chromis.pos.forms.DataLogicSystem;
+import uk.chromis.pos.forms.JRootApp;
 import uk.chromis.pos.sales.JPanelTicket;
 import uk.chromis.pos.ticket.ProductFilterSalesSearch;
 import uk.chromis.pos.ticket.ProductInfoExt;
 import uk.chromis.pos.ticket.ProductRenderer;
+import uk.chromis.pos.util.SessionFactory;
 import uk.chromis.pos.util.ThumbNailBuilder;
 
 public class JProductFinder extends javax.swing.JDialog {
@@ -77,6 +84,7 @@ public class JProductFinder extends javax.swing.JDialog {
     public final static int PRODUCT_NORMAL = 1;
     public final static int PRODUCT_AUXILIAR = 2;
     public final static int PRODUCT_RECIPE = 3;
+    private DataLogicSystem dlSystem;
     
     /** Creates new form JProductFinder */
     private JProductFinder(java.awt.Frame parent, boolean modal) {
@@ -90,6 +98,9 @@ public class JProductFinder extends javax.swing.JDialog {
     }    
     
     private ProductInfoExt init( Window window, DataLogicSales dlSales, int productsType, String siteGuid) {
+        
+        dlSystem = JRootApp.m_dlSystem;
+        
         initComponents();
         
         boolean showNumKeys = AppConfig.getInstance().getBoolean("machine.shownumkeys");
@@ -140,9 +151,12 @@ public class JProductFinder extends javax.swing.JDialog {
    
         m_ReturnProduct = null;
         
+        
         //show();
         setLocationRelativeTo(window);
         setVisible(true);
+        
+        
         
         return m_ReturnProduct;
     }
@@ -198,12 +212,19 @@ public class JProductFinder extends javax.swing.JDialog {
     
     
     private class MyTableData extends AbstractTableModel {
-
+        
         private List<ProductInfoExt> products = new ArrayList();
-        private String[] columnNames = { "Name", "Price", "In Stock", "Image"};
+        private String[] columnNames = {};
 
         public MyTableData(List<ProductInfoExt> list){
-             this.products = list;
+            
+            this.products = list;
+            
+            if(JRootApp.ShowBuyPrice) {
+                columnNames = new String[]{ "Name", "B.Code", "Price", "In Stock", "Image" };
+            } else {
+                columnNames = new String[]{ "Name", "Price", "In Stock", "Image" };
+            }
         }
         
         public List<ProductInfoExt> getProducts(){
@@ -228,33 +249,69 @@ public class JProductFinder extends javax.swing.JDialog {
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             ProductInfoExt product = products.get(rowIndex);
-            switch (columnIndex) {
-                case 0: 
-                    return product.getName();
-                case 1:
-                    return Formats.CURRENCY.formatValue(product.getPriceSell());
-                case 2:
-                    return Formats.DOUBLE.formatValue(product.getStockUnits());
-                case 3:
-                    return product.getImage();
-               }
-               return null;
+            
+            if(JRootApp.ShowBuyPrice) {
+                switch (columnIndex) {
+                    case 0: 
+                        return product.getName();
+                    case 1:
+                        String buyPriceString = Integer.toString((int)Math.rint(product.getPriceBuy()));
+                        String nameSubString = product.getName().substring(0, 3);
+                        return nameSubString + buyPriceString + nameSubString;
+                    case 2:
+                        return Formats.CURRENCY.formatValue(product.getPriceSell());
+                    case 3:
+                        return Formats.DOUBLE.formatValue(product.getStockUnits());
+                    case 4:
+                        return product.getImage();
+                    }
+            } else {
+                switch (columnIndex) {
+                    case 0: 
+                        return product.getName();
+                    case 1:
+                        return Formats.CURRENCY.formatValue(product.getPriceSell());
+                    case 2:
+                        return Formats.DOUBLE.formatValue(product.getStockUnits());
+                    case 3:
+                        return product.getImage();
+                    }
+            }
+            
+            
+            return null;
        }
 
        @Override
        public Class<?> getColumnClass(int columnIndex){
-              switch (columnIndex){
-                 case 0:
-                   return String.class;
-                 case 1:
-                   return String.class;
-                 case 2:
-                   return String.class;
-                 case 3:
-                   return BufferedImage.class;
-                 }
-                 return null;
-       }
+           if(JRootApp.ShowBuyPrice) {
+               switch (columnIndex){
+                    case 0:
+                        return String.class;
+                    case 1:
+                        return String.class;
+                    case 2:
+                        return String.class;
+                    case 3:
+                        return String.class;
+                    case 4:
+                        return BufferedImage.class;
+                }
+           } else {
+                switch (columnIndex){
+                    case 0:
+                        return String.class;
+                    case 1:
+                        return String.class;
+                    case 2:
+                        return String.class;
+                    case 3:
+                        return BufferedImage.class;
+                }
+           }
+           
+            return null;
+        }
     }
     
     
@@ -276,6 +333,7 @@ public class JProductFinder extends javax.swing.JDialog {
         jListProducts = new javax.swing.JList();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableProducts = new javax.swing.JTable();
+        jLabelQuantityLocationNote = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jcmdCancel = new javax.swing.JButton();
         jcmdOK = new javax.swing.JButton();
@@ -331,6 +389,11 @@ public class JProductFinder extends javax.swing.JDialog {
 
         jPanel5.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
+        jLabelQuantityLocationNote.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        jLabelQuantityLocationNote.setForeground(new java.awt.Color(255, 51, 51));
+        jLabelQuantityLocationNote.setText("Note: Above table shows quantity of Default Sale Location set in configuration.");
+        jPanel5.add(jLabelQuantityLocationNote, java.awt.BorderLayout.PAGE_END);
+
         jPanel2.add(jPanel5, java.awt.BorderLayout.CENTER);
 
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
@@ -371,7 +434,7 @@ public class JProductFinder extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(m_jKeys, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -382,8 +445,8 @@ public class JProductFinder extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(m_jKeys, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 314, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -487,7 +550,8 @@ public class JProductFinder extends javax.swing.JDialog {
                 
                 component.setHorizontalAlignment( column == 0 ? LEFT : CENTER);
 
-                if(column == 3){
+                int imgColIndex = JRootApp.ShowBuyPrice ? 4 : 3;
+                if(column == imgColIndex){
                     Image img = tnbprod.getThumbNail((Image)value);
                     
                     if(img != null){
@@ -524,6 +588,7 @@ public class JProductFinder extends javax.swing.JDialog {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabelQuantityLocationNote;
     private javax.swing.JList jListProducts;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

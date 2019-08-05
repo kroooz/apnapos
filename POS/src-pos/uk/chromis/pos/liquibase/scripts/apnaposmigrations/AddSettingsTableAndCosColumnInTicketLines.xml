@@ -18,10 +18,16 @@
     <property name="blob.type" value="mediumblob" dbms="mysql"/>
      
       
-    <changeSet author="Apna POS" id="Add cost column in ticketlines tables" >   
-        <addColumn tableName="TICKETLINES">       
+    <changeSet author="Apna POS" id="Add cost and discount columns in ticketlines tables" >   
+        <addColumn tableName="TICKETLINES">
             <column name="COST" type="double" defaultValue="0"/> 
-        </addColumn>                                               
+        </addColumn>
+        <addColumn tableName="TICKETLINES">
+            <column name="DISCOUNT" type="double" defaultValue="0"/> 
+        </addColumn>
+        <addColumn tableName="TICKETLINES">
+            <column name="DISCOUNT_BY" type="varchar(255)" defaultValue="0"/> 
+        </addColumn>
     </changeSet>
     
     <changeSet author="Apna POS" id="Add Settings Table" >
@@ -30,6 +36,15 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="SETTING_VALUE" type="varchar(1000)" />
+        </createTable>
+    </changeSet>
+    
+    <changeSet author="Apna POS" id="Add Sequence Table" >
+        <createTable tableName="SEQUENCE">
+            <column name="ENTRYTYPE" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NUMBER" type="BIGINT(1)" />
         </createTable>
     </changeSet>
           

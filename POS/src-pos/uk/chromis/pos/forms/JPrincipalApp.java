@@ -25,10 +25,13 @@ package uk.chromis.pos.forms;
 
 import java.awt.CardLayout;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -46,6 +49,7 @@ import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.data.gui.MessageInf;
 import uk.chromis.pos.customers.CustomerInfo;
+import uk.chromis.pos.sales.JPanelTicketSales;
 import uk.chromis.pos.scripting.ScriptEngine;
 import uk.chromis.pos.scripting.ScriptException;
 import uk.chromis.pos.scripting.ScriptFactory;
@@ -80,6 +84,9 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
 
     //HS Updates
     private CustomerInfo customerInfo;
+    private JPanel nullPanel = new JPanel();
+    
+    private Stack viewsStack = new Stack();
 
     /**
      * Creates new form JPrincipalApp
@@ -123,12 +130,15 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
             menu_open = new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/menu-left.png"));
             menu_close = new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/menu-right.png"));
         }
+        
+        jButtonBack.setIcon( new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/go-back.png")) );
+        
         assignMenuButtonIcon();
 // to look at
         // m_jPanelTitle.setBorder(RoundedBorder.createGradientBorder()); 
         m_jPanelTitle.setVisible(false);
 
-        m_jPanelContainer.add(new JPanel(), "<NULL>");
+        m_jPanelContainer.add(nullPanel, "<NULL>");
         showView("<NULL>");
 
         try {
@@ -465,8 +475,17 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
     }
 
     private void showView(String sView) {
+        
         CardLayout cl = (CardLayout) (m_jPanelContainer.getLayout());
         cl.show(m_jPanelContainer, sView);
+        this.viewsStack.push(sView);
+        
+        if(this.viewsStack.size() > 2) {
+            jButtonBack.setEnabled(true);
+        } else {
+            jButtonBack.setEnabled(false);
+        }
+        repaint();
     }
 
     /**
@@ -485,6 +504,9 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
     @Override
     public void showTask(String sTaskClass) {
 
+        m_jPanelContainer.removeAll();
+        m_aCreatedViews.clear();
+        
         customerInfo = new CustomerInfo("");
         customerInfo.setName("");
 
@@ -501,6 +523,7 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
 
                     // Is the view prepared
                     m_jMyView = m_aPreparedViews.get(sTaskClass);
+                    
                     if (m_jMyView == null) {
                         // The view is not prepared. Try to get as a Bean...
                         try {
@@ -533,7 +556,7 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
             }
         } else {
             JOptionPane.showMessageDialog(null,
-                    AppLocal.getIntString("message.notpermissions") + " " + sTaskClass,
+                    AppLocal.getIntString("message.notpermissions") + ": " + sTaskClass.replace("/uk/chromis/", ""),
                     "Access Error", JOptionPane.WARNING_MESSAGE);
         }
         m_appview.waitCursorEnd();
@@ -567,7 +590,7 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
         } else {
 
             JOptionPane.showMessageDialog(null,
-                    AppLocal.getIntString("message.notpermissions") + " " + sTaskClass,
+                    AppLocal.getIntString("message.notpermissions") + ": " + sTaskClass.replace("/uk/chromis/", ""),
                     "Access Error", JOptionPane.WARNING_MESSAGE);
         }
         m_appview.waitCursorEnd();
@@ -583,11 +606,15 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jButtonBack = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         m_jPanelLeft = new javax.swing.JScrollPane();
         m_jPanelRight = new javax.swing.JPanel();
         m_jPanelTitle = new javax.swing.JPanel();
         m_jTitle = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
         m_jPanelContainer = new javax.swing.JPanel();
 
         setLayout(new java.awt.BorderLayout());
@@ -598,13 +625,32 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jButtonBack.setToolTipText(bundle.getString("tiptext.openclosemenu")); // NOI18N
+        jButtonBack.setFocusPainted(false);
+        jButtonBack.setFocusable(false);
+        jButtonBack.setIconTextGap(0);
+        jButtonBack.setMargin(new java.awt.Insets(14, 2, 14, 2));
+        jButtonBack.setPreferredSize(new java.awt.Dimension(32, 32));
+        jButtonBack.setRequestFocusEnabled(false);
+        jButtonBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBackActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButtonBack);
+
+        jPanel5.setMaximumSize(null);
+        jPanel5.setMinimumSize(new java.awt.Dimension(2, 100));
+        jPanel5.setLayout(null);
+        jPanel2.add(jPanel5);
+
         jButton1.setToolTipText(bundle.getString("tiptext.openclosemenu")); // NOI18N
         jButton1.setFocusPainted(false);
         jButton1.setFocusable(false);
         jButton1.setIconTextGap(0);
         jButton1.setMargin(new java.awt.Insets(14, 2, 14, 2));
-        jButton1.setMaximumSize(new java.awt.Dimension(32, 32));
-        jButton1.setMinimumSize(new java.awt.Dimension(32, 32));
+        jButton1.setMaximumSize(null);
+        jButton1.setMinimumSize(null);
         jButton1.setPreferredSize(new java.awt.Dimension(32, 32));
         jButton1.setRequestFocusEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -613,6 +659,7 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
             }
         });
         jPanel2.add(jButton1);
+        jPanel2.add(jPanel3);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.LINE_END);
         jPanel1.add(m_jPanelLeft, java.awt.BorderLayout.CENTER);
@@ -631,21 +678,49 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
 
         m_jPanelContainer.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jPanelContainer.setLayout(new java.awt.CardLayout());
-        m_jPanelRight.add(m_jPanelContainer, java.awt.BorderLayout.CENTER);
+        jScrollPane1.setViewportView(m_jPanelContainer);
+
+        m_jPanelRight.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         add(m_jPanelRight, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    setMenuVisible(!m_jPanelLeft.isVisible());
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        setMenuVisible(!m_jPanelLeft.isVisible());
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-}//GEN-LAST:event_jButton1ActionPerformed
+    private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
+        
+        if(this.viewsStack.peek().equals("<NULL>")) {
+            return;
+        }
+        
+        if(this.viewsStack.size() <= 2) {
+            jButtonBack.setEnabled(false);
+            return;
+        }
+        
+        this.viewsStack.pop();
+        String lastView = (String)this.viewsStack.pop();
+        
+        if(lastView == "<NULL>") {
+            return;
+        }
+        
+        //this.showTask(lastView);
+        m_appview.getAppUserView().showTask(lastView);
+        
+    }//GEN-LAST:event_jButtonBackActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonBack;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel m_jPanelContainer;
     private javax.swing.JScrollPane m_jPanelLeft;
     private javax.swing.JPanel m_jPanelRight;

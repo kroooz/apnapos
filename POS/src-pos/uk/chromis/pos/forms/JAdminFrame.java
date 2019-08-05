@@ -169,11 +169,12 @@ public class JAdminFrame extends javax.swing.JFrame implements AppMessage {
         stockMenu.add(new JPopupMenu.Separator());
         addItem(stockMenu, AppLocal.getIntString("Menu.Promotions"), "uk.chromis.pos.promotion.PromotionPanel");
         stockMenu.add(new JPopupMenu.Separator());
-        addItem(stockMenu, AppLocal.getIntString("Menu.Recipe"), "uk.chromis.pos.inventory.RecipePanel");
+        addItem(stockMenu, AppLocal.getIntString("Menu.PackageCarton"), "uk.chromis.pos.inventory.RecipePanel");
 
 // *****************************************************************************
         customerMenu.setText(bundle.getString("Menu.customers"));
         addItem(customerMenu, "Customers", "uk.chromis.pos.customers.CustomersPanel");
+        addItem(customerMenu, "Suppliers", "uk.chromis.pos.customers.SuppliersPanel");
 
 // *****************************************************************************
         reportsMenu.setText(bundle.getString("Menu.reports"));

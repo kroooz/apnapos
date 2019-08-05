@@ -125,7 +125,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_cat = new JCatalog(m_dlSales, siteGuid);
         m_cat.addActionListener(new CatalogListener());
 
-        catcontainer.add(m_cat.getComponent(), BorderLayout.CENTER);
+        
 
         m_jdate.getDocument().addDocumentListener(dirty);
         m_jreason.addActionListener(dirty);
@@ -177,7 +177,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         sellprice = null;
         stocksecurity = null;
         stockmaximum = null;
-        m_jreference.setText(null);
         m_jcodebar.setText(null);
         jproduct.setText(null);
         m_junitsinstock.setText(null);
@@ -194,8 +193,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jdate.setEnabled(false);
         m_jbtndate.setEnabled(false);
         m_jreason.setEnabled(false);
-        m_jreference.setEnabled(false);
-        m_EditProduct.setEnabled(false);
         m_jcodebar.setEnabled(false);
         m_jEnter.setEnabled(false);
         m_jLocation.setEnabled(false);
@@ -233,7 +230,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         stocksecurity = null;
         stockmaximum = null;
 
-        m_jreference.setText(null);
         m_jcodebar.setText(null);
         jproduct.setText(null);
         m_junitsinstock.setText(null);
@@ -251,7 +247,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jdate.setEnabled(true);
         m_jbtndate.setEnabled(true);
         m_jreason.setEnabled(true);
-        m_jreference.setEnabled(true);
         m_jcodebar.setEnabled(true);
         m_jEnter.setEnabled(true);
         m_jLocation.setEnabled(true);
@@ -288,7 +283,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         stockmaximum = (Double) diary[16];
         buyprice = (Double) diary[17];
         sellprice = (Double) diary[18];
-        m_jreference.setText(productref);
         m_jcodebar.setText(productcode);
         jproduct.setText(productname);
         m_junitsinstock.setText(unitsinstock);
@@ -306,8 +300,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jdate.setEnabled(false);
         m_jbtndate.setEnabled(false);
         m_jreason.setEnabled(false);
-        m_jreference.setEnabled(false);
-        m_EditProduct.setEnabled(false);
+        
         m_jcodebar.setEnabled(false);
         m_jEnter.setEnabled(false);
         m_jLocation.setEnabled(false);
@@ -349,7 +342,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         sellprice = (Double) diary[18];
         siteGuid = (String) diary[19];
 
-        m_jreference.setText(productref);
+        
         m_jcodebar.setText(productcode);
         jproduct.setText(productname);
         m_junitsinstock.setText(unitsinstock);
@@ -367,9 +360,9 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jdate.setEnabled(false);
         m_jbtndate.setEnabled(false);
         m_jreason.setEnabled(false);
-        m_jreference.setEnabled(false);
+        
         //m_EditProduct.setEnabled(false);
-        m_EditProduct.setEnabled(m_canProductEdit);
+        
         m_jcodebar.setEnabled(false);
         m_jEnter.setEnabled(false);
         m_jLocation.setEnabled(false);
@@ -467,9 +460,9 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
                 attsetinstdesc = null;
                 jproduct.setText(null);
                 m_jcodebar.setText(null);
-                m_jreference.setText(null);
+                
                 jattributes.setText(null);
-                m_EditProduct.setEnabled(false);
+                
                 m_junitsinstock.setText(null);
                 m_jbuyprice.setText(null);
                 m_jsellprice.setText(null);
@@ -510,7 +503,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
                 attsetinstdesc = null;
                 jproduct.setText(productname);
                 m_jcodebar.setText(productcode);
-                m_jreference.setText(productref);
+                
                 m_junitsinstock.setText(unitsinstock);
                 m_jbuyprice.setText(Formats.CURRENCY.formatValue(buyprice));
                 m_jsellprice.setText(Formats.CURRENCY.formatValue(sellprice));
@@ -519,7 +512,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
                 m_jmaximum.setText(Formats.DOUBLE.formatValue(stockmaximum));
                 jattributes.setText(null);
                 //m_EditProduct.setEnabled(true);
-                m_EditProduct.setEnabled(m_canProductEdit);
+                
 
                 // calculo el precio sugerido para la entrada.
                 MovementReason reason = (MovementReason) m_ReasonModel.getSelectedItem();
@@ -585,22 +578,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         }
     }
 
-    private void assignProductByReference() {
-        try {
-            ProductInfoExt oProduct = m_dlSales.getProductInfoByReference(m_jreference.getText(), siteGuid);
-            if (oProduct == null) {
-                assignProduct(null);
-                new PlayWave("error.wav").start(); // playing WAVE file 
-            } else {
-                assignProduct(oProduct);
-            }
-        } catch (BasicException eData) {
-            assignProduct(null);
-            MessageInf msg = new MessageInf(eData);
-            msg.show(this);
-        }
-    }
-
     private void editProduct() {
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         // JDlgEditProduct dlg = new JDlgEditProduct(topFrame, true);
@@ -638,13 +615,13 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         if (productDialog.getProductID() != null) {
             writeValueInsert();
             //m_jreference.setText(reference);
-            m_jreference.setText(productDialog.getProductID());
+            
 
             jproduct.setEnabled(true);
             m_jminimum.setEnabled(true);
             m_jmaximum.setEnabled(true);
 
-            assignProductByReference();
+            
 
             // reload catalog layout only if a product was inserted
             if (productDialog.getExecutionStatus() == JDlgEditProduct.STATUS.INSERTED) {
@@ -697,8 +674,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jcodebar = new javax.swing.JTextField();
         m_jEnter = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        m_jreference = new javax.swing.JTextField();
-        m_EditProduct = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jattributes = new javax.swing.JTextField();
         jEditAttributes = new javax.swing.JButton();
@@ -706,7 +681,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         m_jmaximum = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         m_jprice = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
         m_junitsinstock = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         m_junits = new javax.swing.JTextField();
@@ -716,7 +690,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         m_jsellprice = new javax.swing.JTextField();
-        catcontainer = new javax.swing.JPanel();
 
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         setMinimumSize(new java.awt.Dimension(550, 250));
@@ -730,36 +703,39 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText(AppLocal.getIntString("label.stockdate")); // NOI18N
+        jLabel1.setText(AppLocal.getIntString("label.StockInOutDate")); // NOI18N
         jLabel1.setMaximumSize(new java.awt.Dimension(23, 20));
         jLabel1.setMinimumSize(new java.awt.Dimension(23, 20));
         jLabel1.setPreferredSize(new java.awt.Dimension(23, 20));
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 80, 25));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 25));
 
         m_jdate.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jdate.setMinimumSize(new java.awt.Dimension(40, 20));
         m_jdate.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(m_jdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 200, 25));
+        jPanel1.add(m_jdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 180, 25));
 
         m_jbtndate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/date.png"))); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         m_jbtndate.setToolTipText(bundle.getString("tiptext.opencalendar")); // NOI18N
+        m_jbtndate.setMaximumSize(null);
+        m_jbtndate.setMinimumSize(null);
+        m_jbtndate.setPreferredSize(null);
         m_jbtndate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jbtndateActionPerformed(evt);
             }
         });
-        jPanel1.add(m_jbtndate, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 3, 40, -1));
+        jPanel1.add(m_jbtndate, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, 40, 30));
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText(AppLocal.getIntString("label.stockreason")); // NOI18N
         jLabel2.setMaximumSize(new java.awt.Dimension(36, 20));
         jLabel2.setMinimumSize(new java.awt.Dimension(36, 20));
         jLabel2.setPreferredSize(new java.awt.Dimension(36, 20));
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, 70, 25));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, 70, 25));
 
         m_jreason.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jPanel1.add(m_jreason, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 10, 200, 25));
+        jPanel1.add(m_jreason, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, 200, 25));
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText(AppLocal.getIntString("label.warehouse")); // NOI18N
@@ -770,23 +746,24 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
 
         jproduct.setEditable(false);
         jproduct.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jPanel1.add(jproduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 45, 200, 25));
+        jPanel1.add(jproduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 45, 180, 25));
 
         m_FindProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/search24.png"))); // NOI18N
         m_FindProduct.setToolTipText(bundle.getString("tiptext.searchproductlist")); // NOI18N
+        m_FindProduct.setPreferredSize(new java.awt.Dimension(54, 33));
         m_FindProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_FindProductActionPerformed(evt);
             }
         });
-        jPanel1.add(m_FindProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 38, 40, -1));
+        jPanel1.add(m_FindProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, 60, -1));
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Location");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 45, 70, 25));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 50, 70, 25));
 
         m_jLocation.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jPanel1.add(m_jLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 45, 200, 25));
+        jPanel1.add(m_jLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, 200, 25));
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText(AppLocal.getIntString("label.prodbarcode")); // NOI18N
@@ -801,7 +778,7 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
                 m_jcodebarActionPerformed(evt);
             }
         });
-        jPanel1.add(m_jcodebar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 80, 200, 25));
+        jPanel1.add(m_jcodebar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 80, 180, 25));
 
         m_jEnter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/barcode.png"))); // NOI18N
         m_jEnter.setToolTipText(bundle.getString("tiptext.getbarcode")); // NOI18N
@@ -816,166 +793,117 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
                 m_jEnterActionPerformed(evt);
             }
         });
-        jPanel1.add(m_jEnter, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 73, 40, -1));
+        jPanel1.add(m_jEnter, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 40, -1));
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText(AppLocal.getIntString("label.maximum")); // NOI18N
         jLabel3.setMaximumSize(new java.awt.Dimension(40, 20));
         jLabel3.setMinimumSize(new java.awt.Dimension(40, 20));
         jLabel3.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 140, 60, 20));
-
-        m_jreference.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        m_jreference.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jreferenceActionPerformed(evt);
-            }
-        });
-        jPanel1.add(m_jreference, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 115, 200, 25));
-
-        m_EditProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_editline.png"))); // NOI18N
-        m_EditProduct.setToolTipText(bundle.getString("tiptext.enterproductid")); // NOI18N
-        m_EditProduct.setFocusPainted(false);
-        m_EditProduct.setFocusable(false);
-        m_EditProduct.setMaximumSize(new java.awt.Dimension(64, 33));
-        m_EditProduct.setMinimumSize(new java.awt.Dimension(64, 33));
-        m_EditProduct.setPreferredSize(new java.awt.Dimension(64, 33));
-        m_EditProduct.setRequestFocusEnabled(false);
-        m_EditProduct.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_EditProductActionPerformed(evt);
-            }
-        });
-        jPanel1.add(m_EditProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, 40, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 140, 60, 20));
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel9.setText(AppLocal.getIntString("label.attributes")); // NOI18N
         jLabel9.setMaximumSize(new java.awt.Dimension(48, 20));
         jLabel9.setMinimumSize(new java.awt.Dimension(48, 20));
         jLabel9.setPreferredSize(new java.awt.Dimension(48, 20));
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 170, 70, 25));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 170, 70, 25));
 
         jattributes.setEditable(false);
         jattributes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jPanel1.add(jattributes, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 210, 25));
+        jPanel1.add(jattributes, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 170, 210, 25));
 
         jEditAttributes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/attributes.png"))); // NOI18N
         jEditAttributes.setToolTipText(bundle.getString("tiptext.productattributes")); // NOI18N
-        jEditAttributes.setMaximumSize(new java.awt.Dimension(65, 33));
-        jEditAttributes.setMinimumSize(new java.awt.Dimension(65, 33));
-        jEditAttributes.setPreferredSize(new java.awt.Dimension(65, 33));
+        jEditAttributes.setMaximumSize(null);
+        jEditAttributes.setMinimumSize(null);
+        jEditAttributes.setPreferredSize(null);
         jEditAttributes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jEditAttributesActionPerformed(evt);
             }
         });
-        jPanel1.add(jEditAttributes, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 160, 40, -1));
+        jPanel1.add(jEditAttributes, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 160, 60, 50));
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText(AppLocal.getIntString("label.units")); // NOI18N
         jLabel4.setMaximumSize(new java.awt.Dimension(40, 20));
         jLabel4.setMinimumSize(new java.awt.Dimension(40, 20));
         jLabel4.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 80, 25));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 80, 25));
 
         m_jmaximum.setEditable(false);
         m_jmaximum.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jmaximum.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         m_jmaximum.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        jPanel1.add(m_jmaximum, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 70, 25));
+        jPanel1.add(m_jmaximum, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 140, 70, 25));
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText(AppLocal.getIntString("label.price")); // NOI18N
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 40, 25));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 110, 40, 25));
 
         m_jprice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jprice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jPanel1.add(m_jprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 70, 25));
-
-        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel10.setText(AppLocal.getIntString("label.stockproduct")); // NOI18N
-        jLabel10.setMaximumSize(new java.awt.Dimension(40, 20));
-        jLabel10.setMinimumSize(new java.awt.Dimension(40, 20));
-        jLabel10.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 80, 30));
+        jPanel1.add(m_jprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 110, 70, 25));
 
         m_junitsinstock.setEditable(false);
         m_junitsinstock.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_junitsinstock.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         m_junitsinstock.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        jPanel1.add(m_junitsinstock, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 80, 60, 20));
+        jPanel1.add(m_junitsinstock, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 80, 60, 20));
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel11.setText(AppLocal.getIntString("label.stockunits")); // NOI18N
         jLabel11.setMaximumSize(new java.awt.Dimension(40, 20));
         jLabel11.setMinimumSize(new java.awt.Dimension(40, 20));
         jLabel11.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 80, 60, 20));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 80, 60, 20));
 
         m_junits.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_junits.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jPanel1.add(m_junits, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, 70, 25));
+        jPanel1.add(m_junits, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 60, 25));
 
         m_jminimum.setEditable(false);
         m_jminimum.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jminimum.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         m_jminimum.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        jPanel1.add(m_jminimum, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 140, 60, 25));
+        jPanel1.add(m_jminimum, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 140, 60, 25));
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel12.setText(AppLocal.getIntString("label.minimum")); // NOI18N
         jLabel12.setMaximumSize(new java.awt.Dimension(40, 20));
         jLabel12.setMinimumSize(new java.awt.Dimension(40, 20));
         jLabel12.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 140, 60, 20));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, 60, 20));
 
         m_jbuyprice.setEditable(false);
         m_jbuyprice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jbuyprice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         m_jbuyprice.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        jPanel1.add(m_jbuyprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, 60, 20));
+        jPanel1.add(m_jbuyprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 110, 60, 20));
 
         jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel13.setText(AppLocal.getIntString("label.prodpricebuy")); // NOI18N
         jLabel13.setMaximumSize(new java.awt.Dimension(40, 20));
         jLabel13.setMinimumSize(new java.awt.Dimension(40, 20));
         jLabel13.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 60, 20));
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 110, 60, 20));
 
         jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel14.setText(AppLocal.getIntString("label.prodpricesell")); // NOI18N
         jLabel14.setMaximumSize(new java.awt.Dimension(40, 20));
         jLabel14.setMinimumSize(new java.awt.Dimension(40, 20));
         jLabel14.setPreferredSize(new java.awt.Dimension(40, 20));
-        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 110, 60, 20));
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 110, 60, 20));
 
         m_jsellprice.setEditable(false);
         m_jsellprice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jsellprice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         m_jsellprice.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        jPanel1.add(m_jsellprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 110, 60, 20));
+        jPanel1.add(m_jsellprice, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 110, 60, 20));
 
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
-
-        catcontainer.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        catcontainer.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
-        catcontainer.setMinimumSize(new java.awt.Dimension(0, 250));
-        catcontainer.setPreferredSize(new java.awt.Dimension(0, 250));
-        catcontainer.setLayout(new java.awt.BorderLayout());
-        add(catcontainer, java.awt.BorderLayout.CENTER);
-        catcontainer.getAccessibleContext().setAccessibleParent(jPanel1);
+        add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void m_EditProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_EditProductActionPerformed
-
-        editProduct();
-    }//GEN-LAST:event_m_EditProductActionPerformed
-
-    private void m_jreferenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jreferenceActionPerformed
-
-        assignProductByReference();
-
-    }//GEN-LAST:event_m_jreferenceActionPerformed
 
     private void m_jcodebarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jcodebarActionPerformed
 
@@ -1034,10 +962,8 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
 
 }//GEN-LAST:event_m_FindProductActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel catcontainer;
     private javax.swing.JButton jEditAttributes;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -1053,7 +979,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jattributes;
     private javax.swing.JTextField jproduct;
-    private javax.swing.JButton m_EditProduct;
     private javax.swing.JButton m_FindProduct;
     private javax.swing.JButton m_jEnter;
     private javax.swing.JComboBox m_jLocation;
@@ -1065,7 +990,6 @@ public final class StockDiaryEditor extends javax.swing.JPanel implements Editor
     private javax.swing.JTextField m_jminimum;
     private javax.swing.JTextField m_jprice;
     private javax.swing.JComboBox m_jreason;
-    private javax.swing.JTextField m_jreference;
     private javax.swing.JTextField m_jsellprice;
     private javax.swing.JTextField m_junits;
     private javax.swing.JTextField m_junitsinstock;

@@ -1206,24 +1206,24 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel16.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel16.setText(AppLocal.getIntString("label.prodpriceselltax")); // NOI18N
         mGeneral.add(jLabel16);
-        jLabel16.setBounds(10, 260, 110, 40);
+        jLabel16.setBounds(220, 310, 110, 40);
 
         m_jPriceSellTax.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         m_jPriceSellTax.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         m_jPriceSellTax.setText("0.00");
         mGeneral.add(m_jPriceSellTax);
-        m_jPriceSellTax.setBounds(130, 260, 80, 40);
+        m_jPriceSellTax.setBounds(330, 310, 80, 40);
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel4.setText(AppLocal.getIntString("label.prodpricesell")); // NOI18N
         mGeneral.add(jLabel4);
-        jLabel4.setBounds(220, 260, 90, 40);
+        jLabel4.setBounds(10, 310, 90, 40);
 
         m_jPriceSell.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         m_jPriceSell.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         mGeneral.add(m_jPriceSell);
-        m_jPriceSell.setBounds(320, 260, 70, 40);
+        m_jPriceSell.setBounds(130, 310, 80, 40);
 
         jLabel19.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -1244,7 +1244,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         m_jPriceBuy.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         m_jPriceBuy.setText("0.00");
         mGeneral.add(m_jPriceBuy);
-        m_jPriceBuy.setBounds(130, 310, 80, 40);
+        m_jPriceBuy.setBounds(130, 260, 80, 40);
 
         m_jGrossProfit.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         m_jGrossProfit.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -1271,7 +1271,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText(AppLocal.getIntString("label.prodpricebuy")); // NOI18N
         mGeneral.add(jLabel3);
-        jLabel3.setBounds(10, 310, 80, 40);
+        jLabel3.setBounds(10, 260, 80, 40);
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel11.setText(bundle.getString("label.supplier")); // NOI18N
@@ -1280,7 +1280,7 @@ public final class ProductsEditor extends JPanel implements EditorRecord {
 
         m_jSuppliers.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         mGeneral.add(m_jSuppliers);
-        m_jSuppliers.setBounds(130, 360, 450, 40);
+        m_jSuppliers.setBounds(130, 360, 490, 40);
 
         m_jService.setText("Service Item");
         mGeneral.add(m_jService);

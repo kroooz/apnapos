@@ -96,10 +96,13 @@ public class JPaymentCashPos extends javax.swing.JPanel implements JPaymentInter
      */
     @Override
     public void activate(CustomerInfoExt customerext, double dTotal, String transID) {
-                              
+                       
         m_dTotal = dTotal;        
         m_jTendered.reset();
         m_jTendered.activate();
+        
+        m_jTendered.setDoubleValue(0d);
+        m_dPaid = 0d;
         
         printState();        
     }
@@ -130,12 +133,11 @@ public class JPaymentCashPos extends javax.swing.JPanel implements JPaymentInter
 
         Double value = m_jTendered.getDoubleValue();
         if (value == null || value == 0.0) {
-            m_dPaid = m_dTotal;
+            m_dPaid = 0d;
         } else {            
             m_dPaid = value;
-
         }   
-
+        
         int iCompare = RoundUtils.compare(m_dPaid, m_dTotal);
         
         m_jMoneyEuros.setText(Formats.CURRENCY.formatValue(m_dPaid));

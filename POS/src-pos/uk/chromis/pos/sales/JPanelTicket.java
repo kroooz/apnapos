@@ -31,6 +31,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -468,11 +469,21 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
     
     private void hideButtonsIfNoPermission(){
+        
+        
+        
         boolean lineDiscountPermission = m_App.getAppUserView().getUser().hasPermission("button.linediscount");
+        boolean totalDiscountPermission = m_App.getAppUserView().getUser().hasPermission("button.totaldiscount");
+        
         jLineDiscount.setVisible(lineDiscountPermission);
+        jTotalDiscount.setVisible(totalDiscountPermission);
+        
+        
+        jEditAttributes.setVisible(false);
         
         boolean editLinePermission = m_App.getAppUserView().getUser().hasPermission("sales.EditLines");
-        m_jEditLine.setVisible(editLinePermission);
+        //m_jEditLine.setVisible(editLinePermission);
+        m_jEditLine.setVisible(false);
         
     }
 
@@ -491,15 +502,16 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private void setKeyboardBindings() {
         
         // Up Down Arrow Keys
-        this.m_jPanelCentral.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "UpArrow");
-        this.m_jPanelCentral.getActionMap().put("UpArrow", new AbstractAction(){
+        this.m_jUp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_KP_UP, 0), "UpArrow");
+        this.m_jUp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "UpArrow");
+        this.m_jUp.getActionMap().put("UpArrow", new AbstractAction(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 m_ticketlines.selectionUp();
             }
         });
-        this.m_jPanelCentral.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "DownArrow");
-        this.m_jPanelCentral.getActionMap().put("DownArrow", new AbstractAction(){
+        this.m_jUp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "DownArrow");
+        this.m_jUp.getActionMap().put("DownArrow", new AbstractAction(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 m_ticketlines.selectionDown();
@@ -570,7 +582,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             });
         }
         
-        // EDIT LINE
+        // EDIT QUANTITY
         String editQuantityKey = AppConfig.getInstance().getProperty("sales_shortkeys.editquantity");
         if(editQuantityKey != null && editQuantityKey != ""){
             editQuantityKey = editQuantityKey.toUpperCase();
@@ -585,7 +597,38 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             });
         }
+        
+        //LINE DISCOUNT
+        String lineDiscountKey = AppConfig.getInstance().getProperty("sales_shortkeys.linediscount");
+        if(lineDiscountKey != null && lineDiscountKey != ""){
+            lineDiscountKey = lineDiscountKey.toUpperCase();
+            this.jLineDiscount.setText( this.jLineDiscount.getText() + " (" + lineDiscountKey + ")" );
+            this.jLineDiscount.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(lineDiscountKey), "LineDiscount");
+            this.jLineDiscount.getActionMap().put("LineDiscount", new AbstractAction(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    shortKeyPressed = true;
+                    jLineDiscountActionPerformed(null);
+                    JPanelTicket.shortKeyPressed = false;
+                }
+            });
+        }
 
+        //TOTAL DISCOUNT
+        String totalDiscountKey = AppConfig.getInstance().getProperty("sales_shortkeys.totaldiscount");
+        if(totalDiscountKey != null && totalDiscountKey != ""){
+            totalDiscountKey = totalDiscountKey.toUpperCase();
+            this.jTotalDiscount.setText( this.jTotalDiscount.getText() + " (" + totalDiscountKey + ")" );
+            this.jTotalDiscount.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(totalDiscountKey), "TotalDiscount");
+            this.jTotalDiscount.getActionMap().put("TotalDiscount", new AbstractAction(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    shortKeyPressed = true;
+                    jTotalDiscountActionPerformed(null);
+                    JPanelTicket.shortKeyPressed = false;
+                }
+            });
+        }
     }
     
     private void makeButtonsLabelsUpperCase()
@@ -633,10 +676,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private void mergeSimilarRows() {
         
-        if(true)
-            return;
+        moveBillDiscountRowAtEnd();
         
-        this.lastMergedRowIndex = -1;   // reset
+        //this.lastMergedRowIndex = -1;   // reset
         
         int linesCount = m_oTicket.getLinesCount();
         
@@ -644,11 +686,26 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             return;
         
         TicketLineInfo lastLine = m_oTicket.getLine(linesCount - 1);
+        int lastLineIndex = linesCount - 1;
+        if(lastLine.getProductID() == null) {
+            // it is discount line
+            
+            if(linesCount <= 2) {
+                return;
+            }
+            
+            lastLine = m_oTicket.getLine(linesCount - 2);
+            lastLineIndex = linesCount - 2;
+        }
      
         int similarLineIndex = -1;
-        for (int i = 0; i < m_oTicket.getLinesCount() - 1; i++) {
+        for (int i = 0; i < lastLineIndex; i++) {
             
             TicketLineInfo line = m_oTicket.getLine(i);
+            
+            if(line.getProductID() == null || lastLine.getProductID() == null) {
+                continue;
+            }
             
             if( line.getBarcode().compareTo(lastLine.getBarcode()) == 0 &&
                 line.getPrice() == lastLine.getPrice() &&
@@ -656,7 +713,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             {
                 similarLineIndex = i;
             }
-            
         }
         
         if( similarLineIndex != -1 )
@@ -668,7 +724,52 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_oTicket.removeLine(similarLineIndex);
             m_ticketlines.removeLine(similarLineIndex);
             
-            this.lastMergedRowIndex = m_oTicket.getLinesCount() - 1;
+            this.lastMergedRowIndex = lastLineIndex - 1;
+        }
+        
+        // refresh last two lines
+        int refreshCounter = 0;
+        for( int i = m_oTicket.getLinesCount() - 1;  i >= 0; i--) {
+            TicketLineInfo line = m_oTicket.getLine(i);
+            this.paintTicketLine(i, line);
+            refreshCounter++;
+            
+            if(refreshCounter == 2) {
+                break;
+            }
+        }
+    }
+    
+    private void moveBillDiscountRowAtEnd() {
+        
+        TicketLineInfo newLine = null;
+        int discountLineIndex = 0;
+        for (int i = 0; i < m_oTicket.getLinesCount() - 1; i++) {
+            
+            TicketLineInfo line = m_oTicket.getLine(i);
+            
+            if(line.getProductID() == null) {
+                
+                discountLineIndex = i;
+                newLine = new TicketLineInfo(
+                    null,
+                    line.getProductName(),
+                    line.getProductTaxCategoryID(),
+                    1,
+                    line.getPrice(),
+                    line.getTaxInfo(),
+                    0, 
+                    line.getDiscount(), 
+                    line.getDiscountBy());
+                newLine.setCanDiscount(false);
+                newLine.setManageStock(false);
+            }
+        }
+        
+        if(newLine != null) {
+            m_oTicket.removeLine(discountLineIndex);
+            m_ticketlines.removeLine(discountLineIndex);
+            this.addTicketLine(newLine);
         }
     }
 
@@ -801,7 +902,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     @Override
     public void activate() throws BasicException {
-// if the autologoff and inactivity is configured the setup the timer with action
+        
+        
+        this.hideButtonsIfNoPermission();
+        
+        // if the autologoff and inactivity is configured the setup the timer with action
         Action logout = new logout();
 
         if (autoLogoffEnabled && autoLogoffInactivity) {
@@ -930,8 +1035,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
 
         m_jNumberKey.setEnabled(true);
-        jEditAttributes.setVisible(true);
-        m_jEditLine.setVisible(true);
+        //jEditAttributes.setVisible(true);
+        
         m_jList.setVisible(true);
 
         m_oTicket = oTicket;
@@ -1136,7 +1241,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
             addTicketLine(new TicketLineInfo(oProduct, dMul, dPrice, tax, (java.util.Properties) (oProduct.getProperties().clone())));
             
-            new PlayWave("error.wav").start();
+            new PlayWave("var_price.wav").start();
             this.editLine(new String[]{"price", "qty"}, "price");
             
         } else {
@@ -2754,7 +2859,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jPanelLogout = new javax.swing.JPanel();
         jbtnLogout = new javax.swing.JButton();
         m_jButtons = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
         btnCustomer = new javax.swing.JButton();
         btnSplit = new javax.swing.JButton();
         btnReprint1 = new javax.swing.JButton();
@@ -2771,6 +2875,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jEditLine = new javax.swing.JButton();
         m_jEditQuantity = new javax.swing.JButton();
         jLineDiscount = new javax.swing.JButton();
+        jTotalDiscount = new javax.swing.JButton();
         jEditAttributes = new javax.swing.JButton();
         m_checkStock = new javax.swing.JButton();
         m_jPanelCentral = new javax.swing.JPanel();
@@ -2839,23 +2944,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jOptions.add(jPanelLogout, java.awt.BorderLayout.LINE_END);
 
         m_jButtons.setLayout(new javax.swing.BoxLayout(m_jButtons, javax.swing.BoxLayout.LINE_AXIS));
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_add_sml.png"))); // NOI18N
-        jButton1.setText(bundle.getString("button.customers")); // NOI18N
-        jButton1.setToolTipText(bundle.getString("tiptext.gotocustomers")); // NOI18N
-        jButton1.setFocusPainted(false);
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setMargin(null);
-        jButton1.setMinimumSize(new java.awt.Dimension(50, 40));
-        jButton1.setRequestFocusEnabled(false);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        m_jButtons.add(jButton1);
 
         btnCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/customer_sml.png"))); // NOI18N
         btnCustomer.setText(bundle.getString("tiptext.findcustomers")); // NOI18N
@@ -3044,7 +3132,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         m_jEditQuantity.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/sale_editqty.png"))); // NOI18N
         m_jEditQuantity.setText(bundle.getString("tiptext.editquantity")); // NOI18N
-        m_jEditQuantity.setToolTipText(bundle.getString("tiptext.editline")); // NOI18N
+        m_jEditQuantity.setToolTipText(bundle.getString("tiptext.editquantity")); // NOI18N
         m_jEditQuantity.setFocusPainted(false);
         m_jEditQuantity.setFocusable(false);
         m_jEditQuantity.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -3075,6 +3163,23 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         });
         jPanel2.add(jLineDiscount);
+
+        jTotalDiscount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/notes.png"))); // NOI18N
+        jTotalDiscount.setText(bundle.getString("button.totaldiscount")); // NOI18N
+        jTotalDiscount.setToolTipText(bundle.getString("tiptext.chooseattributes")); // NOI18N
+        jTotalDiscount.setFocusPainted(false);
+        jTotalDiscount.setFocusable(false);
+        jTotalDiscount.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jTotalDiscount.setMargin(null);
+        jTotalDiscount.setMaximumSize(new java.awt.Dimension(500, 36));
+        jTotalDiscount.setMinimumSize(new java.awt.Dimension(42, 36));
+        jTotalDiscount.setRequestFocusEnabled(false);
+        jTotalDiscount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTotalDiscountActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jTotalDiscount);
 
         jEditAttributes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/attributes.png"))); // NOI18N
         jEditAttributes.setText(bundle.getString("tiptext.chooseattributes")); // NOI18N
@@ -3463,8 +3568,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         
         //sales.RemoveLines
         
-        
         int i = m_ticketlines.getSelectedIndex();
+        if( m_oTicket.getLine(i).getProductID() == null ) {
+            m_oTicket.removeLine(i);
+            this.refreshTicket(true);
+        }
+        
         if (m_oTicket.getLine(i).getProductID().equals("sc999-001")) {
             m_oTicket.setNoSC("1");
         }
@@ -3515,7 +3624,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
         
         if(showMessage) {
-            JOptionPane.showMessageDialog(null, "User does not have permission to perform this operation");
+            JOptionPane.showMessageDialog(null, "User does not have the permission to perform this operation");
         }
         return null;
     }
@@ -3647,13 +3756,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
         //  AutoLogoff.getInstance().activateTimer();
 }//GEN-LAST:event_jEditAttributesActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        AutoLogoff.getInstance().activateTimer();
-// Show the custmer panel - this does deactivate
-        m_App.getAppUserView().showTask("uk.chromis.pos.customers.CustomersPanel");
-        AutoLogoff.getInstance().activateTimer();
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jbtnMooringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnMooringActionPerformed
 // Display vessel selection box on screen if reply is good add to the ticket
@@ -3796,65 +3898,109 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_btnLogout
 
     private void m_jEditQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jEditQuantityActionPerformed
+        
+        int i = m_ticketlines.getSelectedIndex();
+        if( m_oTicket.getLine(i).getProductID() == null ) {
+            return;
+        }
+        
         this.editLine(new String[]{"qty"}, "qty");
     }//GEN-LAST:event_m_jEditQuantityActionPerformed
 
     private void jLineDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLineDiscountActionPerformed
-        
-        boolean lineDiscountPermission = m_App.getAppUserView().getUser().hasPermission("button.linediscount");
-        
-        if(!lineDiscountPermission){
+
+        int i = m_ticketlines.getSelectedIndex();
+        if( m_oTicket.getLine(i).getProductID() == null ) {
             return;
         }
         
-        double inputValue = getInputValue();
+        AppUser user = getUserHavingAtleastOnePermission(new String[]{"button.linediscount"}, true);
         
-        if(inputValue == 0){
-            JOptionPane.showMessageDialog(this, AppLocal.getIntString("message.enterdiscountrate"), "Notice", JOptionPane.INFORMATION_MESSAGE);
+        if(user == null) {
             return;
         }
         
-        double discountrate = 1 - (inputValue)/100;
+        Double discountRate = this.getNumberInput("Please enter discount rate between 0 and 100", 0, 100);
+        
+        if(discountRate == null) {
+            return;
+        }
 
         int index = m_ticketlines.getSelectedIndex();
 
         TicketInfo ticket = m_oTicket;
         
         if (index >= 0) {
-            if (ticket.getTotal() > 0.0 && discountrate > 0.0) {
-                String sdiscount = Formats.PERCENT.formatValue((1-discountrate));
 
-                TicketLineInfo line = ticket.getLine(index);
+            TicketLineInfo line = ticket.getLine(index);
 
-                if (line.canDiscount())
-                {
-                    TicketLineInfo newLine = new TicketLineInfo(
-                        line.getProductID(),
-                        line.getProductName() + " - " + sdiscount,
-                        line.getProductTaxCategoryID(),
-                        line.getMultiply(),
-                        (double)Math.rint(line.getPrice() * discountrate *100) /100d,
-                        line.getTaxInfo(),
-                        line.getPriceBuy());
-                    newLine.setBarcode(line.getBarcode());
-                    newLine.setDiscounted("yes");
 
-                    paintTicketLine(index, newLine);
-                    if (newLine.getUpdated()) {
-                        reLoadCatalog();
-                    }
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(this, AppLocal.getIntString("message.discountnotallowedonthisitem"), "Notice", JOptionPane.INFORMATION_MESSAGE);
+            if (line.canDiscount())
+            {
+                double discountAmount = (double)Math.rint(line.getPriceBeforeDiscount() * discountRate / 100);
+                double priceAfterDiscount = (double)Math.rint(line.getPriceBeforeDiscount() * (1 - (discountRate / 100)));
+
+                TicketLineInfo newLine = new TicketLineInfo(
+                    line.getProductID(),
+                    line.getProductName(),
+                    line.getProductTaxCategoryID(),
+                    line.getMultiply(),
+                    priceAfterDiscount,
+                    line.getTaxInfo(),
+                    line.getPriceBuy(), 
+                    discountAmount, 
+                    user.getId());
+                newLine.setBarcode(line.getBarcode());
+                newLine.setCanDiscount(line.canDiscount());
+                //newLine.setDiscounted("yes");
+
+                newLine.setManageStock(line.getManageStock());
+
+                paintTicketLine(index, newLine);
+                if (newLine.getUpdated()) {
+                    reLoadCatalog();
                 }
             }
+            else
+            {
+                JOptionPane.showMessageDialog(this, AppLocal.getIntString("message.discountnotallowedonthisitem"), "Notice", JOptionPane.INFORMATION_MESSAGE);
+            }
+            
         } else {
             java.awt.Toolkit.getDefaultToolkit().beep();
         }
         
     }//GEN-LAST:event_jLineDiscountActionPerformed
 
+    private Double getNumberInput(String message, int min, int max) {
+        String numberString = null;
+        Double number = null;
+        
+        while(true) {
+            numberString = JOptionPane.showInputDialog(message);
+            
+            if(numberString == null) {
+                break;
+            }
+            
+            try
+            {
+                number = Double.parseDouble(numberString);
+                if(number >= min && number <= max) {
+                    break;
+                } else {
+                    number = null;
+                    JOptionPane.showMessageDialog(null, "Please enter value between " +min+ " and " + max);
+                }
+            }
+            catch(NumberFormatException nfe) {
+                JOptionPane.showMessageDialog(null, "Please enter correct Number Value");
+            }
+        }
+        
+        return number;
+    }
+    
     private void formAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         // TODO add your handling code here:
         hideButtonsIfNoPermission();
@@ -3874,6 +4020,64 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }//GEN-LAST:event_btnSyncbtnReprintActionPerformed
 
+    private void removeOldTotalDisount() {
+        for(int i = 0; i < m_oTicket.getLinesCount(); i++) {
+            TicketLineInfo line = m_oTicket.getLine(i);
+            
+            if(line.getProductID() == null) {
+                m_oTicket.removeLine(i);
+                this.refreshTicket(true);
+            }
+        }
+    }
+    
+    private void jTotalDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTotalDiscountActionPerformed
+        
+        AppUser user = getUserHavingAtleastOnePermission(new String[]{"button.totaldiscount"}, true);
+        
+        if(user == null) {
+            return;
+        }
+        
+        this.removeOldTotalDisount();
+        
+        TicketInfo ticket = m_oTicket;
+        
+        int linesCount = ticket.getLinesCount();
+        
+        if(linesCount == 0) {
+            JOptionPane.showMessageDialog(null, "Please add items before giving discount");
+        }
+        
+        Double discountAmount = this.getNumberInput("Please enter discount amount", 0, (int) ticket.getTotal());
+        
+        if(discountAmount == null) {
+            return;
+        }
+        
+        TicketLineInfo lastLine = ticket.getLine(linesCount - 1);
+        
+        TicketLineInfo newLine = new TicketLineInfo(
+            null,
+            "Discount",
+            lastLine.getProductTaxCategoryID(),
+            1,
+            -discountAmount,
+            lastLine.getTaxInfo(),
+            0, 
+            discountAmount, 
+            user.getId());
+        newLine.setCanDiscount(false);
+        newLine.setManageStock(false);
+        
+        addTicketLine(newLine);
+
+        paintTicketLine(linesCount + 1, newLine);
+        if (newLine.getUpdated()) {
+            reLoadCatalog();
+        }
+    }//GEN-LAST:event_jTotalDiscountActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCustomer;
@@ -3881,7 +4085,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private javax.swing.JButton btnSplit;
     private javax.swing.JButton btnSync;
     private javax.swing.JPanel catcontainer;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jEditAttributes;
     private javax.swing.JButton jLineDiscount;
     private javax.swing.JPanel jPanel1;
@@ -3891,6 +4094,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private javax.swing.JPanel jPanel9;
     private javax.swing.JPanel jPanelEmptyForPadding;
     private javax.swing.JPanel jPanelLogout;
+    private javax.swing.JButton jTotalDiscount;
     private javax.swing.JButton j_btnKitchenPrt;
     private javax.swing.JButton jbtnLogout;
     private javax.swing.JButton jbtnMooring;

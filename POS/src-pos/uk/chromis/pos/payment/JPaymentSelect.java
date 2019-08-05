@@ -30,12 +30,17 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.customers.CustomerInfoExt;
@@ -82,6 +87,30 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         printselected = true;
         
         setPrintingButtonText();
+        
+        setKeyBindings();
+    }
+    
+    private void setKeyBindings() {
+        
+        this.m_jButtonAdd.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, 0), "PlusKey");
+        this.m_jButtonAdd.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, 0), "PlusKey");
+        this.m_jButtonAdd.getActionMap().put("PlusKey", new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                m_jButtonAddActionPerformed(null);
+            }
+        });
+        
+        this.m_jButtonRemove.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, 0), "MinusKey");
+        this.m_jButtonRemove.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0), "MinusKey");
+        this.m_jButtonRemove.getActionMap().put("MinusKey", new AbstractAction(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                m_jButtonRemoveActionPerformed(null);
+            }
+        });
+        
     }
 
     public void setPrintSelected(boolean value) {

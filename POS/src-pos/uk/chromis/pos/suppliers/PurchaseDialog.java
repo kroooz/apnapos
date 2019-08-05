@@ -203,6 +203,7 @@ public class PurchaseDialog extends javax.swing.JDialog {
 
         jLabel3.setText("Invoice No.");
 
+        jPanel1.setBackground(new java.awt.Color(204, 204, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Add / Edit Purchase Items"));
 
         jLabel4.setText("Barcode");
@@ -890,13 +891,14 @@ public class PurchaseDialog extends javax.swing.JDialog {
         String supplierId = m_SupplierModel.getSelectedKey().toString();
         String locationId = this.m_LocationsModel.getSelectedKey().toString();
         
+        int purchaseNumber = this.dlSystem.getEntryNumber( AppLocal.purchaseTypeString );
         
         // PURCHASES TABLE
         new StaticSentence(s, "DELETE FROM PURCHASES WHERE ID = ?", SerializerWriteString.INSTANCE).exec(this.currentPurchaseId);
-        new StaticSentence(s, "INSERT INTO PURCHASES ( ID, PURCHASE_DATE, INVOICE_NUMBER, PARTY_ID, LOCATION_ID, TOTAL, CASH_PAID, CARD_PAID, CHEQUE_PAID, BALANCE_PAYABLE ) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasic(new Datas[]{
-                Datas.STRING, Datas.TIMESTAMP, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE }))
-                .exec( this.currentPurchaseId, dpPurchaseDate.getDate(), txtInvoiceNo.getText(), supplierId, locationId, grandTotal, paidThroughCash, paidThroughCard, paidThroughCheque, balancePayable );
+        new StaticSentence(s, "INSERT INTO PURCHASES ( ID, PURCHASE_NUMBER, PURCHASE_DATE, INVOICE_NUMBER, PARTY_ID, LOCATION_ID, TOTAL, CASH_PAID, CARD_PAID, CHEQUE_PAID, BALANCE_PAYABLE ) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasic(new Datas[]{
+                Datas.STRING, Datas.INT, Datas.TIMESTAMP, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE, Datas.DOUBLE }))
+                .exec( this.currentPurchaseId, purchaseNumber, dpPurchaseDate.getDate(), txtInvoiceNo.getText(), supplierId, locationId, grandTotal, paidThroughCash, paidThroughCard, paidThroughCheque, balancePayable );
         
         // PURCHASES LINES TABLE
         new StaticSentence(s, "DELETE FROM PURCHASE_LINES WHERE PURCHASE_ID = ?", SerializerWriteString.INSTANCE).exec(this.currentPurchaseId);
@@ -911,23 +913,23 @@ public class PurchaseDialog extends javax.swing.JDialog {
         }
         
         // UPDATE SUPPLIER BALANCE
-        new StaticSentence(s, "UPDATE SUPPLIERS SET CURRENT_BALANCE = CURRENT_BALANCE - ?", new SerializerWriteBasic(new Datas[]{
-                Datas.DOUBLE, Datas.DOUBLE}))
-                .exec( oldBalancePayable, 0d );
+        new StaticSentence(s, "UPDATE SUPPLIERS SET CURRENT_BALANCE = COALESCE(CURRENT_BALANCE, 0) - ? WHERE ID = ?", new SerializerWriteBasic(new Datas[]{
+                Datas.DOUBLE, Datas.STRING}))
+                .exec( oldBalancePayable, supplierId );
         
-        new StaticSentence(s, "UPDATE SUPPLIERS SET CURRENT_BALANCE = CURRENT_BALANCE + ?", new SerializerWriteBasic(new Datas[]{
-                Datas.DOUBLE, Datas.DOUBLE}))
-                .exec( (Double)balancePayable, 0d );
+        new StaticSentence(s, "UPDATE SUPPLIERS SET CURRENT_BALANCE = COALESCE(CURRENT_BALANCE, 0) + ? WHERE ID = ?", new SerializerWriteBasic(new Datas[]{
+                Datas.DOUBLE, Datas.STRING}))
+                .exec( (Double)balancePayable, supplierId );
         
         // SUPPLIER_LEDGER TABLE
         new StaticSentence(s, "DELETE FROM PARTY_LEDGER WHERE TRANSACTION_TYPE = ? and TRANSACTION_ID = ?", new SerializerWriteBasic(new Datas[]{
                 Datas.STRING, Datas.STRING}))
                 .exec( AppLocal.purchaseTypeString, this.currentPurchaseId );
         
-        new StaticSentence(s, "INSERT INTO PARTY_LEDGER (ID, TRANSACTION_DATE, TRANSACTION_TYPE, TRANSACTION_ID, PARTY_TYPE, PARTY_ID, AMOUNT) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasic(new Datas[]{
-                Datas.STRING, Datas.TIMESTAMP, Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE}))
-                .exec( UUID.randomUUID().toString(), dpPurchaseDate.getDate(), AppLocal.purchaseTypeString, this.currentPurchaseId, AppLocal.supplierTypeString, supplierId, balancePayable );
+        new StaticSentence(s, "INSERT INTO PARTY_LEDGER (ID, TRANSACTION_DATE, TRANSACTION_TYPE, TRANSACTION_ID, TRANSACTION_NUMBER, PARTY_TYPE, PARTY_ID, AMOUNT) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasic(new Datas[]{
+                Datas.STRING, Datas.TIMESTAMP, Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE}))
+                .exec( UUID.randomUUID().toString(), dpPurchaseDate.getDate(), AppLocal.purchaseTypeString, this.currentPurchaseId, this.txtInvoiceNo.getText(), AppLocal.supplierTypeString, supplierId, balancePayable );
         
         // STOCK DIARY
         new StaticSentence(s, "DELETE FROM STOCKDIARY WHERE TRANSACTION_ID = ?", new SerializerWriteBasic(new Datas[]{

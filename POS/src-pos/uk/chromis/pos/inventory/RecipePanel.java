@@ -98,6 +98,13 @@ public class RecipePanel extends JPanelTable2 {
                 if (values[5] == null) {
                     // INSERT
                     values[5] = filterws.getSelectKey();
+                    
+                    /*
+                    if( params[1] == params[2] ) {
+                        
+                    }
+                    */
+                    
                     return new PreparedSentence(app.getSession(), "INSERT INTO PRODUCTS_KIT (ID, PRODUCT, PRODUCT_KIT, QUANTITY, SITEGUID) VALUES (?, ?, ?, ?, ?)", new SerializerWriteBasicExt(row.getDatas(), new int[]{0, 1, 2, 3, 5})).exec(params);
                 } else {
                     // UPDATE
@@ -152,7 +159,7 @@ public class RecipePanel extends JPanelTable2 {
 
     @Override
     public String getTitle() {
-        return AppLocal.getIntString("Menu.Recipe");
+        return AppLocal.getIntString("Menu.PackageCarton");
     }
 
     private void reload() throws BasicException {
