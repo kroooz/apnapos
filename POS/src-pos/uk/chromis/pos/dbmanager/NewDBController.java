@@ -105,13 +105,15 @@ public class NewDBController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         dirname = System.getProperty("dirname.path");
         dirname = dirname == null ? "./" : dirname;
-        DbEngine.getItems().addAll("Apache Derby Embedded");
+        //DbEngine.getItems().addAll("Apache Derby Embedded");
         DbEngine.getItems().addAll("MySQL");
-        DbEngine.getItems().addAll("PostgreSQL");
-        DbEngine.setValue("Apache Derby Embedded");
-        dbURL.setText("jdbc:derby:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-database").getAbsolutePath() + ";create=true");
-        dbDriverLibrary.setText(new File(new File(dirname), "lib/derby-10.10.2.0.jar").getAbsolutePath());
-        dbDriverClass.setText("org.apache.derby.jdbc.EmbeddedDriver");
+        //DbEngine.getItems().addAll("PostgreSQL");
+        DbEngine.setValue("MySQL");
+        
+        dbURL.setText("jdbc:mysql://localhost:3306/apnapos");
+        dbDriverLibrary.setText(new File(new File(dirname), "lib/mysql-connector-java-5.1.42.jar").getAbsolutePath());
+        dbDriverClass.setText("com.mysql.jdbc.Driver");
+        
         lblProgressMsg.setText("");
 
         dbDriverClass.textProperty().addListener(new ChangeListener<String>() {

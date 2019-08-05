@@ -167,6 +167,7 @@ public class AppUser {
      * @return
      */
     public boolean hasPermission(String classname) {
+        
         return (m_apermissions == null) ? false : m_apermissions.contains(classname);
     }
 
@@ -211,7 +212,7 @@ public class AppUser {
         m_oldclasses.put("net.adrianromero.tpv.reports.JReportInventoryDiff", "/uk/chromis/reports/inventorydiff.bs");
         m_oldclasses.put("net.adrianromero.tpv.reports.JReportInventoryReOrder", "/uk/chromis/reports/InventoryReOrder.bs");
 
-        m_oldclasses.put("Menu.SalesManagement", "uk.chromis.pos.forms.MenuSalesManagement");
+        m_oldclasses.put("Menu.SalesManagement", "uk.chromis.pos.forms.Reports");
         m_oldclasses.put("net.adrianromero.tpv.reports.JReportUserSales", "/uk/chromis/reports/usersales.bs");
         m_oldclasses.put("net.adrianromero.tpv.reports.JReportClosedProducts", "/uk/chromis/reports/closedproducts.bs");
         m_oldclasses.put("net.adrianromero.tpv.reports.JReportTaxes", "/uk/chromis/reports/taxes.bs");

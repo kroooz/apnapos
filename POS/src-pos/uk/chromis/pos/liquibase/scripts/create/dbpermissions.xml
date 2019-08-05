@@ -294,13 +294,22 @@
             <column name="SECTION" value="##label.sectionadmin"/>
             <column name="DISPLAYNAME" value="##label.displayname32"/>
             <column name="DESCRIPTION" value="##label.description32"/>
-        </insert>		
+        </insert>	
+        
+        		
 		
         <insert tableName="DBPERMISSIONS">		
             <column name="CLASSNAME" value="uk.chromis.pos.customers.CustomersPanel"/>
             <column name="SECTION" value="##label.sectioncustomers"/>
             <column name="DISPLAYNAME" value="##label.displayname33"/>
             <column name="DESCRIPTION" value="##label.description33"/>
+        </insert>	
+        
+        <insert tableName="DBPERMISSIONS">		
+            <column name="CLASSNAME" value="uk.chromis.pos.forms.SuppliersPanel"/>
+            <column name="SECTION" value="##label.sectionsuppliers"/>
+            <column name="DISPLAYNAME" value="##label.suppliers"/>
+            <column name="DESCRIPTION" value="##label.suppliersdescription"/>
         </insert>		
 		
         <insert tableName="DBPERMISSIONS">		
@@ -528,7 +537,7 @@
         </insert>		
 		
         <insert tableName="DBPERMISSIONS">		
-            <column name="CLASSNAME" value="uk.chromis.pos.forms.MenuSalesManagement"/>
+            <column name="CLASSNAME" value="uk.chromis.pos.forms.Reports"/>
             <column name="SECTION" value="##label.sectionadmin"/>
             <column name="DISPLAYNAME" value="##label.displayname66"/>
             <column name="DESCRIPTION" value="##label.description66"/>

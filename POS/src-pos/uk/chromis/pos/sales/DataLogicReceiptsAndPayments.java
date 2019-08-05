@@ -288,10 +288,10 @@ public class DataLogicReceiptsAndPayments extends BeanFactoryDataSingle {
                 throw new Exception("Party type not specified");
             }
             
-            new StaticSentence(s, "INSERT INTO PARTY_LEDGER ( ID, TRANSACTION_DATE, TRANSACTION_TYPE, TRANSACTION_ID, PARTY_TYPE, PARTY_ID, AMOUNT ) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasic(new Datas[]{
-                Datas.STRING, Datas.TIMESTAMP, Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE}))
-                .exec( UUID.randomUUID().toString(), date, AppLocal.paymentTypeString, paymentId, partyType, partyId, amount );
+            new StaticSentence(s, "INSERT INTO PARTY_LEDGER ( ID, TRANSACTION_DATE, TRANSACTION_TYPE, TRANSACTION_ID, TRANSACTION_NUMBER, PARTY_TYPE, PARTY_ID, AMOUNT, TRANSACTION_DESCRIPTION ) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", new SerializerWriteBasic(new Datas[]{
+                Datas.STRING, Datas.TIMESTAMP, Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING, Datas.DOUBLE, Datas.STRING}))
+                .exec( UUID.randomUUID().toString(), date, AppLocal.paymentTypeString, paymentId, transactionId, partyType, partyId, amount, notes);
         }
     }
 

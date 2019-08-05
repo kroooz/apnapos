@@ -74,7 +74,7 @@ public class ResetDialog extends javax.swing.JPanel {
         try {
             // get list of resources in database that match resource in templates
             Statement stmt = connection.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM RESOURCES ORDER BY NAME");
+            rs = stmt.executeQuery("SELECT * FROM RESOURCES ORDER BY NAME WHERE NAME LIKE '%logo%'");
 
             while (rs.next()) {
                 if (checkResource(rs.getString("NAME"))) {

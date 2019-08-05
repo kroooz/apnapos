@@ -98,7 +98,8 @@ public class JRootApp extends JPanel implements AppView {
 
     private AppProperties m_props;
     private Session session;
-    private DataLogicSystem m_dlSystem;
+    public static DataLogicSystem m_dlSystem;
+    public static boolean ShowBuyPrice = false;
     private DataLogicSync m_dlSync;
 
     private Properties m_propsdb = null;
@@ -250,6 +251,8 @@ public class JRootApp extends JPanel implements AppView {
         m_dlSystem = (DataLogicSystem) getBean("uk.chromis.pos.forms.DataLogicSystem");
         m_dlSync = (DataLogicSync) getBean("uk.chromis.pos.sync.DataLogicSync");
         
+        String showBuyPriceString = m_dlSystem.getSettingValue(AppLocal.settingShowBuyPrice);
+        ShowBuyPrice = showBuyPriceString == "0" ? false : true;
         
         // SYNC
         jPanelTillBranchSync = new JPanelTillBranchSync();
@@ -1054,14 +1057,14 @@ public class JRootApp extends JPanel implements AppView {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
+    public javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton m_jClose;
     private javax.swing.JLabel m_jHost;
     private javax.swing.JLabel m_jLblTitle;
-    private javax.swing.JPanel m_jPanelContainer;
+    public javax.swing.JPanel m_jPanelContainer;
     private javax.swing.JPanel m_jPanelDown;
     private javax.swing.JPanel m_jPanelLogin;
     private javax.swing.JPanel m_jPanelTitle;

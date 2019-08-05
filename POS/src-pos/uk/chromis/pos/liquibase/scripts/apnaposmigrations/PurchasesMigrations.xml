@@ -41,6 +41,7 @@
             <column name="ID" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="PURCHASE_NUMBER" type="varchar(255)" />
             <column name="PURCHASE_DATE" type="datetime" />
             <column name="INVOICE_NUMBER" type="varchar(255)" />
             <column name="PARTY_ID" type="varchar(255)" />
@@ -78,6 +79,8 @@
             <column name="TRANSACTION_DATE" type="datetime" />
             <column name="TRANSACTION_TYPE" type="varchar(255)" />
             <column name="TRANSACTION_ID" type="varchar(255)" />
+            <column name="TRANSACTION_NUMBER" type="varchar(255)" />
+            <column name="TRANSACTION_DESCRIPTION" type="varchar(255)" />
             <column name="PARTY_TYPE" type="varchar(255)" />
             <column name="PARTY_ID" type="varchar(255)" />
             <column name="AMOUNT" type="double" />

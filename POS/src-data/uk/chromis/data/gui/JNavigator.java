@@ -81,6 +81,7 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
 
         initComponents();
         
+        /*
         if (iButtons == BUTTONS_ALL) {
             jbtnFirst = new javax.swing.JButton();
             jbtnFirst.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/2leftarrow.png")));
@@ -114,6 +115,7 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
             jbtnPrev.setText("PREVIOUS");
             add(jbtnPrev);
         }
+        */
 
         jbtnRefresh = new javax.swing.JButton();
         jbtnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/refresh.png")));
@@ -127,9 +129,10 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
             }
         });
         
-        jbtnRefresh.setText("REFRESH");
+        jbtnRefresh.setText("REFRESH / CANCEL");
         add(jbtnRefresh);
 
+        /*
         if (iButtons == BUTTONS_ALL) {
             jbtnNext = new javax.swing.JButton();
             jbtnNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/1rightarrow.png")));
@@ -163,6 +166,7 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
             jbtnLast.setText("LAST");
             add(jbtnLast);
         }
+        */
 
         add(new javax.swing.JSeparator());
 
@@ -178,12 +182,13 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
                     jbtnReloadActionPerformed(evt);
                 }
             });
-            jbtnReload.setText("RELOAD");
+            jbtnReload.setText("RELOAD LIST");
             add(jbtnReload);
 
             add(new javax.swing.JSeparator());
         }
         
+        /*
         if (vec == null) {
             m_LastFindInfo = null;
         } else {
@@ -203,7 +208,9 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
             jbtnFind.setText("FIND");
             add(jbtnFind);  
         }
+        */
         
+        /*
         m_cc = cc;
         if (m_cc != null) {
             jbtnSort = new javax.swing.JButton();
@@ -219,7 +226,8 @@ public class JNavigator extends javax.swing.JPanel implements BrowseListener, St
             });
             jbtnSort.setText("SORT");
             add(jbtnSort);
-        }       
+        } 
+        */
         
         m_bd = bd;
         bd.addBrowseListener(this);

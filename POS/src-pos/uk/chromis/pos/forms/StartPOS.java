@@ -75,7 +75,7 @@ public class StartPOS {
         
         try
         {
-            String ExpiryDateString = "2019-07-30"; // yyyy-MM-dd
+            String ExpiryDateString = "2019-08-30"; // yyyy-MM-dd
 
               // Dev Computer
             String MotherBoard = "/4GNVC2S/CN7360422O0BGT/";
@@ -193,11 +193,9 @@ public class StartPOS {
                 JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        
     }
     
     static public boolean sendFirstUseEmail(){
-        
         try
         {
             boolean firstTimeEmailSent = AppConfig.getInstance().getBoolean("firsttimeemailsent");

@@ -52,6 +52,7 @@ import uk.chromis.pos.forms.AppLocal;
 import uk.chromis.pos.forms.AppView;
 import uk.chromis.pos.forms.AppViewConnection;
 import uk.chromis.pos.forms.DataLogicSystem;
+import uk.chromis.pos.forms.JRootApp;
 import uk.chromis.pos.sync.DataLogicSync;
 import uk.chromis.pos.ticket.TicketLineInfo;
 import uk.chromis.pos.util.AltEncrypter;
@@ -127,6 +128,15 @@ public class JProductLineEdit extends javax.swing.JDialog {
         m_jPrice.setDoubleValue(oLine.getPrice());
         m_jPriceTax.setDoubleValue(oLine.getPriceTax());
         m_jTaxrate.setText(oLine.getTaxInfo().getName());
+        
+        if(JRootApp.ShowBuyPrice == true) {
+            String buyPriceString = Integer.toString((int)Math.rint(oLine.getPriceBuy()));
+            String nameSubString = oLine.getProductName().substring(0, 3);
+            jLabelBCodeValue.setText( nameSubString + buyPriceString + nameSubString );
+        } else {
+            jLabelBCodeValue.setVisible(false);
+            jLabelBCodeTitle.setVisible(false);
+        }
 
         m_jName.addPropertyChangeListener("Edition", new RecalculateName());
         m_jUnits.addPropertyChangeListener("Edition", new RecalculateUnits());
@@ -382,6 +392,8 @@ public class JProductLineEdit extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         m_jSubtotal = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabelBCodeTitle = new javax.swing.JLabel();
+        jLabelBCodeValue = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         m_jButtonUpdate = new javax.swing.JButton();
         m_jButtonCancel = new javax.swing.JButton();
@@ -482,6 +494,21 @@ public class JProductLineEdit extends javax.swing.JDialog {
         jLabel8.setText(AppLocal.getIntString("label.tax")); // NOI18N
         jPanel2.add(jLabel8);
         jLabel8.setBounds(10, 280, 90, 25);
+
+        jLabelBCodeTitle.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabelBCodeTitle.setText("B.Code");
+        jPanel2.add(jLabelBCodeTitle);
+        jLabelBCodeTitle.setBounds(10, 370, 90, 25);
+
+        jLabelBCodeValue.setBackground(javax.swing.UIManager.getDefaults().getColor("TextField.disabledBackground"));
+        jLabelBCodeValue.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabelBCodeValue.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabelBCodeValue.setBorder(null);
+        jLabelBCodeValue.setOpaque(true);
+        jLabelBCodeValue.setPreferredSize(new java.awt.Dimension(150, 25));
+        jLabelBCodeValue.setRequestFocusEnabled(false);
+        jPanel2.add(jLabelBCodeValue);
+        jLabelBCodeValue.setBounds(100, 370, 210, 25);
 
         jPanel5.add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -593,6 +620,8 @@ public class JProductLineEdit extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabelBCodeTitle;
+    private javax.swing.JLabel jLabelBCodeValue;
     private javax.swing.JLabel jLabelPrice;
     private javax.swing.JLabel jLabelQty;
     private javax.swing.JPanel jPanel1;

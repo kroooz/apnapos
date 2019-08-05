@@ -31,6 +31,9 @@ public class OtherController implements Initializable, BaseController {
     @FXML
     private CheckBox ckbDontAllowSalesIfNotEnoughQuantity;
     
+    @FXML
+    private CheckBox ckbShowBuyPrice;
+    
     private DataLogicSystem dlSystem;
     
 
@@ -57,6 +60,10 @@ public class OtherController implements Initializable, BaseController {
         String dontAllowSalesIfNotEnoughQuantityString = dlSystem.getSettingValue(AppLocal.settingDontAllowSalesIfNotEnoughQuantity);
         boolean dontAllowSalesIfNotEnoughQuantity = dontAllowSalesIfNotEnoughQuantityString == null || "0".equals(dontAllowSalesIfNotEnoughQuantityString) ? false : true;
         ckbDontAllowSalesIfNotEnoughQuantity.setSelected(dontAllowSalesIfNotEnoughQuantity);
+                
+        String showBuyPriceString = dlSystem.getSettingValue(AppLocal.settingShowBuyPrice);
+        boolean showBuyPrice = showBuyPriceString == null || "0".equals(showBuyPriceString) ? false : true;
+        this.ckbShowBuyPrice.setSelected(showBuyPrice);
         
         dirty.setValue(false);
     }
@@ -66,6 +73,7 @@ public class OtherController implements Initializable, BaseController {
         
         dlSystem.setSettingValue(AppLocal.settingUseWeightedAverageCosting, ckbUseWeightedAverageCosting.isSelected() ? "1" : "0");
         dlSystem.setSettingValue(AppLocal.settingDontAllowSalesIfNotEnoughQuantity, ckbDontAllowSalesIfNotEnoughQuantity.isSelected() ? "1" : "0");
+        dlSystem.setSettingValue(AppLocal.settingShowBuyPrice, ckbShowBuyPrice.isSelected() ? "1" : "0");
         dirty.setValue(false);
     }
 

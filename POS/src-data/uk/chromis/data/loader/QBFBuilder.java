@@ -218,7 +218,7 @@ public class QBFBuilder implements ISQLBuilderStatic {
 
             String sItem;
             for (int i = 0; i < m_asFindFields.length; i++) {
-                sItem = m_aiCondFields[i].getExpression(m_asFindFields[i], m_aParams[i]);
+                sItem = (m_aiCondFields != null && m_aiCondFields[i] != null) ? m_aiCondFields[i].getExpression(m_asFindFields[i], m_aParams[i]) : null;
                 if (sItem != null) {
                     if (sFilter.length() > 0) {
                         sFilter.append(" AND ");

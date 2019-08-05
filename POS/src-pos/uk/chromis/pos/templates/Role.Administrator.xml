@@ -68,6 +68,7 @@
 	<class name="/uk/chromis/reports/newproducts.bs"/>
 	<class name="uk.chromis.pos.epm.JPanelEmployeePresence"/>
 	<class name="uk.chromis.pos.customers.CustomersPanel"/>
+        <class name="uk.chromis.pos.customers.SuppliersPanel"/>
 	<class name="/uk/chromis/reports/closedpos_1.bs"/>
 	<class name="/uk/chromis/reports/updatedprices.bs"/>
 	<class name="uk.chromis.pos.forms.MenuStockManagement"/>
@@ -103,7 +104,7 @@
 	<class name="uk.chromis.pos.forms.MenuMaintenance"/>
 	<class name="/uk/chromis/reports/customersdiary.bs"/>
 	<class name="sales.PrintTicket"/>
-	<class name="uk.chromis.pos.forms.MenuSalesManagement"/>
+	<class name="uk.chromis.pos.forms.Reports"/>
 	<class name="/uk/chromis/reports/promotions.bs"/>
 	<class name="uk.chromis.pos.inventory.TaxCategoriesPanel"/>
 	<class name="/uk/chromis/reports/invalidcategory.bs"/>
@@ -128,6 +129,7 @@
 	<class name="sales.EditTicket"/>
 	<class name="/uk/chromis/reports/salecatalog.bs"/>
 	<class name="uk.chromis.pos.forms.MenuCustomers"/>
+        <class name="uk.chromis.pos.forms.MenuSuppliers"/>
 	<class name="uk.chromis.pos.inventory.CategoriesPanel"/>
 	<class name="/uk/chromis/reports/bestsellers.bs"/>
 	<class name="refund.cash"/>
@@ -135,9 +137,13 @@
 	<class name="/uk/chromis/reports/people.bs"/>
 	<class name="/uk/chromis/reports/top10sales.bs"/>
 	<class name="/uk/chromis/reports/barcodesheet.bs"/>
+        <class name="/uk/chromis/reports/suppliers.bs"/>
+        <class name="/uk/chromis/reports/suppliersbalance.bs"/>
+        <class name="/uk/chromis/reports/supplierstransactions.bs"/>
+        <class name="/uk/chromis/reports/supplierproducts.bs"/>
         <class name="uk.chromis.pos.sales.JPanelUnlockTables"/>
         <class name="uk.chromis.pos.suppliers.SuppliersPanel"/>
         <class name="uk.chromis.pos.suppliers.PurchasesPanel"/>
         <class name="uk.chromis.pos.suppliers.SupplierPaymentPanel"/>
-        <class name="uk.chromis.pos.forms.MenuSuppliers"/>
+        <class name="uk.chromis.pos.forms.SuppliersPanel"/>
  </permissions>        

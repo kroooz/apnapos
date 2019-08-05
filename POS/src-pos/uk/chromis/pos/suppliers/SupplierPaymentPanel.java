@@ -12,8 +12,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import uk.chromis.basic.BasicException;
 import uk.chromis.data.gui.ComboBoxValModel;
+import uk.chromis.data.loader.Datas;
 import uk.chromis.data.loader.SentenceList;
+import uk.chromis.data.loader.SerializerWriteBasic;
 import uk.chromis.data.loader.Session;
+import uk.chromis.data.loader.StaticSentence;
 import uk.chromis.data.loader.Transaction;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.forms.AppLocal;
@@ -42,7 +45,7 @@ public class SupplierPaymentPanel extends javax.swing.JPanel implements JPanelVi
     private String localGuid;
     private SentenceList m_sentsuppliers;
     private ComboBoxValModel m_SupplierModel;
-    private Object total;
+    private double total;
     private double paidThroughCash;
     private double paidThroughCard;
     private double paidThroughCheque;
@@ -298,17 +301,18 @@ public class SupplierPaymentPanel extends javax.swing.JPanel implements JPanelVi
         
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
-    private void savePayment() {
+    private void savePayment() throws Exception {
         
         String supplierId = m_SupplierModel.getSelectedKey().toString();
-        
         try
         {
+            int entryNumber = this.dlSystem.getEntryNumber(AppLocal.paymentTypeString);
+            
             if(paidThroughCash != 0) {
                 dlReceiptsAndPayments.makePaymentOrReceiptEntry(
                     AppLocal.paymentThroughCash, 
                     -paidThroughCash, 
-                    null,
+                    Integer.toString(entryNumber),
                     supplierId,
                     AppLocal.supplierTypeString,
                     this.txtAreaPaymentDescription.getText(),
@@ -319,7 +323,7 @@ public class SupplierPaymentPanel extends javax.swing.JPanel implements JPanelVi
                 dlReceiptsAndPayments.makePaymentOrReceiptEntry(
                     AppLocal.paymentThroughCard, 
                     -paidThroughCard, 
-                    null,
+                    Integer.toString(entryNumber),
                     supplierId,
                     AppLocal.supplierTypeString,
                     this.txtAreaPaymentDescription.getText(),
@@ -330,16 +334,21 @@ public class SupplierPaymentPanel extends javax.swing.JPanel implements JPanelVi
                 dlReceiptsAndPayments.makePaymentOrReceiptEntry(
                     AppLocal.paymentThroughCheque, 
                     -paidThroughCheque, 
-                    null,
+                    Integer.toString(entryNumber),
                     supplierId,
                     AppLocal.supplierTypeString,
                     this.txtAreaPaymentDescription.getText(),
                     dpPurchaseDate.getDate());
             }
+            
+            new StaticSentence(s, "UPDATE SUPPLIERS SET CURRENT_BALANCE = COALESCE(CURRENT_BALANCE, 0) - ? WHERE ID = ?", new SerializerWriteBasic(new Datas[]{
+                Datas.DOUBLE, Datas.STRING}))
+                .exec( (Double)this.total, supplierId );
         }
         catch(Exception ex)
         {
             JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            throw ex;
         }
     }
     
