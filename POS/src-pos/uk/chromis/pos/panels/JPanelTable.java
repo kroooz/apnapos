@@ -223,7 +223,7 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
         container.setLayout(new java.awt.BorderLayout());
 
         toolbar.setMinimumSize(null);
-        toolbar.setPreferredSize(new java.awt.Dimension(0, 180));
+        toolbar.setPreferredSize(new java.awt.Dimension(0, 100));
         toolbar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
         container.add(toolbar, java.awt.BorderLayout.NORTH);
 

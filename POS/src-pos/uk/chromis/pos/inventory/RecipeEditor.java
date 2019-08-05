@@ -250,25 +250,37 @@ public class RecipeEditor extends javax.swing.JPanel implements EditorRecord {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         m_jReference = new javax.swing.JTextField();
+        m_jBarcode = new javax.swing.JTextField();
+        m_jProduct = new javax.swing.JTextField();
+        m_jQuantity = new javax.swing.JTextField();
         m_jEnter1 = new javax.swing.JButton();
         m_jEnter2 = new javax.swing.JButton();
         m_jSearch = new javax.swing.JButton();
-        m_jProduct = new javax.swing.JTextField();
-        m_jBarcode = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        m_jQuantity = new javax.swing.JTextField();
 
         setPreferredSize(new java.awt.Dimension(700, 100));
         setLayout(null);
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(AppLocal.getIntString("title.addItemsInAbovePackageCarton"))); // NOI18N
+
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText(AppLocal.getIntString("label.prodref")); // NOI18N
         jLabel3.setPreferredSize(new java.awt.Dimension(70, 25));
-        add(jLabel3);
-        jLabel3.setBounds(10, 11, 70, 25);
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel5.setText(AppLocal.getIntString("label.prodbarcode")); // NOI18N
+        jLabel5.setPreferredSize(new java.awt.Dimension(70, 25));
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText(AppLocal.getIntString("label.name")); // NOI18N
+        jLabel4.setPreferredSize(new java.awt.Dimension(70, 25));
+
+        jLabel1.setText("Quantity");
 
         m_jReference.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jReference.setPreferredSize(new java.awt.Dimension(150, 25));
@@ -277,41 +289,6 @@ public class RecipeEditor extends javax.swing.JPanel implements EditorRecord {
                 m_jReferenceActionPerformed(evt);
             }
         });
-        add(m_jReference);
-        m_jReference.setBounds(90, 11, 150, 25);
-
-        m_jEnter1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/ok.png"))); // NOI18N
-        m_jEnter1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jEnter1ActionPerformed(evt);
-            }
-        });
-        add(m_jEnter1);
-        m_jEnter1.setBounds(250, 11, 57, 33);
-
-        m_jEnter2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/barcode.png"))); // NOI18N
-        m_jEnter2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jEnter2ActionPerformed(evt);
-            }
-        });
-        add(m_jEnter2);
-        m_jEnter2.setBounds(557, 11, 55, 31);
-
-        m_jSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/search24.png"))); // NOI18N
-        m_jSearch.setPreferredSize(new java.awt.Dimension(58, 34));
-        m_jSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_jSearchActionPerformed(evt);
-            }
-        });
-        add(m_jSearch);
-        m_jSearch.setBounds(10, 50, 58, 34);
-
-        m_jProduct.setEditable(false);
-        m_jProduct.setPreferredSize(new java.awt.Dimension(200, 25));
-        add(m_jProduct);
-        m_jProduct.setBounds(90, 50, 217, 25);
 
         m_jBarcode.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jBarcode.setPreferredSize(new java.awt.Dimension(150, 25));
@@ -320,20 +297,99 @@ public class RecipeEditor extends javax.swing.JPanel implements EditorRecord {
                 m_jBarcodeActionPerformed(evt);
             }
         });
-        add(m_jBarcode);
-        m_jBarcode.setBounds(397, 11, 150, 25);
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText(AppLocal.getIntString("label.prodbarcode")); // NOI18N
-        jLabel4.setPreferredSize(new java.awt.Dimension(70, 25));
-        add(jLabel4);
-        jLabel4.setBounds(317, 11, 70, 25);
+        m_jProduct.setEditable(false);
+        m_jProduct.setPreferredSize(new java.awt.Dimension(150, 25));
 
-        jLabel1.setText("Quantity");
-        add(jLabel1);
-        jLabel1.setBounds(320, 50, 60, 14);
-        add(m_jQuantity);
-        m_jQuantity.setBounds(400, 50, 150, 20);
+        m_jQuantity.setPreferredSize(new java.awt.Dimension(150, 25));
+
+        m_jEnter1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/ok.png"))); // NOI18N
+        m_jEnter1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jEnter1ActionPerformed(evt);
+            }
+        });
+
+        m_jEnter2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/barcode.png"))); // NOI18N
+        m_jEnter2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jEnter2ActionPerformed(evt);
+            }
+        });
+
+        m_jSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/search24.png"))); // NOI18N
+        m_jSearch.setPreferredSize(new java.awt.Dimension(58, 34));
+        m_jSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jSearchActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(m_jReference, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(m_jEnter1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(m_jBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(m_jEnter2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(m_jProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(m_jSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(m_jQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(m_jReference, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(m_jEnter1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(m_jBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(m_jEnter2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(m_jProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(m_jSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel1))
+                    .addComponent(m_jQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 8, Short.MAX_VALUE))
+        );
+
+        add(jPanel1);
+        jPanel1.setBounds(10, 10, 450, 240);
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jSearchActionPerformed
@@ -363,6 +419,8 @@ public class RecipeEditor extends javax.swing.JPanel implements EditorRecord {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField m_jBarcode;
     private javax.swing.JButton m_jEnter1;
     private javax.swing.JButton m_jEnter2;

@@ -57,15 +57,14 @@ public class JDialogTillBranchSyncConfig extends javax.swing.JDialog {
         dirname = System.getProperty("dirname.path");
         dirname = dirname == null ? "./" : dirname;
         
-        jComboBoxDbEngine.addItem("Apache Derby Embedded");
+        //jComboBoxDbEngine.addItem("Apache Derby Embedded");
         jComboBoxDbEngine.addItem("MySQL");
-        jComboBoxDbEngine.addItem("PostgreSQL");
+        //jComboBoxDbEngine.addItem("PostgreSQL");
         jComboBoxDbEngine.setSelectedIndex(0);
         
-        jTextFieldURL.setText("jdbc:derby:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-database").getAbsolutePath() + ";create=false");
-        
-        jTextFieldDriverLibrary.setText(new File(new File(dirname), "lib/derby-10.10.2.0.jar").getAbsolutePath());
-        jTextFieldDriverClass.setText("org.apache.derby.jdbc.EmbeddedDriver");
+        jTextFieldURL.setText("jdbc:mysql://localhost:3306/apnapos");
+        jTextFieldDriverLibrary.setText(new File(new File(dirname), "lib/mysql-connector-java-5.1.42.jar").getAbsolutePath());
+        jTextFieldDriverClass.setText("com.mysql.jdbc.Driver");
         
         loadProperties();
     }

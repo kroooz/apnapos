@@ -184,11 +184,11 @@ public class JDlgEditProduct extends javax.swing.JDialog {
 
         jPanel1.setLayout(null);
         jPanel1.add(jPanelEditor);
-        jPanelEditor.setBounds(0, 0, 620, 480);
+        jPanelEditor.setBounds(10, 0, 730, 480);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        setSize(new java.awt.Dimension(634, 566));
+        setSize(new java.awt.Dimension(770, 591));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

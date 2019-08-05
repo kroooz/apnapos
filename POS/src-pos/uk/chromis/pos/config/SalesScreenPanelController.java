@@ -84,6 +84,8 @@ public class SalesScreenPanelController implements Initializable, BaseController
     public TextField txbSearch;
     public TextField txbEditLine;
     public TextField txbEditQuantity;
+    public TextField txbLineDiscount;
+    public TextField txbTotalDiscount;
 
     protected BooleanProperty dirty = new SimpleBooleanProperty();
 
@@ -177,6 +179,8 @@ public class SalesScreenPanelController implements Initializable, BaseController
             this.txbSearch.setText(AppConfig.getInstance().getProperty("sales_shortkeys.search"));
             this.txbEditLine.setText(AppConfig.getInstance().getProperty("sales_shortkeys.editline"));
             this.txbEditQuantity.setText(AppConfig.getInstance().getProperty("sales_shortkeys.editquantity"));
+            this.txbLineDiscount.setText(AppConfig.getInstance().getProperty("sales_shortkeys.linediscount"));
+            this.txbTotalDiscount.setText(AppConfig.getInstance().getProperty("sales_shortkeys.totaldiscount"));
         }
         catch(Exception ex)
         {
@@ -205,6 +209,8 @@ public class SalesScreenPanelController implements Initializable, BaseController
         AppConfig.getInstance().setProperty("sales_shortkeys.search", this.txbSearch.getText());
         AppConfig.getInstance().setProperty("sales_shortkeys.editline", this.txbEditLine.getText());
         AppConfig.getInstance().setProperty("sales_shortkeys.editquantity", this.txbEditQuantity.getText());
+        AppConfig.getInstance().setProperty("sales_shortkeys.linediscount", this.txbLineDiscount.getText());
+        AppConfig.getInstance().setProperty("sales_shortkeys.totaldiscount", this.txbTotalDiscount.getText());
         
         dirty.set(false);
     }

@@ -104,8 +104,10 @@ public class CreatePermissions implements liquibase.change.custom.CustomTaskChan
         startPerms.add("sales.PrintTicket");
         startPerms.add("sales.Total");
         startPerms.add("uk.chromis.pos.customers.CustomersPanel");
+        startPerms.add("uk.chromis.pos.customers.SuppliersPanel");
         startPerms.add("uk.chromis.pos.forms.MenuCustomers");
-        startPerms.add("uk.chromis.pos.forms.MenuSalesManagement");
+        startPerms.add("uk.chromis.pos.forms.MenuSuppliers");
+        startPerms.add("uk.chromis.pos.forms.Reports");
         startPerms.add("uk.chromis.pos.forms.MenuStockManagement");
         startPerms.add("uk.chromis.pos.inventory.AuxiliarPanel");
         startPerms.add("uk.chromis.pos.inventory.CategoriesPanel");
@@ -232,7 +234,6 @@ public class CreatePermissions implements liquibase.change.custom.CustomTaskChan
         startPerms.add("sales.EditLines");
         startPerms.add("sales.EditTicket");
         startPerms.add("uk.chromis.pos.admin.RolesPanelNew");
-        startPerms.add("uk.chromis.pos.forms.MenuSuppliers");
         startPerms.add("uk.chromis.pos.inventory.RecipePanel");
         startPerms.add("uk.chromis.pos.sales.JPanelResetPickupId");
         startPerms.add("uk.chromis.pos.sales.JPanelTicketSales");

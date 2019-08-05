@@ -25,7 +25,11 @@ package uk.chromis.editor;
 import java.awt.ComponentOrientation;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.EventListener;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.event.EventListenerList;
 import uk.chromis.pos.customers.JCustomerFinder;
 
@@ -97,6 +101,8 @@ public class JEditorKeys extends javax.swing.JPanel implements EditorKeys {
         editorcurrent = null;
         setMode(MODE_STRING);
         doEnabled(false);
+        
+        
     }
 
     @Override
@@ -336,6 +342,11 @@ public class JEditorKeys extends javax.swing.JPanel implements EditorKeys {
         m_jCE.setFocusable(false);
         m_jCE.setMargin(new java.awt.Insets(8, 16, 8, 16));
         m_jCE.setRequestFocusEnabled(false);
+        m_jCE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jCEActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -459,6 +470,9 @@ public class JEditorKeys extends javax.swing.JPanel implements EditorKeys {
             }
         });
         m_txtKeys.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                m_txtKeysKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 m_txtKeysKeyTyped(evt);
             }
@@ -468,6 +482,10 @@ public class JEditorKeys extends javax.swing.JPanel implements EditorKeys {
 
     private void m_txtKeysKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_m_txtKeysKeyTyped
 
+        char a = evt.getKeyChar();
+        int x = a;
+        System.out.println(a);
+        System.out.println(x);
         // como contenedor de editores solo
         if (editorcurrent != null) {
             m_txtKeys.setText("0");
@@ -495,6 +513,18 @@ public class JEditorKeys extends javax.swing.JPanel implements EditorKeys {
         setInactive(editorcurrent);
 
     }//GEN-LAST:event_m_txtKeysFocusLost
+
+    private void m_txtKeysKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_m_txtKeysKeyPressed
+        
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            editorcurrent.transChar('\u007f');
+        }
+        
+    }//GEN-LAST:event_m_txtKeysKeyPressed
+
+    private void m_jCEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jCEActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_m_jCEActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

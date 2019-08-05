@@ -47,6 +47,7 @@ public class AppLocal {
     public static final String paymentThroughCheque = "cheque";
     public static final String settingUseWeightedAverageCosting = "use_weighted_average_costing";
     public static final String settingDontAllowSalesIfNotEnoughQuantity = "dont_allow_sales_if_not_enough_quantity";
+    public static final String settingShowBuyPrice = "show_buy_price";
 
     static {
         m_resources = new LocaleResources();

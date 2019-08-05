@@ -236,6 +236,8 @@ public class JTicketLines extends javax.swing.JPanel {
             // Solo seleccionamos si podemos.
             setSelectedIndex(i);
         }
+        
+        JPanelTicket.lastMergedRowIndex--;
     }
 
     /**

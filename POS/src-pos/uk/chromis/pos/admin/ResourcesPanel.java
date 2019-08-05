@@ -80,10 +80,12 @@ public class ResourcesPanel extends JPanelTable2 {
                 new Field("SITEGUID", Datas.STRING, Formats.STRING)
         );
 
+        
+        String visibleResourcesQuery = " AND NAME IN ('Ticket.Line', 'Printer.Ticket', 'Printer.ReprintTicket', 'Printer.ReprintLastTicket', 'Printer.Ticket.Logo', 'img.reportlogo') ";
         lpr = new ListProviderCreator(new PreparedSentence(app.getSession(),
                 "SELECT ID, NAME, RESTYPE, CONTENT, SITEGUID "
                 + "FROM RESOURCES "
-                + "WHERE SITEGUID = ? "
+                + "WHERE SITEGUID = ? " + visibleResourcesQuery
                 + "ORDER BY LOWER (NAME)",
                 new SerializerWriteBasicExt(new Datas[]{Datas.OBJECT, Datas.STRING}, new int[]{1}),
                 new ResourceSerializerRead()

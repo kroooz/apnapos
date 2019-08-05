@@ -426,7 +426,10 @@ public class BrowsableEditableData {
      */
     public boolean actionClosingForm(Component c) throws BasicException {
         if (m_Dirty.isDirty()) {
-            int res = JOptionPane.showConfirmDialog(c, LocalRes.getIntString("message.wannasave"), LocalRes.getIntString("title.editor"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            //int res = JOptionPane.showConfirmDialog(c, LocalRes.getIntString("message.wannasave"), LocalRes.getIntString("title.editor"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            
+            int res = JOptionPane.NO_OPTION;
+            
             if (res == JOptionPane.YES_OPTION) {
                 saveData();
                 return true;

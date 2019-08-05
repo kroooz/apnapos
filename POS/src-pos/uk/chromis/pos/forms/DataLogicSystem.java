@@ -345,7 +345,9 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     }
 
     public final AppUser findPeopleByCard(String card) throws BasicException {
-        return (AppUser) m_peoplebycard.find(card);
+         AppUser user = (AppUser) m_peoplebycard.find(card);
+         user.fillPermissions(this, null);
+         return user;
     }
 
     public final AppUser getsuperuser() throws BasicException {
@@ -736,5 +738,41 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         {
             JOptionPane.showMessageDialog(null, "Error occurred in setting Setting Value for key: ["+key+"], Error: " + ex.getMessage());
         }
+    }
+
+    public int getEntryNumber(String paymentTypeString) throws Exception {
+        
+        try
+        {
+            int count = (int)new StaticSentence(s,
+                "SELECT COUNT(*) FROM SEQUENCE WHERE ENTRYTYPE = ?",
+                SerializerWriteString.INSTANCE,
+                SerializerReadInteger.INSTANCE).find(paymentTypeString);
+            
+            if(count == 0) {
+                new StaticSentence(s,
+                    "INSERT INTO SEQUENCE (ENTRYTYPE, NUMBER) VALUES ('"+paymentTypeString+"', 1)",
+                    null,
+                    null).exec();
+            }
+            
+            int val = (int)new StaticSentence(s,
+                "SELECT NUMBER FROM SEQUENCE WHERE ENTRYTYPE = ?",
+                SerializerWriteString.INSTANCE,
+                SerializerReadInteger.INSTANCE).find(paymentTypeString);
+            
+            new StaticSentence(s,
+                    "UPDATE SEQUENCE SET NUMBER = NUMBER + 1 WHERE ENTRYTYPE='"+paymentTypeString+"'",
+                    null,
+                    null).exec();
+            
+            return val;
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "Error occurred in getting entry number for entrytype: ["+paymentTypeString+"], Error: " + ex.getMessage());
+            throw ex;
+        }
+        
     }
 }

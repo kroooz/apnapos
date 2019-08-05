@@ -74,7 +74,9 @@
     <class name="button.scharge"/>
 
     <class name="uk.chromis.pos.forms.MenuCustomers"/>
+    <class name="uk.chromis.pos.forms.MenuSuppliers"/>
     <class name="uk.chromis.pos.customers.CustomersPanel"/>
+    <class name="uk.chromis.pos.customers.SuppliersPanel"/>
     <class name="/uk/chromis/reports/customers.bs"/>
     <class name="/uk/chromis/reports/customersb.bs"/>
     <class name="/uk/chromis/reports/customersdebtors.bs"/>
@@ -99,6 +101,10 @@
     <class name="uk.chromis.pos.inventory.TaxPanel"/>
 
     <class name="/uk/chromis/reports/barcodesheet.bs"/>
+    <class name="/uk/chromis/reports/suppliers.bs"/>
+    <class name="/uk/chromis/reports/suppliersbalance.bs"/>
+        <class name="/uk/chromis/reports/supplierstransactions.bs"/>
+    <class name="/uk/chromis/reports/supplierproducts.bs"/>
     <class name="/uk/chromis/reports/inventory.bs"/>
     <class name="/uk/chromis/reports/inventoryb.bs"/>
     <class name="/uk/chromis/reports/inventorybroken.bs"/>
@@ -112,7 +118,7 @@
     <class name="/uk/chromis/reports/salecatalog.bs"/>
     <class name="/uk/chromis/reports/shelfedgelabels.bs"/>
 
-    <class name="uk.chromis.pos.forms.MenuSalesManagement"/>
+    <class name="uk.chromis.pos.forms.Reports"/>
     <class name="/uk/chromis/reports/cashflow.bs"/>
     <class name="/uk/chromis/reports/cashregisterlog.bs"/>
     <class name="/uk/chromis/reports/categorysales.bs"/>

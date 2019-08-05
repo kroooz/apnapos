@@ -651,7 +651,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         Properties m_propsdb = m_dlSystem.getResourceAsProperties(AppConfig.getInstance().getHost() + "/properties");
         return new StaticSentence(s, new QBFBuilder(
                 "SELECT "
-                + "P.ID, "
+                + "DISTINCT P.ID, "
                 + "P.REFERENCE, "
                 + "P.CODE, "
                 + "P.CODETYPE, "
@@ -1266,7 +1266,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 }
                 );
 
-                SentenceExec ticketlineinsert = new PreparedSentence(s, "INSERT INTO TICKETLINES (TICKET, LINE, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, TAXID, ATTRIBUTES, REFUNDQTY, TAXRATE, TAXAMOUNT, COMMISSION, COST) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteBuilder.INSTANCE);
+                SentenceExec ticketlineinsert = new PreparedSentence(s, "INSERT INTO TICKETLINES (TICKET, LINE, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, TAXID, ATTRIBUTES, REFUNDQTY, TAXRATE, TAXAMOUNT, COMMISSION, COST, DISCOUNT, DISCOUNT_BY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteBuilder.INSTANCE);
 
                 String hostname = AppConfig.getInstance().getProperty("machine.hostname");
                 Properties prop = m_dlSystem.getResourceAsProperties(hostname + "/properties");
@@ -1296,6 +1296,9 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
                     ticketlineinsert.exec(l);
 
+                    String s = l.getProductID();
+                    boolean b = l.getManageStock();
+                    
                     if (l.getProductID() != null && l.isProductService() != true
                             && l.getManageStock() == true) {
 
@@ -1760,6 +1763,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         } else {
 
             int updateresult;
+            params[3] = params[3] == null ? 0d : params[3];
             if ((Double) params[3] > 0.00) {
                 updateresult = ((Object[]) params)[2] == null // si ATTRIBUTESETINSTANCE_ID is null
                         ? new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID IS NULL AND SITEGUID = ? ", new SerializerWriteBasicExt(stockAdjustDatas, new int[]{3, 0, 1, 4})).exec(params)
@@ -1770,7 +1774,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         : new PreparedSentence(s, "UPDATE STOCKCURRENT SET UNITS = (UNITS + ?) WHERE LOCATION = ? AND PRODUCT = ? AND ATTRIBUTESETINSTANCE_ID = ? AND SITEGUID = ? ", new SerializerWriteBasicExt(stockAdjustDatas, new int[]{3, 0, 1, 2, 4})).exec(params);
 
             }
-            if (updateresult == 0) {
+            if (updateresult == 0 && params[0] != null) {
                 new PreparedSentence(s, "INSERT INTO STOCKCURRENT (LOCATION, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, SITEGUID) VALUES (?, ?, ?, ?, ?)", new SerializerWriteBasicExt(stockAdjustDatas, new int[]{0, 1, 2, 3, 4})).exec(params);
             }
             return 1;

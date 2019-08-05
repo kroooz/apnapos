@@ -92,7 +92,10 @@ public class DatabasePanelController implements Initializable, BaseController {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         dirty.bindBidirectional(databaseDetails.dirty);
-        ObservableList<String> dbEngines = FXCollections.observableArrayList("Apache Derby Embedded", "MySQL", "PostgreSQL");
+        
+        //ObservableList<String> dbEngines = FXCollections.observableArrayList("Apache Derby Embedded", "MySQL", "PostgreSQL");
+        ObservableList<String> dbEngines = FXCollections.observableArrayList("MySQL");
+        
         databaseDetails.setLabel("Database Engine");
         databaseDetails.setWidthSizes(120.0, 400.0);
         databaseDetails.addItemList(dbEngines);
