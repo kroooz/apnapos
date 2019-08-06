@@ -2137,6 +2137,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
                 this.checkQuantity(i);
                 this.refreshTicket(true);
+                this.setSelectedIndex(i);
             } else if (cTrans == '-'
                     && m_iNumberStatusInput == NUMBERZERO && m_iNumberStatusPor == NUMBERZERO ) {
                 
