@@ -471,14 +471,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private void hideButtonsIfNoPermission(){
         
         
-        
-        boolean lineDiscountPermission = m_App.getAppUserView().getUser().hasPermission("button.linediscount");
-        boolean totalDiscountPermission = m_App.getAppUserView().getUser().hasPermission("button.totaldiscount");
-        
-        jLineDiscount.setVisible(lineDiscountPermission);
-        jTotalDiscount.setVisible(totalDiscountPermission);
-        
-        
         jEditAttributes.setVisible(false);
         
         boolean editLinePermission = m_App.getAppUserView().getUser().hasPermission("sales.EditLines");
@@ -1103,6 +1095,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         if (m_oTicket != null) {
             m_jDelete.setVisible(m_oTicket.getTicketType() != TicketType.REFUND);
+            m_jEditQuantity.setVisible(m_oTicket.getTicketType() != TicketType.REFUND);
+            jLineDiscount.setVisible(m_oTicket.getTicketType() != TicketType.REFUND);
+            jTotalDiscount.setVisible(m_oTicket.getTicketType() != TicketType.REFUND);
         }
         CardLayout cl = (CardLayout) (getLayout());
 
@@ -1274,12 +1269,21 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             } else {
 
-                // if this a refund do not apply discount otherwise apply customer discount
-                if (m_oTicket.getTicketType().getId() != 1) {
-                    if (oLine.canDiscount() && m_oTicket.getDiscount() > 0.0) {
-                        oLine.setPrice(oLine.getPrice() - (oLine.getPrice() * m_oTicket.getDiscount()));
+                if (oLine.canDiscount() && m_oTicket.getDiscount() > 0.0) {
+
+                    if( m_oTicket.getTicketType().getId() == TicketType.REFUND.getId() ) {  // refund
+                     
+                        double priceBeforeDiscount = oLine.getPrice() / ( 1 -  m_oTicket.getDiscount());
+                        double discountAmount = priceBeforeDiscount * m_oTicket.getDiscount();
+                        oLine.setPrice(priceBeforeDiscount);
+                        oLine.setDiscount(discountAmount);
+                        
+                    } else {
+                        double discountAmount = oLine.getPrice() * m_oTicket.getDiscount();
+                        oLine.setDiscount(discountAmount);
                     }
                 }
+                
                 m_oTicket.addLine(oLine);
                 m_ticketlines.addTicketLine(oLine); // Pintamos la linea en la vista... 
 
@@ -1800,7 +1804,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                         options, options[1]) == 0) {
                                     // Apply this discount to all ticket lines  
                                     for (TicketLineInfo line : m_oTicket.getLines()) {
-                                        line.setPrice(line.getPrice() - (line.getPrice() * m_oTicket.getDiscount()));
+                                        
+                                        if(line.canDiscount()) {
+                                            double discountAmount = line.getPrice() * m_oTicket.getDiscount();
+                                            line.setDiscount(discountAmount);
+                                        }
+                                        
                                     }
                                     refreshTicket(false);
                                 }
@@ -3149,7 +3158,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         jLineDiscount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/line_discount.png"))); // NOI18N
         jLineDiscount.setText(bundle.getString("button.linediscount")); // NOI18N
-        jLineDiscount.setToolTipText(bundle.getString("tiptext.chooseattributes")); // NOI18N
+        jLineDiscount.setToolTipText(bundle.getString("button.linediscount")); // NOI18N
         jLineDiscount.setFocusPainted(false);
         jLineDiscount.setFocusable(false);
         jLineDiscount.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -3166,7 +3175,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         jTotalDiscount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/notes.png"))); // NOI18N
         jTotalDiscount.setText(bundle.getString("button.totaldiscount")); // NOI18N
-        jTotalDiscount.setToolTipText(bundle.getString("tiptext.chooseattributes")); // NOI18N
+        jTotalDiscount.setToolTipText(bundle.getString("button.totaldiscount")); // NOI18N
         jTotalDiscount.setFocusPainted(false);
         jTotalDiscount.setFocusable(false);
         jTotalDiscount.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -3683,7 +3692,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             options, options[1]) == 0) {
                         // Apply this discount to all ticket lines 
                         for (TicketLineInfo line : m_oTicket.getLines()) {
-                            line.setPrice(line.getPrice() - (line.getPrice() * m_oTicket.getDiscount()));
+                            
+                            double discountAmount = line.getPrice() * m_oTicket.getDiscount();
+                            line.setDiscount(discountAmount);
+                            
                         }
                         refreshTicket(false);
                     }
@@ -4047,6 +4059,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         
         if(linesCount == 0) {
             JOptionPane.showMessageDialog(null, "Please add items before giving discount");
+            return;
         }
         
         Double discountAmount = this.getNumberInput("Please enter discount amount", 0, (int) ticket.getTotal());

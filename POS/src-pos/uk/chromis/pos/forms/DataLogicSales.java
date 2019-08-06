@@ -1186,7 +1186,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                     ? null
                     : loadCustomerExt(customerid));
 
-            ticket.setLines(new PreparedSentence(s, "SELECT L.TICKET, L.LINE, L.PRODUCT, L.ATTRIBUTESETINSTANCE_ID, L.UNITS, L.PRICE, T.ID, T.NAME, T.CATEGORY, T.CUSTCATEGORY, T.PARENTID, T.RATE, T.RATECASCADE, T.RATEORDER, L.ATTRIBUTES, L.REFUNDQTY  "
+            ticket.setLines(new PreparedSentence(s, "SELECT L.TICKET, L.LINE, L.PRODUCT, L.ATTRIBUTESETINSTANCE_ID, L.UNITS, L.PRICE, T.ID, T.NAME, T.CATEGORY, T.CUSTCATEGORY, "
+                    + "T.PARENTID, T.RATE, T.RATECASCADE, T.RATEORDER, L.ATTRIBUTES, L.REFUNDQTY, COST, DISCOUNT, DISCOUNT_BY  "
                     + "FROM TICKETLINES L, TAXES T WHERE L.TAXID = T.ID AND L.TICKET = ? ORDER BY L.LINE", SerializerWriteString.INSTANCE, new SerializerReadClass(TicketLineInfo.class
                     )).list(ticket.getId()));
             ticket.setPayments(new PreparedSentence(s //                    , "SELECT PAYMENT, TOTAL, TRANSID TENDERED FROM PAYMENTS WHERE RECEIPT = ?" 
@@ -1274,6 +1275,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 String locationGuid = m_dlSync.getLocationGuid(loc);
                 
                 for (TicketLineInfo l : ticket.getLines()) {
+                    
+                    double d = l.getPriceBuy();
                     
                     // INSERT INTO DENORMALIZED SALES TABLE
                     new StaticSentence(s, "INSERT INTO SALES_DENORMALIZED ( ID, TICKET_ID, SALE_DATE, CATEGORY_ID, "

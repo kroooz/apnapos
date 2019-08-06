@@ -315,6 +315,9 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         } catch (IOException e) {
         }
         refundQty = dr.getDouble(16);
+        cost = dr.getDouble(17);
+        discount = dr.getDouble(18);
+        discountBy = dr.getString(19);
     }
 
     public TicketLineInfo copyTicketLine() {
@@ -464,6 +467,11 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     
     public double getDiscount() {
         return discount;
+    }
+    
+    public void setDiscount(double dValue) {
+        this.discount = dValue;
+        this.price -= this.discount;
     }
     
     public String getDiscountBy() {
@@ -646,6 +654,8 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     public void setDiscounted(String value) {
         attributes.setProperty("product.discounted", value);
     }
+    
+    
 
     public String printAlias() {
         return StringUtils.encodeXML(attributes.getProperty("product.alias"));
