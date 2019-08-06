@@ -457,6 +457,7 @@ public class JTicketsBagTicket extends JTicketsBag {
 
         for (int i = 0; i < m_ticket.getLinesCount(); i++) {
             TicketLineInfo newline = new TicketLineInfo(m_ticket.getLine(i));
+            double d = newline.getPriceBuy();
             newline.setRefundTicket(m_ticket.getLine(i).getTicket(), m_ticket.getLine(i).getTicketLine());
             newline.setMultiply(newline.getMultiply() - newline.getRefundQty());
             newline.setOrderQty(newline.getMultiply() + newline.getRefundQty());

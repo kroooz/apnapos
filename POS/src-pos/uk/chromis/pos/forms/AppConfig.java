@@ -256,6 +256,8 @@ public class AppConfig implements AppProperties {
         m_propsconfig.setProperty("sales_shortkeys.search", "F6");
         m_propsconfig.setProperty("sales_shortkeys.editquantity", "F7");
         m_propsconfig.setProperty("sales_shortkeys.editline", "F8");
+        m_propsconfig.setProperty("sales_shortkeys.linediscount", "F9");
+        m_propsconfig.setProperty("sales_shortkeys.totaldiscount", "F10");
 
     }
 

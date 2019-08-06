@@ -69,6 +69,10 @@ public class JRefundLines extends javax.swing.JPanel {
         ticketlines.clearTicketLines();
         if (m_aLines != null) {
             for (Object m_aLine : m_aLines) {
+                
+                TicketLineInfo line = (TicketLineInfo) m_aLine;
+                double d = line.getPriceBuy();
+                
                 ticketlines.addTicketLine((TicketLineInfo) m_aLine);
             }
         }
