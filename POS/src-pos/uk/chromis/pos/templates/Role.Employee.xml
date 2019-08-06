@@ -54,12 +54,10 @@
     <!--<class name="sales.PrintKitchen"/>-->
 
     <!-- Standard button scripts -->
-    <class name="button.totaldiscount"/>
     <class name="button.print"/>
     <class name="button.opendrawer"/>
     
     <!-- Additional button scripts -->
-    <class name="button.linediscount"/>
     <class name="button.sendorder"/>
 
     <class name="uk.chromis.pos.forms.MenuCustomers"/>
