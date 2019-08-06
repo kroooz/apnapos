@@ -1250,8 +1250,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         setString(5, ticket.getUser().getId());
 
                     }
-                }
-                );
+                });
 
                 // new ticket
                 new PreparedSentence(s, "INSERT INTO TICKETS (ID, TICKETTYPE, TICKETID, PERSON, CUSTOMER) VALUES (?, ?, ?, ?, ?)", SerializerWriteParams.INSTANCE
@@ -1264,8 +1263,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         setString(4, ticket.getUser().getId());
                         setString(5, ticket.getCustomerId());
                     }
-                }
-                );
+                });
 
                 SentenceExec ticketlineinsert = new PreparedSentence(s, "INSERT INTO TICKETLINES (TICKET, LINE, PRODUCT, ATTRIBUTESETINSTANCE_ID, UNITS, PRICE, TAXID, ATTRIBUTES, REFUNDQTY, TAXRATE, TAXAMOUNT, COMMISSION, COST, DISCOUNT, DISCOUNT_BY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SerializerWriteBuilder.INSTANCE);
 
@@ -1325,7 +1323,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         //Code to resolve refundit issue
                         if (ticket.getTicketType().toString().equals("REFUND" )) {
                             reason = 2;
-                            amount = l.getMultiply();
+                            
+                            //amount = l.getMultiply();
+                            
+                            amount = -l.getMultiply();  // added - sign to fix inventory problem
                         }                        
                         
                         getStockDiaryInsert().exec(new Object[]{
