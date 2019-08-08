@@ -621,6 +621,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             });
         }
+        
+        //CLOSE BILL
+        this.jbtnCloseBill.setText( this.jbtnCloseBill.getText() + " (=)" );
     }
     
     private void makeButtonsLabelsUpperCase()
@@ -2258,41 +2261,45 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 ProductInfoExt product = getInputProduct();
                 addTicketLine(product, getPorValue(), -product.getPriceSell());
             } else if (cTrans == ' ' || cTrans == '=') {
-                if (m_oTicket.getLinesCount() > 0) {
-                    if (closeTicket(m_oTicket, m_oTicketExt)) {
-                        if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
-                            try {
-                                JRefundLines.updateRefunds();
-                            } catch (BasicException ex) {
-                                //  Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                        m_ticketsbag.deleteTicket();
-
-                        if ((!("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag")))
-                                && autoLogoffEnabled
-                                && autoLogoffAfterSales)) {
-                            ((JRootApp) m_App).closeAppView();
-                        } else if (("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag")))
-                                && autoLogoffEnabled
-                                && autoLogoffAfterSales
-                                && !autoLogoffToTables) {
-                            ((JRootApp) m_App).closeAppView();
-                        }
-                    } else {
-                        refreshTicket(false);
-                    }
-                } else if (AppConfig.getInstance().getBoolean("till.customsounds")) {
-                    new PlayWave("error.wav").start(); // playing WAVE file 
-                } else {
-                    Toolkit.getDefaultToolkit().beep();
-                }
+                closeButtonClicked();
             } else if (!Character.isDigit(cTrans)) {
                 m_iNumberStatusInput = NUMBERINVALID;
             }
         }
         
         
+    }
+    
+    private void closeButtonClicked() {
+        if (m_oTicket.getLinesCount() > 0) {
+            if (closeTicket(m_oTicket, m_oTicketExt)) {
+                if (m_oTicket.getTicketType().equals(TicketType.REFUND)) {
+                    try {
+                        JRefundLines.updateRefunds();
+                    } catch (BasicException ex) {
+                        //  Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                m_ticketsbag.deleteTicket();
+
+                if ((!("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag")))
+                        && autoLogoffEnabled
+                        && autoLogoffAfterSales)) {
+                    ((JRootApp) m_App).closeAppView();
+                } else if (("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag")))
+                        && autoLogoffEnabled
+                        && autoLogoffAfterSales
+                        && !autoLogoffToTables) {
+                    ((JRootApp) m_App).closeAppView();
+                }
+            } else {
+                refreshTicket(false);
+            }
+        } else if (AppConfig.getInstance().getBoolean("till.customsounds")) {
+            new PlayWave("error.wav").start(); // playing WAVE file 
+        } else {
+            Toolkit.getDefaultToolkit().beep();
+        }
     }
 
     private boolean closeTicket(TicketInfo ticket, Object ticketext) {
@@ -2867,6 +2874,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jPanContainer = new javax.swing.JPanel();
         m_jOptions = new javax.swing.JPanel();
         jPanelLogout = new javax.swing.JPanel();
+        jbtnCloseBill = new javax.swing.JButton();
         jbtnLogout = new javax.swing.JButton();
         m_jButtons = new javax.swing.JPanel();
         btnCustomer = new javax.swing.JButton();
@@ -2936,14 +2944,34 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         jPanelLogout.setLayout(new javax.swing.BoxLayout(jPanelLogout, javax.swing.BoxLayout.LINE_AXIS));
 
-        jbtnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/exit.png"))); // NOI18N
+        jbtnCloseBill.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/cash.png"))); // NOI18N
+        jbtnCloseBill.setText(AppLocal.getIntString("tiptext.closebill")); // NOI18N
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jbtnCloseBill.setToolTipText(bundle.getString("tiptext.closebill")); // NOI18N
+        jbtnCloseBill.setFocusPainted(false);
+        jbtnCloseBill.setFocusable(false);
+        jbtnCloseBill.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbtnCloseBill.setMargin(null);
+        jbtnCloseBill.setMinimumSize(new java.awt.Dimension(50, 40));
+        jbtnCloseBill.setRequestFocusEnabled(false);
+        jbtnCloseBill.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jbtnCloseBill.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnCloseBillbtnLogout(evt);
+            }
+        });
+        jPanelLogout.add(jbtnCloseBill);
+
+        jbtnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/exit.png"))); // NOI18N
+        jbtnLogout.setText(AppLocal.getIntString("tiptext.logout")); // NOI18N
         jbtnLogout.setToolTipText(bundle.getString("tiptext.logout")); // NOI18N
         jbtnLogout.setFocusPainted(false);
         jbtnLogout.setFocusable(false);
-        jbtnLogout.setMargin(new java.awt.Insets(5, 4, 5, 4));
+        jbtnLogout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbtnLogout.setMargin(null);
         jbtnLogout.setMinimumSize(new java.awt.Dimension(50, 40));
         jbtnLogout.setRequestFocusEnabled(false);
+        jbtnLogout.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jbtnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogout(evt);
@@ -4092,6 +4120,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }//GEN-LAST:event_jTotalDiscountActionPerformed
 
+    private void jbtnCloseBillbtnLogout(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCloseBillbtnLogout
+        this.closeButtonClicked();
+    }//GEN-LAST:event_jbtnCloseBillbtnLogout
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCustomer;
@@ -4110,6 +4142,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private javax.swing.JPanel jPanelLogout;
     private javax.swing.JButton jTotalDiscount;
     private javax.swing.JButton j_btnKitchenPrt;
+    private javax.swing.JButton jbtnCloseBill;
     private javax.swing.JButton jbtnLogout;
     private javax.swing.JButton jbtnMooring;
     private javax.swing.JButton m_checkStock;

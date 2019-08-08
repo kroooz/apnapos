@@ -299,74 +299,74 @@ public final class SuppliersEditor extends JPanel implements EditorRecord {
         jSupplierName.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
         jSupplierName.setText(bundle.getString("label.suppliername")); // NOI18N
-        add(jSupplierName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 100, 20));
+        add(jSupplierName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 100, 20));
 
         jSupplierAccount.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jSupplierAccount.setText(bundle.getString("label.supplieraccount")); // NOI18N
-        add(jSupplierAccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, 70, 20));
-        add(m_SupplierAccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 160, -1));
+        add(jSupplierAccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 20, 70, 20));
+        add(m_SupplierAccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, 160, 40));
 
         jSupplierAddr1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jSupplierAddr1.setText(bundle.getString("label.supplierAddress")); // NOI18N
-        add(jSupplierAddr1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 46, 100, 20));
-        add(m_SupplierCity, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 98, 250, -1));
-        add(m_SupplierAddr1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 46, 250, -1));
+        add(jSupplierAddr1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 100, 20));
+        add(m_SupplierCity, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 250, 40));
+        add(m_SupplierAddr1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 250, 40));
 
         m_SupplierAddr2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_SupplierAddr2ActionPerformed(evt);
             }
         });
-        add(m_SupplierAddr2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 72, 250, -1));
+        add(m_SupplierAddr2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 250, 40));
 
         jSupplierPostcode.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jSupplierPostcode.setText(bundle.getString("label.supplierpostcode")); // NOI18N
-        add(jSupplierPostcode, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 98, 70, 20));
-        add(m_SupplierPostCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 98, 160, -1));
+        add(jSupplierPostcode, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 70, 70, 20));
+        add(m_SupplierPostCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 60, 160, 40));
 
         jSupplierCity.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jSupplierCity.setText(bundle.getString("label.suppliercity")); // NOI18N
-        add(jSupplierCity, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 98, 98, 20));
+        add(jSupplierCity, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 98, 20));
 
         jSupplierContact.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jSupplierContact.setText(bundle.getString("label.suppliercontact")); // NOI18N
-        add(jSupplierContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 124, 100, 20));
-        add(m_SupplierContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 124, 250, -1));
+        add(jSupplierContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 100, 20));
+        add(m_SupplierContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 200, 250, 40));
 
         jSupplierTerms.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jSupplierTerms.setText(bundle.getString("label.suppliercreditterms")); // NOI18N
-        add(jSupplierTerms, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 176, 100, 20));
-        add(m_SupplierEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, 250, -1));
+        add(jSupplierTerms, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 100, 20));
+        add(m_SupplierEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 250, 250, 40));
 
         jSupplierComments.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jSupplierComments.setText(bundle.getString("label.suppliercomments")); // NOI18N
-        add(jSupplierComments, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 100, 20));
+        add(jSupplierComments, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, 100, 20));
 
         m_SupplierComments.setColumns(20);
         m_SupplierComments.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         m_SupplierComments.setRows(5);
         jScrollPane1.setViewportView(m_SupplierComments);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 230, 500, 100));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 390, 490, 100));
 
         jSupplierTelephone.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jSupplierTelephone.setText(bundle.getString("label.suppliertelephone")); // NOI18N
-        add(jSupplierTelephone, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 124, 70, 20));
-        add(m_SupplierTelephone, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 124, 160, -1));
+        add(jSupplierTelephone, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 120, 70, 20));
+        add(m_SupplierTelephone, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 110, 160, 40));
 
         jSupplierEmail.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jSupplierEmail.setText(bundle.getString("label.supplieremail")); // NOI18N
-        add(jSupplierEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 100, 20));
-        add(m_SupplierCredit, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 176, 70, -1));
+        add(jSupplierEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 100, 20));
+        add(m_SupplierCredit, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 300, 70, 40));
 
         jSupplierActive.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jSupplierActive.setText(bundle.getString("label.supplieractive")); // NOI18N
-        add(jSupplierActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 100, 30));
-        add(m_SupplierTerms, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 176, 310, -1));
+        add(jSupplierActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 100, 30));
+        add(m_SupplierTerms, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 300, 310, 40));
 
         jSupplierCredit.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jSupplierCredit.setText(bundle.getString("label.suppliercreditlimit")); // NOI18N
-        add(jSupplierCredit, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 176, 100, 20));
+        add(jSupplierCredit, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, 100, 20));
 
         m_SupplierActive.setText(" ");
         m_SupplierActive.addActionListener(new java.awt.event.ActionListener() {
@@ -374,8 +374,8 @@ public final class SuppliersEditor extends JPanel implements EditorRecord {
                 m_SupplierActiveActionPerformed(evt);
             }
         });
-        add(m_SupplierActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 40, 30));
-        add(m_SupplierName, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, 250, -1));
+        add(m_SupplierActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 350, 40, 30));
+        add(m_SupplierName, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 250, 40));
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_SupplierActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_SupplierActiveActionPerformed

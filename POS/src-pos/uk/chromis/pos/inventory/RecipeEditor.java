@@ -385,11 +385,11 @@ public class RecipeEditor extends javax.swing.JPanel implements EditorRecord {
                         .addGap(10, 10, 10)
                         .addComponent(jLabel1))
                     .addComponent(m_jQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 8, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         add(jPanel1);
-        jPanel1.setBounds(10, 10, 450, 240);
+        jPanel1.setBounds(10, 10, 450, 230);
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jSearchActionPerformed

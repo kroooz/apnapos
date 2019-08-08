@@ -60,13 +60,13 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         initComponents();
        
         m_ReasonModel = new ComboBoxValModel();
-        m_ReasonModel.add(new PaymentReasonPositive("cashin", AppLocal.getIntString("transpayment.cashin")));
-        m_ReasonModel.add(new PaymentReasonNegative("cashout", AppLocal.getIntString("transpayment.cashout")));              
-        m_jreason.setModel(m_ReasonModel);
+        m_ReasonModel.add(new PaymentReasonPositive("cash", AppLocal.getIntString("transpayment.cashin")));
+        m_ReasonModel.add(new PaymentReasonNegative("cash", AppLocal.getIntString("transpayment.cashout")));              
+        m_jtype.setModel(m_ReasonModel);
         
         jTotal.addEditorKeys(m_jKeys);
         
-        m_jreason.addActionListener(dirty);
+        m_jtype.addActionListener(dirty);
         jTotal.addPropertyChangeListener("Text", dirty);
         m_jNotes.addPropertyChangeListener("Text", dirty);
         m_jNotes.addEditorKeys(m_jKeys);        
@@ -83,7 +83,7 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         m_sPaymentId = null;
         datenew = null;
         setReasonTotal(null, null);
-        m_jreason.setEnabled(false);
+        m_jtype.setEnabled(false);
         jTotal.setEnabled(false);
         m_sNotes = null;
         m_jNotes.setEnabled(false);
@@ -100,7 +100,7 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         m_sPaymentId = null;
         datenew = null;
         setReasonTotal("cashin", null);
-        m_jreason.setEnabled(true);
+        m_jtype.setEnabled(true);
         jTotal.setEnabled(true);   
         jTotal.activate();
         m_sNotes = null;
@@ -119,7 +119,7 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         datenew = (Date) payment[2];
         m_sPaymentId = (String) payment[3];
         setReasonTotal(payment[4], payment[5]);
-        m_jreason.setEnabled(false);
+        m_jtype.setEnabled(false);
         jTotal.setEnabled(false);
         m_sNotes = (String) payment[6];
         m_jNotes.setEnabled(false);
@@ -136,7 +136,7 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         datenew = (Date) payment[2];
         m_sPaymentId = (String) payment[3];
         setReasonTotal(payment[4], payment[5]);
-        m_jreason.setEnabled(false);
+        m_jtype.setEnabled(false);
         jTotal.setEnabled(false);
         jTotal.activate();
         m_sNotes = (String) payment[6];
@@ -267,20 +267,21 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
 
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        m_jreason = new javax.swing.JComboBox();
+        m_jtype = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         jTotal = new uk.chromis.editor.JEditorCurrency();
         m_jNotes = new uk.chromis.editor.JEditorString();
+        jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         m_jKeys = new uk.chromis.editor.JEditorKeys();
 
         setLayout(new java.awt.BorderLayout());
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText(AppLocal.getIntString("label.paymentreason")); // NOI18N
+        jLabel5.setText(AppLocal.getIntString("label.paymentreceipttype")); // NOI18N
 
-        m_jreason.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        m_jreason.setFocusable(false);
+        m_jtype.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        m_jtype.setFocusable(false);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText(AppLocal.getIntString("label.paymenttotal")); // NOI18N
@@ -288,6 +289,9 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         jTotal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         m_jNotes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setText(AppLocal.getIntString("label.paymentreceiptdescription")); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -297,11 +301,12 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(m_jNotes, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-                    .addComponent(m_jreason, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(m_jtype, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
@@ -311,14 +316,16 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(m_jreason, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(m_jtype, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(m_jNotes, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(289, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(m_jNotes, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
 
         add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -342,13 +349,14 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private uk.chromis.editor.JEditorCurrency jTotal;
     private uk.chromis.editor.JEditorKeys m_jKeys;
     private uk.chromis.editor.JEditorString m_jNotes;
-    private javax.swing.JComboBox m_jreason;
+    private javax.swing.JComboBox m_jtype;
     // End of variables declaration//GEN-END:variables
     
 }
