@@ -2,7 +2,7 @@ group = menu.addGroup("Menu.Main");
         group.addPanel("/uk/chromis/images/sale.png", "Menu.Ticket", "uk.chromis.pos.sales.JPanelTicketSales");
         group.addPanel("/uk/chromis/images/saleedit.png", "Menu.TicketEdit", "uk.chromis.pos.sales.JPanelTicketEdits");
         group.addPanel("/uk/chromis/images/customerpay.png", "Menu.CustomersPayment", "uk.chromis.pos.customers.CustomersPayment");
-        group.addPanel("/uk/chromis/images/payments.png", "Menu.Payments", "uk.chromis.pos.panels.JPanelPayments");
+        group.addPanel("/uk/chromis/images/payments.png", "Menu.ReceiptsPayments", "uk.chromis.pos.panels.JPanelPayments");
         group.addPanel("/uk/chromis/images/calculator.png", "Menu.CloseTPV", "uk.chromis.pos.panels.JPanelCloseMoney");
 group = menu.addGroup("Menu.Backoffice");
 
