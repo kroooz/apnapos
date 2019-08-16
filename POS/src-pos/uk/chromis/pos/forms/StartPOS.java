@@ -84,7 +84,7 @@ public class StartPOS {
 //            String MotherBoard = "PGDZT038J660XE";
 
 //            Ali's Computer
-//            String MotherBoard = "/FNK9B2S/CN7360418N018S/";
+//            String MotherBoard = "..CN1374008B04SA.";
 
 //           Usman's Computer
 //             String MotherBoard = "/J3WTB2S/CN7360418R04KJ/";

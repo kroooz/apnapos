@@ -29,16 +29,19 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,10 +54,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.print.PrintService;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -114,6 +119,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import uk.chromis.data.gui.JMessageDialog;
 import uk.chromis.format.Formats;
 import uk.chromis.pos.catalog.JCatalog;
+import uk.chromis.pos.customers.CustomersView;
 import uk.chromis.pos.forms.AppUser;
 import uk.chromis.pos.printer.DeviceDisplayAdvance;
 import uk.chromis.pos.ticket.TicketType;
@@ -898,6 +904,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     @Override
     public void activate() throws BasicException {
         
+        jPanelCustomer.setVisible(false);
         
         this.hideButtonsIfNoPermission();
         
@@ -1109,6 +1116,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         if (m_oTicket == null) {
             btnSplit.setEnabled(false);
             m_jTicketId.setText(null);
+            this.refreshCustomerPanel(null);
             m_ticketlines.clearTicketLines();
 
             m_jSubtotalEuros.setText(null);
@@ -1190,6 +1198,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     public void setTicketName(String tName) {
         m_jTicketId.setText(tName);
+        this.refreshCustomerPanel(m_oTicket.getCustomer());
     }
 
     private void printPartialTotals() {
@@ -1792,6 +1801,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             }
 
                             m_oTicket.setCustomer(newcustomer);
+                            this.refreshCustomerPanel(newcustomer);
                             m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
 
                             if (m_oTicket.getDiscount() > 0.0 && m_oTicket.getLinesCount() > 0) {
@@ -2913,11 +2923,16 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jTaxesEuros = new javax.swing.JLabel();
         m_jTotalEuros = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
+        jPanelCustomer = new javax.swing.JPanel();
+        jPanelCustomerImage = new javax.swing.JPanel();
+        jLabelCustomerImage = new javax.swing.JLabel();
+        jLabelCustomerName = new javax.swing.JLabel();
+        jPanelBarcode = new javax.swing.JPanel();
         m_jPrice = new javax.swing.JLabel();
         m_jEnter = new javax.swing.JButton();
-        m_jPor = new javax.swing.JLabel();
-        m_jTax = new javax.swing.JComboBox();
         m_jaddtax = new javax.swing.JToggleButton();
+        m_jTax = new javax.swing.JComboBox();
+        m_jPor = new javax.swing.JLabel();
         m_jContEntries = new javax.swing.JPanel();
         m_jPanEntries = new javax.swing.JPanel();
         m_jNumberKey = new uk.chromis.beans.JNumberKeys();
@@ -3432,15 +3447,59 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jPanelCentral.add(jPanel4, java.awt.BorderLayout.PAGE_END);
 
         jPanel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        jPanel9.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        jPanelCustomerImage.setBackground(new java.awt.Color(204, 204, 255));
+        jPanelCustomerImage.setMaximumSize(new java.awt.Dimension(100, 100));
+
+        jLabelCustomerImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelCustomerImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/pos/ticket/customer_sml.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanelCustomerImageLayout = new javax.swing.GroupLayout(jPanelCustomerImage);
+        jPanelCustomerImage.setLayout(jPanelCustomerImageLayout);
+        jPanelCustomerImageLayout.setHorizontalGroup(
+            jPanelCustomerImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabelCustomerImage, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+        );
+        jPanelCustomerImageLayout.setVerticalGroup(
+            jPanelCustomerImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCustomerImageLayout.createSequentialGroup()
+                .addComponent(jLabelCustomerImage, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jLabelCustomerName.setText("jLabel1");
+
+        javax.swing.GroupLayout jPanelCustomerLayout = new javax.swing.GroupLayout(jPanelCustomer);
+        jPanelCustomer.setLayout(jPanelCustomerLayout);
+        jPanelCustomerLayout.setHorizontalGroup(
+            jPanelCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelCustomerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanelCustomerImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanelCustomerLayout.setVerticalGroup(
+            jPanelCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelCustomerLayout.createSequentialGroup()
+                .addGroup(jPanelCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelCustomerLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanelCustomerImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanelCustomerLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         m_jPrice.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         m_jPrice.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         m_jPrice.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
         m_jPrice.setOpaque(true);
-        m_jPrice.setPreferredSize(new java.awt.Dimension(300, 30));
+        m_jPrice.setPreferredSize(new java.awt.Dimension(200, 30));
         m_jPrice.setRequestFocusEnabled(false);
-        jPanel9.add(m_jPrice);
+        jPanelBarcode.add(m_jPrice);
 
         m_jEnter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uk/chromis/images/barcode.png"))); // NOI18N
         m_jEnter.setToolTipText(bundle.getString("tiptext.getbarcode")); // NOI18N
@@ -3453,21 +3512,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 m_jEnterActionPerformed(evt);
             }
         });
-        jPanel9.add(m_jEnter);
-
-        m_jPor.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        m_jPor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        m_jPor.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
-        m_jPor.setOpaque(true);
-        m_jPor.setPreferredSize(new java.awt.Dimension(0, 0));
-        m_jPor.setRequestFocusEnabled(false);
-        jPanel9.add(m_jPor);
-
-        m_jTax.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        m_jTax.setFocusable(false);
-        m_jTax.setPreferredSize(new java.awt.Dimension(0, 0));
-        m_jTax.setRequestFocusEnabled(false);
-        jPanel9.add(m_jTax);
+        jPanelBarcode.add(m_jEnter);
 
         m_jaddtax.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         m_jaddtax.setText("+");
@@ -3480,7 +3525,42 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 m_jaddtaxActionPerformed(evt);
             }
         });
-        jPanel9.add(m_jaddtax);
+        jPanelBarcode.add(m_jaddtax);
+
+        m_jTax.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        m_jTax.setFocusable(false);
+        m_jTax.setPreferredSize(new java.awt.Dimension(0, 0));
+        m_jTax.setRequestFocusEnabled(false);
+        jPanelBarcode.add(m_jTax);
+
+        m_jPor.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        m_jPor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        m_jPor.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
+        m_jPor.setOpaque(true);
+        m_jPor.setPreferredSize(new java.awt.Dimension(0, 0));
+        m_jPor.setRequestFocusEnabled(false);
+        jPanelBarcode.add(m_jPor);
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanelCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 149, Short.MAX_VALUE)
+                .addComponent(jPanelBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanelCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         m_jPanelCentral.add(jPanel9, java.awt.BorderLayout.PAGE_START);
         jPanel9.getAccessibleContext().setAccessibleParent(m_jPanelCentral);
@@ -3703,7 +3783,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
 
             if (finder.getSelectedCustomer() != null) {
-                m_oTicket.setCustomer(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()));
+                
+                CustomerInfoExt customer = dlSales.loadCustomerExt(finder.getSelectedCustomer().getId());
+                refreshCustomerPanel(customer);
+                
+                m_oTicket.setCustomer(customer);
                 if ("restaurant".equals(AppConfig.getInstance().getProperty("machine.ticketsbag"))) {
                     restDB.setCustomerNameInTableByTicketId(dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()).toString(), m_oTicket.getId());
                 }
@@ -3739,6 +3823,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         refreshTicket(false);
 }//GEN-LAST:event_btnCustomerActionPerformed
 
+    private void refreshCustomerPanel(CustomerInfoExt customer) {
+        if(customer == null) {
+            jPanelCustomer.setVisible(false);
+        } else {
+            jLabelCustomerName.setText(customer.getName());
+            jPanelCustomer.setVisible(true);
+        }
+    }
+    
     private void btnSplitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSplitActionPerformed
         AutoLogoff.getInstance().deactivateTimer();
         this.refreshTicket(true);
@@ -4132,12 +4225,17 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private javax.swing.JButton btnSync;
     private javax.swing.JPanel catcontainer;
     private javax.swing.JButton jEditAttributes;
+    private javax.swing.JLabel jLabelCustomerImage;
+    private javax.swing.JLabel jLabelCustomerName;
     private javax.swing.JButton jLineDiscount;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanelBarcode;
+    private javax.swing.JPanel jPanelCustomer;
+    private javax.swing.JPanel jPanelCustomerImage;
     private javax.swing.JPanel jPanelEmptyForPadding;
     private javax.swing.JPanel jPanelLogout;
     private javax.swing.JButton jTotalDiscount;
