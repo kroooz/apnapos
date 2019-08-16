@@ -504,8 +504,7 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
     @Override
     public void showTask(String sTaskClass) {
 
-        m_jPanelContainer.removeAll();
-        m_aCreatedViews.clear();
+        
         
         customerInfo = new CustomerInfo("");
         customerInfo.setName("");
@@ -513,6 +512,9 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
         m_appview.waitCursorBegin();
 
         if (m_appuser.hasPermission(sTaskClass)) {
+            
+            m_jPanelContainer.removeAll();
+            m_aCreatedViews.clear();
 
             JPanelView m_jMyView = (JPanelView) m_aCreatedViews.get(sTaskClass);
 
@@ -555,8 +557,11 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
                 m_jTitle.setText(sTitle);
             }
         } else {
+            String task = sTaskClass.replace("uk/chromis/", "");
+            task = task.replace("uk.chromis", "");
+            task = task.replace("chromis", "");
             JOptionPane.showMessageDialog(null,
-                    AppLocal.getIntString("message.notpermissions") + ": " + sTaskClass.replace("/uk/chromis/", ""),
+                    AppLocal.getIntString("message.notpermissions") + ": " + task,
                     "Access Error", JOptionPane.WARNING_MESSAGE);
         }
         m_appview.waitCursorEnd();
@@ -589,8 +594,11 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
                         JOptionPane.WARNING_MESSAGE);            }
         } else {
 
+            String task = sTaskClass.replace("uk/chromis/", "");
+            task = task.replace("uk.chromis", "");
+            task = task.replace("chromis", "");
             JOptionPane.showMessageDialog(null,
-                    AppLocal.getIntString("message.notpermissions") + ": " + sTaskClass.replace("/uk/chromis/", ""),
+                    AppLocal.getIntString("message.notpermissions") + ": " + task,
                     "Access Error", JOptionPane.WARNING_MESSAGE);
         }
         m_appview.waitCursorEnd();

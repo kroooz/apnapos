@@ -316,8 +316,11 @@ public class JPrincipalAdminApp extends javax.swing.JPanel implements AppUserVie
                 m_jTitle.setText(sTitle);
             }
         } else {
+            String task = sTaskClass.replace("uk/chromis/", "");
+            task = task.replace("uk.chromis", "");
+            task = task.replace("chromis", "");
             JOptionPane.showMessageDialog(null,
-                    AppLocal.getIntString("message.notpermissions") + ": " + sTaskClass.replace("/uk/chromis/", ""),
+                    AppLocal.getIntString("message.notpermissions") + ": " + task,
                     "Access Error", JOptionPane.WARNING_MESSAGE);
         }
         m_appview.waitCursorEnd();
@@ -345,9 +348,11 @@ public class JPrincipalAdminApp extends javax.swing.JPanel implements AppUserVie
                         JOptionPane.WARNING_MESSAGE);
             }
         } else {
-
+            String task = sTaskClass.replace("uk/chromis/", "");
+            task = task.replace("uk.chromis", "");
+            task = task.replace("chromis", "");
             JOptionPane.showMessageDialog(null,
-                    AppLocal.getIntString("message.notpermissions") + ": " + sTaskClass.replace("/uk/chromis/", ""),
+                    AppLocal.getIntString("message.notpermissions") + ": " + task,
                     "Access Error", JOptionPane.WARNING_MESSAGE);
         }
         m_appview.waitCursorEnd();
