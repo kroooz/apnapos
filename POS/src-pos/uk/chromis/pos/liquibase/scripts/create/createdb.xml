@@ -1230,7 +1230,7 @@
             <column name="ID" value="0"/>
             <column name="NAME" value="Administrator"/>
             <column name="ROLE" value="0"/>
-            <column name="VISIBLE" valueBoolean="true"/>
+            <column name="VISIBLE" valueBoolean="false"/>
         </insert>
         <insert tableName="PEOPLE">
             <column name="ID" value="1"/>
