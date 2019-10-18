@@ -81,8 +81,9 @@ public class ResourcesPanel extends JPanelTable2 {
         );
 
         
-        String visibleResourcesQuery = " AND NAME IN ('Ticket.Line', 'Printer.Ticket', 'Printer.ReprintTicket', "
-                + "'Printer.ReprintLastTicket', 'Printer.Ticket.Logo', 'Printer.TicketRefundPreview', 'img.reportlogo') ";
+        String visibleResourcesQuery = " AND (NAME IN ('Ticket.Line', 'Printer.Ticket', 'Printer.ReprintTicket', "
+                + "'Printer.ReprintLastTicket', 'Printer.Ticket.Logo', 'Printer.TicketRefundPreview', 'img.reportlogo') "
+                + " OR NAME LIKE '%/properties%' )";
         lpr = new ListProviderCreator(new PreparedSentence(app.getSession(),
                 "SELECT ID, NAME, RESTYPE, CONTENT, SITEGUID "
                 + "FROM RESOURCES "
